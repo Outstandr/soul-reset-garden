@@ -50,15 +50,21 @@ const resetSteps = [
 
 export const ResetOverview = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-background to-muted/30">
-      <div className="zen-container">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold">
-            The <span className="gradient-text">RESET</span> Blueprint®️
+    <section className="py-24 bg-gradient-to-b from-background via-primary/5 to-secondary/5 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 right-20 w-64 h-64 bg-gradient-to-br from-primary to-secondary rounded-full blur-3xl opacity-20 animate-float" />
+        <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-br from-accent to-reset-transformation rounded-full blur-3xl opacity-15 animate-float" style={{ animationDelay: "3s" }} />
+      </div>
+
+      <div className="zen-container relative z-10">
+        <div className="text-center mb-20 space-y-6 animate-fade-in-up">
+          <h2 className="text-5xl md:text-7xl font-black">
+            The <span className="gradient-text neon-text">RESET</span> Blueprint®️
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A full-circle journey from doing to becoming. Each step builds upon the last, 
-            creating a holistic transformation.
+          <p className="text-2xl text-foreground/80 font-bold max-w-2xl mx-auto">
+            🌈 A full-circle journey from doing to becoming<br/>
+            ⭐ Each step builds upon the last, creating holistic transformation
           </p>
         </div>
 
@@ -68,49 +74,68 @@ export const ResetOverview = () => {
             return (
               <div
                 key={step.letter}
-                className="group relative animate-fade-in-up"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className="group relative animate-bounce-in hover-lift"
+                style={{ animationDelay: `${index * 150}ms` }}
               >
-                <div className="h-full p-8 rounded-2xl bg-card border border-border hover:shadow-strong transition-all duration-300 hover:scale-105">
-                  {/* Icon with color */}
+                <div 
+                  className="h-full p-8 rounded-3xl bg-gradient-to-br from-card to-card/50 border-3 hover:border-4 transition-all duration-300 shadow-medium hover:shadow-strong relative overflow-hidden"
+                  style={{ 
+                    borderColor: `hsl(var(--${step.color}))`,
+                    boxShadow: `0 8px 32px hsl(var(--${step.color}) / 0.15)`,
+                  }}
+                >
+                  {/* Animated gradient overlay */}
+                  <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ 
+                      background: `linear-gradient(135deg, hsl(var(--${step.color}) / 0.1) 0%, transparent 100%)`,
+                    }}
+                  />
+
+                  {/* Icon with color and animation */}
                   <div
-                    className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `hsl(var(--${step.color}) / 0.15)` }}
+                    className="relative w-20 h-20 rounded-2xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-125 group-hover:rotate-12 shadow-lg animate-scale-pulse"
+                    style={{ 
+                      backgroundColor: `hsl(var(--${step.color}) / 0.2)`,
+                      boxShadow: `0 4px 20px hsl(var(--${step.color}) / 0.3)`,
+                    }}
                   >
                     <Icon
-                      className="w-8 h-8"
+                      className="w-10 h-10"
                       style={{ color: `hsl(var(--${step.color}))` }}
                     />
                   </div>
 
-                  {/* Letter badge */}
+                  {/* Letter badge with animation */}
                   <div
-                    className="absolute top-6 right-6 w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl border-2"
+                    className="absolute top-6 right-6 w-14 h-14 rounded-full flex items-center justify-center font-black text-2xl border-3 shadow-glow animate-scale-pulse"
                     style={{
-                      backgroundColor: `hsl(var(--${step.color}) / 0.1)`,
+                      backgroundColor: `hsl(var(--${step.color}))`,
                       borderColor: `hsl(var(--${step.color}))`,
-                      color: `hsl(var(--${step.color}))`,
+                      color: `hsl(var(--card))`,
+                      boxShadow: `0 0 20px hsl(var(--${step.color}) / 0.5)`,
+                      animationDelay: `${index * 0.2}s`,
                     }}
                   >
                     {step.letter}
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-2xl font-bold mb-2">{step.title}</h3>
+                  <h3 className="relative text-3xl font-black mb-2">{step.title}</h3>
                   <p
-                    className="text-sm font-medium mb-4"
+                    className="relative text-base font-bold mb-4"
                     style={{ color: `hsl(var(--${step.color}))` }}
                   >
                     {step.subtitle}
                   </p>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                  <p className="relative text-foreground/70 font-medium mb-4 leading-relaxed">
                     {step.description}
                   </p>
 
-                  {/* Symbolism */}
-                  <div className="pt-4 border-t border-border">
-                    <p className="text-xs text-muted-foreground italic">
-                      {step.symbolism}
+                  {/* Symbolism with icon */}
+                  <div className="relative pt-4 border-t-2" style={{ borderColor: `hsl(var(--${step.color}) / 0.3)` }}>
+                    <p className="text-sm text-foreground/60 font-semibold">
+                      ✨ {step.symbolism}
                     </p>
                   </div>
                 </div>
@@ -119,24 +144,31 @@ export const ResetOverview = () => {
           })}
         </div>
 
-        {/* Journey flow indicator */}
-        <div className="mt-16 flex justify-center">
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-card border border-border shadow-soft">
-            <div className="flex items-center gap-3">
+        {/* Journey flow indicator - More dynamic */}
+        <div className="mt-20 flex justify-center animate-fade-in-up animation-delay-700">
+          <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-card via-primary/10 to-card border-3 border-primary/30 shadow-glow">
+            <div className="flex items-center gap-4">
               {resetSteps.map((step, index) => (
-                <div key={step.letter} className="flex items-center gap-3">
+                <div key={step.letter} className="flex items-center gap-4">
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all duration-300 hover:scale-110"
+                    className="w-12 h-12 rounded-full flex items-center justify-center font-black text-base border-3 transition-all duration-300 hover:scale-125 cursor-pointer shadow-medium hover-lift animate-scale-pulse"
                     style={{
-                      backgroundColor: `hsl(var(--${step.color}) / 0.2)`,
+                      backgroundColor: `hsl(var(--${step.color}))`,
                       borderColor: `hsl(var(--${step.color}))`,
-                      color: `hsl(var(--${step.color}))`,
+                      color: `hsl(var(--card))`,
+                      boxShadow: `0 4px 20px hsl(var(--${step.color}) / 0.4)`,
+                      animationDelay: `${index * 0.3}s`,
                     }}
                   >
                     {step.letter}
                   </div>
                   {index < resetSteps.length - 1 && (
-                    <div className="w-8 h-0.5 bg-gradient-to-r from-current to-transparent opacity-30" />
+                    <div 
+                      className="w-12 h-1 rounded-full animate-shimmer"
+                      style={{
+                        background: `linear-gradient(90deg, hsl(var(--${step.color})), hsl(var(--${resetSteps[index + 1].color})))`,
+                      }}
+                    />
                   )}
                 </div>
               ))}
