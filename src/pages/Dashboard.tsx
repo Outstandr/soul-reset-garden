@@ -3,6 +3,7 @@ import { ModuleCard } from "@/components/ModuleCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const journeySteps = [
   {
@@ -101,6 +102,8 @@ const modules = [
 ];
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
       {/* Header */}
@@ -184,7 +187,11 @@ const Dashboard = () => {
               >
                 <ModuleCard
                   {...module}
-                  onStart={() => console.log(`Starting ${module.title}`)}
+                  onStart={() => {
+                    if (module.status !== "locked") {
+                      navigate("/journey/reset-in-you");
+                    }
+                  }}
                 />
               </div>
             ))}
