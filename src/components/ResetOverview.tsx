@@ -50,12 +50,15 @@ const resetSteps = [
 
 export const ResetOverview = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-background via-primary/5 to-secondary/5 relative overflow-hidden">
-      {/* Animated background elements */}
+    <section className="py-24 bg-gradient-to-b from-muted via-background to-muted relative overflow-hidden">
+      {/* Animated background elements with neon glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 right-20 w-64 h-64 bg-gradient-to-br from-primary to-secondary rounded-full blur-3xl opacity-20 animate-float" />
-        <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-br from-accent to-reset-transformation rounded-full blur-3xl opacity-15 animate-float" style={{ animationDelay: "3s" }} />
+        <div className="absolute top-10 right-20 w-64 h-64 bg-gradient-to-br from-primary to-secondary rounded-full blur-3xl opacity-30 animate-float" />
+        <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-br from-accent to-reset-transformation rounded-full blur-3xl opacity-25 animate-float" style={{ animationDelay: "3s" }} />
       </div>
+      
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10" />
 
       <div className="zen-container relative z-10">
         <div className="text-center mb-20 space-y-6 animate-fade-in-up">

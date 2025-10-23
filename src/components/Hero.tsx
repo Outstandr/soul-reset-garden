@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-primary/5 to-secondary/5">
-      {/* Animated background blobs */}
-      <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-primary to-secondary rounded-full blur-3xl opacity-30 animate-float" />
-      <div className="absolute bottom-20 left-20 w-[500px] h-[500px] bg-gradient-to-br from-accent to-reset-energy rounded-full blur-3xl opacity-20 animate-float" style={{ animationDelay: "2s" }} />
-      <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-gradient-to-br from-reset-execution to-reset-transformation rounded-full blur-3xl opacity-25 animate-float" style={{ animationDelay: "4s" }} />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-muted to-background">
+      {/* Animated background blobs with neon glow */}
+      <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-primary to-secondary rounded-full blur-3xl opacity-40 animate-float" />
+      <div className="absolute bottom-20 left-20 w-[500px] h-[500px] bg-gradient-to-br from-accent to-reset-energy rounded-full blur-3xl opacity-30 animate-float" style={{ animationDelay: "2s" }} />
+      <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-gradient-to-br from-reset-execution to-reset-transformation rounded-full blur-3xl opacity-35 animate-float" style={{ animationDelay: "4s" }} />
+      
+      {/* Grid overlay for depth */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)] opacity-20" />
 
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
