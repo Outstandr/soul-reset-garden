@@ -21,7 +21,7 @@ interface Lesson {
   interactive_config: any;
 }
 
-interface Progress {
+interface LessonProgress {
   id: string;
   completed: boolean;
   video_progress: number;
@@ -34,7 +34,7 @@ export default function MentalPillar() {
   const { toast } = useToast();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
-  const [progress, setProgress] = useState<Map<string, Progress>>(new Map());
+  const [progress, setProgress] = useState<Map<string, LessonProgress>>(new Map());
   const [loading, setLoading] = useState(true);
 
   const videoUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/masterclass-videos/mental-masterclass.mp4`;
@@ -89,7 +89,7 @@ export default function MentalPillar() {
     }
   };
 
-  const saveProgress = async (lessonId: string, updates: Partial<Progress>) => {
+  const saveProgress = async (lessonId: string, updates: Partial<LessonProgress>) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -105,7 +105,7 @@ export default function MentalPillar() {
 
     if (!error) {
       const newProgress = new Map(progress);
-      newProgress.set(lessonId, { ...existing, ...updates } as Progress);
+      newProgress.set(lessonId, { ...existing, ...updates } as LessonProgress);
       setProgress(newProgress);
     }
   };
