@@ -37,7 +37,7 @@ export default function MentalPillar() {
   const [progress, setProgress] = useState<Map<string, LessonProgress>>(new Map());
   const [loading, setLoading] = useState(true);
 
-  const videoUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/masterclass-videos/mental-masterclass.mp4`;
+  const videoUrl = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/masterclass-videos/mental-mastery/Masterclass%20Final%20Aproved%20Edit%20-%20Mental%20mastery%20_compressed.mp4`;
 
   useEffect(() => {
     loadLessons();
