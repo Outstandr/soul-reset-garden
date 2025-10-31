@@ -210,7 +210,10 @@ const Dashboard = () => {
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
-            <Card className="hover:shadow-medium transition-shadow cursor-pointer">
+            <Card 
+              className="hover:shadow-medium transition-shadow cursor-pointer"
+              onClick={() => navigate("/mental-pillar")}
+            >
               <CardHeader>
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <Library className="w-6 h-6 text-primary" />

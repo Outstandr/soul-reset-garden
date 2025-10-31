@@ -59,6 +59,89 @@ export type Database = {
         }
         Relationships: []
       }
+      masterclass_lessons: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          interactive_config: Json | null
+          interactive_type: string
+          lesson_number: number
+          module_name: string
+          title: string
+          video_end_time: string
+          video_start_time: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          interactive_config?: Json | null
+          interactive_type: string
+          lesson_number: number
+          module_name: string
+          title: string
+          video_end_time: string
+          video_start_time: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          interactive_config?: Json | null
+          interactive_type?: string
+          lesson_number?: number
+          module_name?: string
+          title?: string
+          video_end_time?: string
+          video_start_time?: string
+        }
+        Relationships: []
+      }
+      user_lesson_progress: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          interactive_responses: Json | null
+          lesson_id: string
+          updated_at: string
+          user_id: string
+          video_progress: number | null
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          interactive_responses?: Json | null
+          lesson_id: string
+          updated_at?: string
+          user_id: string
+          video_progress?: number | null
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          interactive_responses?: Json | null
+          lesson_id?: string
+          updated_at?: string
+          user_id?: string
+          video_progress?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "masterclass_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
