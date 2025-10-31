@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, BookmarkPlus, MessageSquare, Lightbulb, Star } from "lucide-react";
+import { ArrowLeft, CheckCircle, BookmarkPlus, MessageSquare, Lightbulb, Star, Sparkles, Target } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function BookLessonContent() {
   const navigate = useNavigate();
   const { lessonId } = useParams();
   const { toast } = useToast();
+  const contentRef = useRef<HTMLDivElement>(null);
   const [readingProgress, setReadingProgress] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [highlights, setHighlights] = useState<string[]>([]);
+  const [checkpoints, setCheckpoints] = useState<number[]>([]);
+  const [actionCompleted, setActionCompleted] = useState(false);
+  const [reflectionText, setReflectionText] = useState("");
+  const [showReflection, setShowReflection] = useState(false);
 
   // Mock lesson data (in real app, fetch based on lessonId)
   const lesson = {
@@ -119,6 +126,31 @@ Which one will you choose?
     reflectionPrompt: "What's one area of your life where you've been waiting for motivation instead of building discipline? What would change if you committed to just 2 minutes a day?"
   };
 
+  // Unlock checkpoints as user reads
+  useEffect(() => {
+    if (readingProgress >= 25 && !checkpoints.includes(25)) {
+      setCheckpoints([...checkpoints, 25]);
+      toast({
+        title: "🎯 Checkpoint Reached!",
+        description: "+5 bonus XP - You're making great progress!",
+      });
+    }
+    if (readingProgress >= 50 && !checkpoints.includes(50)) {
+      setCheckpoints([...checkpoints, 50]);
+      toast({
+        title: "🎯 Halfway There!",
+        description: "+10 bonus XP - Keep going!",
+      });
+    }
+    if (readingProgress >= 75 && !checkpoints.includes(75)) {
+      setCheckpoints([...checkpoints, 75]);
+      toast({
+        title: "🎯 Almost Done!",
+        description: "+15 bonus XP - Final stretch!",
+      });
+    }
+  }, [readingProgress, checkpoints, toast]);
+
   const handleComplete = () => {
     setIsCompleted(true);
     toast({
@@ -127,15 +159,36 @@ Which one will you choose?
     });
     
     setTimeout(() => {
-      navigate("/book/reset-discipline");
+      navigate("/book/reset-by-discipline");
     }, 2000);
   };
 
-  const handleJournal = () => {
+  const handleHighlight = (text: string) => {
+    if (!highlights.includes(text)) {
+      setHighlights([...highlights, text]);
+      toast({
+        title: "✨ Highlighted!",
+        description: "Saved to your highlights",
+      });
+    }
+  };
+
+  const handleActionComplete = () => {
+    setActionCompleted(true);
     toast({
-      title: "💭 Journal Entry Started",
-      description: "Your reflection has been saved!",
+      title: "💪 Action Completed!",
+      description: "+10 bonus XP for taking action!",
     });
+  };
+
+  const handleReflectionSave = () => {
+    if (reflectionText.trim()) {
+      toast({
+        title: "💭 Reflection Saved!",
+        description: "Your insights have been saved to your journal",
+      });
+      setShowReflection(false);
+    }
   };
 
   // Simulate reading progress on scroll
@@ -186,20 +239,95 @@ Which one will you choose?
         onScroll={handleScroll}
         style={{ maxHeight: 'calc(100vh - 200px)' }}
       >
-        {/* Lesson Content */}
-        <div className="prose prose-invert prose-lg max-w-none mb-12">
-          <div 
-            className="leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: lesson.content.split('\n').map(line => {
-              if (line.startsWith('# ')) return `<h1 class="text-4xl font-black mb-6 mt-8">${line.slice(2)}</h1>`;
-              if (line.startsWith('## ')) return `<h2 class="text-3xl font-black mb-4 mt-8 text-reset-rhythm">${line.slice(3)}</h2>`;
-              if (line.startsWith('**') && line.endsWith('**')) return `<p class="text-xl font-black text-reset-energy my-4">${line.slice(2, -2)}</p>`;
-              if (line.startsWith('- ')) return `<li class="ml-6 my-2">${line.slice(2)}</li>`;
-              if (line.trim() === '') return '<br/>';
-              return `<p class="my-4 text-gray-300">${line}</p>`;
-            }).join('') }}
-          />
+        {/* Interactive Lesson Content */}
+        <div className="prose prose-invert prose-lg max-w-none mb-12" ref={contentRef}>
+          {lesson.content.split('\n\n').map((paragraph, idx) => {
+            if (paragraph.startsWith('# ')) {
+              return (
+                <h1 key={idx} className="text-4xl font-black mb-6 mt-8 animate-fade-in">
+                  {paragraph.slice(2)}
+                </h1>
+              );
+            }
+            if (paragraph.startsWith('## ')) {
+              return (
+                <h2 key={idx} className="text-3xl font-black mb-4 mt-8 text-reset-rhythm animate-fade-in">
+                  {paragraph.slice(3)}
+                </h2>
+              );
+            }
+            if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+              const text = paragraph.slice(2, -2);
+              return (
+                <div key={idx} className="relative group my-6 animate-fade-in">
+                  <p className="text-xl font-black text-reset-energy p-4 bg-reset-energy/10 border-l-4 border-reset-energy rounded-r-lg cursor-pointer transition-all hover:bg-reset-energy/20">
+                    {text}
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleHighlight(text)}
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                  </Button>
+                </div>
+              );
+            }
+            if (paragraph.includes('\n- ')) {
+              const items = paragraph.split('\n').filter(line => line.startsWith('- '));
+              return (
+                <ul key={idx} className="space-y-2 my-6 animate-fade-in">
+                  {items.map((item, i) => (
+                    <li key={i} className="ml-6 text-gray-300 flex items-start gap-3 group cursor-pointer hover:text-white transition-colors">
+                      <span className="text-reset-rhythm mt-1">•</span>
+                      <span className="flex-1">{item.slice(2)}</span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleHighlight(item.slice(2))}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Sparkles className="w-3 h-3" />
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              );
+            }
+            if (paragraph.trim() === '' || paragraph === '---') return null;
+            return (
+              <p key={idx} className="my-4 text-gray-300 leading-relaxed animate-fade-in group relative cursor-pointer hover:text-white transition-colors">
+                {paragraph}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => handleHighlight(paragraph)}
+                  className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Sparkles className="w-3 h-3" />
+                </Button>
+              </p>
+            );
+          })}
         </div>
+
+        {/* Highlights Section */}
+        {highlights.length > 0 && (
+          <Card className="mb-8 p-6 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border-2 border-yellow-500/30 animate-scale-in">
+            <div className="flex items-center gap-3 mb-4">
+              <Sparkles className="w-6 h-6 text-yellow-400" />
+              <h3 className="text-2xl font-black text-yellow-400">Your Highlights ({highlights.length})</h3>
+            </div>
+            <div className="space-y-3">
+              {highlights.map((highlight, idx) => (
+                <div key={idx} className="p-3 bg-yellow-500/5 border-l-2 border-yellow-500 rounded-r text-gray-300">
+                  {highlight}
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
 
         {/* Key Takeaways */}
         <Card className="mb-8 p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30">
@@ -217,30 +345,78 @@ Which one will you choose?
           </ul>
         </Card>
 
-        {/* Action Step */}
-        <Card className="mb-8 p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-2 border-green-500/30">
+        {/* Interactive Action Step */}
+        <Card className={`mb-8 p-6 transition-all duration-300 ${
+          actionCompleted 
+            ? 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/50' 
+            : 'bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-2 border-green-500/30'
+        }`}>
           <div className="flex items-center gap-3 mb-4">
-            <CheckCircle className="w-6 h-6 text-green-400" />
+            <Target className="w-6 h-6 text-green-400" />
             <h3 className="text-2xl font-black text-green-400">Your Action Step</h3>
           </div>
-          <p className="text-gray-300 font-semibold leading-relaxed">{lesson.actionStep}</p>
+          <p className="text-gray-300 font-semibold leading-relaxed mb-4">{lesson.actionStep}</p>
+          {!actionCompleted ? (
+            <Button
+              variant="hero"
+              onClick={handleActionComplete}
+              className="gap-2"
+            >
+              <CheckCircle className="w-4 h-4" />
+              Mark Action Complete
+            </Button>
+          ) : (
+            <div className="flex items-center gap-2 text-green-400 font-bold animate-scale-in">
+              <CheckCircle className="w-5 h-5" />
+              <span>Action Completed! +10 XP</span>
+            </div>
+          )}
         </Card>
 
-        {/* Reflection Prompt */}
+        {/* Interactive Reflection Prompt */}
         <Card className="mb-8 p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30">
           <div className="flex items-center gap-3 mb-4">
             <MessageSquare className="w-6 h-6 text-purple-400" />
             <h3 className="text-2xl font-black text-purple-400">Reflection Question</h3>
           </div>
           <p className="text-gray-300 font-semibold leading-relaxed mb-4">{lesson.reflectionPrompt}</p>
-          <Button
-            variant="hero"
-            onClick={handleJournal}
-            className="gap-2"
-          >
-            <MessageSquare className="w-4 h-4" />
-            Open Journal
-          </Button>
+          
+          {!showReflection ? (
+            <Button
+              variant="hero"
+              onClick={() => setShowReflection(true)}
+              className="gap-2"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Write Your Reflection
+            </Button>
+          ) : (
+            <div className="space-y-4 animate-fade-in">
+              <Textarea
+                placeholder="Write your thoughts here..."
+                value={reflectionText}
+                onChange={(e) => setReflectionText(e.target.value)}
+                className="min-h-[120px] bg-purple-500/5 border-purple-500/30 text-white placeholder:text-gray-500"
+              />
+              <div className="flex gap-3">
+                <Button
+                  variant="hero"
+                  onClick={handleReflectionSave}
+                  disabled={!reflectionText.trim()}
+                  className="gap-2"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Save Reflection
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowReflection(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
         </Card>
 
         {/* Complete Button */}
