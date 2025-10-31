@@ -230,7 +230,10 @@ const Dashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card className="hover:shadow-medium transition-shadow cursor-pointer">
+            <Card 
+              className="hover:shadow-medium transition-shadow cursor-pointer"
+              onClick={() => navigate("/journal")}
+            >
               <CardHeader>
                 <div className="w-12 h-12 rounded-xl bg-reset-systems/10 flex items-center justify-center mb-4">
                   <PenLine className="w-6 h-6 text-reset-systems" />

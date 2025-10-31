@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import ModuleJourney from "./pages/ModuleJourney";
 import BookLessons from "./pages/BookLessons";
 import BookLessonContent from "./pages/BookLessonContent";
+import Journal from "./pages/Journal";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/journey/:moduleId" element={<ModuleJourney />} />
           <Route path="/book/:bookId" element={<BookLessons />} />
           <Route path="/book-lesson/:lessonId" element={<BookLessonContent />} />
+          <Route path="/journal" element={<Journal />} />
+          <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
