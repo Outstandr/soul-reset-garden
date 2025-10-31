@@ -10,6 +10,7 @@ import BookLessons from "./pages/BookLessons";
 import BookLessonContent from "./pages/BookLessonContent";
 import Journal from "./pages/Journal";
 import Auth from "./pages/Auth";
+import UploadMasterclass from "./pages/UploadMasterclass";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/book-lesson/:lessonId" element={<BookLessonContent />} />
           <Route path="/journal" element={<Journal />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/upload-masterclass" element={<UploadMasterclass />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
