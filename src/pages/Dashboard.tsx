@@ -60,7 +60,7 @@ const modules = [
     description: "Build a strong foundation for growth through daily rhythms and intentional structure.",
     icon: <Leaf className="w-6 h-6" style={{ color: "hsl(var(--reset-rhythm))" }} />,
     color: "reset-rhythm",
-    status: "active" as const,
+    status: "locked" as const,
     progress: 0,
   },
   {
@@ -87,7 +87,7 @@ const modules = [
     description: "Put leadership and consistency into practice with focused discipline.",
     icon: <Mountain className="w-6 h-6" style={{ color: "hsl(var(--reset-execution))" }} />,
     color: "reset-execution",
-    status: "locked" as const,
+    status: "active" as const,
     progress: 0,
   },
   {
@@ -189,7 +189,11 @@ const Dashboard = () => {
                   {...module}
                   onStart={() => {
                     if (module.status !== "locked") {
-                      navigate("/journey/reset-in-you");
+                      if (module.title === "Reset by Discipline") {
+                        navigate("/book/reset-by-discipline");
+                      } else {
+                        navigate("/journey/reset-in-you");
+                      }
                     }
                   }}
                 />
