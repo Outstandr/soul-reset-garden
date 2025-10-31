@@ -116,7 +116,7 @@ const Dashboard = () => {
                 <BookOpen className="w-4 h-4 mr-2" />
                 Library
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" onClick={() => navigate("/journal")}>
                 <PenLine className="w-4 h-4 mr-2" />
                 Journal
               </Button>
@@ -150,7 +150,7 @@ const Dashboard = () => {
               <p className="text-lg mb-4">
                 "What rhythm did you build today? Reflect on one structure that supported your growth."
               </p>
-              <Button variant="zen">
+              <Button variant="zen" onClick={() => navigate("/journal")}>
                 <PenLine className="w-4 h-4 mr-2" />
                 Write in Journal
               </Button>
