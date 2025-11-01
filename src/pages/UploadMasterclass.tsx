@@ -16,10 +16,9 @@ const UploadMasterclass = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadComplete, setUploadComplete] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<string>("reset-discipline");
   const [selectedModule, setSelectedModule] = useState<string>("1");
-  const [selectedLesson, setSelectedLesson] = useState<string>("1");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -40,84 +39,78 @@ const UploadMasterclass = () => {
   }, [navigate]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
-    // Validate file type
-    if (!file.type.startsWith("video/")) {
-      toast({
-        title: "Invalid file type",
-        description: "Please upload a video file (MP4, WebM, MOV, etc.)",
-        variant: "destructive",
-      });
-      return;
-    }
+    const fileArray = Array.from(files);
 
-    // Validate file size (500MB limit)
-    if (file.size > 524288000) {
-      toast({
-        title: "File too large",
-        description: "Video must be under 500MB",
-        variant: "destructive",
-      });
-      return;
+    // Validate all files
+    for (const file of fileArray) {
+      if (!file.type.startsWith("video/")) {
+        toast({
+          title: "Invalid file type",
+          description: `${file.name} is not a video file`,
+          variant: "destructive",
+        });
+        return;
+      }
+      if (file.size > 524288000) {
+        toast({
+          title: "File too large",
+          description: `${file.name} must be under 500MB`,
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     setUploading(true);
     setUploadProgress(0);
-    setFileName(file.name);
+    setUploadedFiles([]);
 
     try {
-      // Simulate upload progress
-      const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-          return prev + 10;
-        });
-      }, 500);
+      const bucketName = selectedCourse === "reset-discipline" 
+        ? "reset-discipline-course" 
+        : "masterclass-videos";
 
-      let bucketName = "masterclass-videos";
-      let filePath = "";
+      const uploaded: string[] = [];
+      const totalFiles = fileArray.length;
 
-      if (selectedCourse === "reset-discipline") {
-        bucketName = "reset-discipline-course";
-        filePath = `module${selectedModule}-lesson${selectedLesson}.mp4`;
-      } else {
-        filePath = `mental-mastery/${file.name}`;
+      for (let i = 0; i < fileArray.length; i++) {
+        const file = fileArray[i];
+        const lessonNumber = i + 1;
+
+        let filePath = "";
+        if (selectedCourse === "reset-discipline") {
+          filePath = `module${selectedModule}-lesson${lessonNumber}.mp4`;
+        } else {
+          filePath = `mental-mastery/${file.name}`;
+        }
+
+        const { error } = await supabase.storage
+          .from(bucketName)
+          .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: true,
+          });
+
+        if (error) throw error;
+
+        uploaded.push(filePath);
+        setUploadedFiles([...uploaded]);
+        setUploadProgress(Math.round(((i + 1) / totalFiles) * 100));
       }
-
-      const { data, error } = await supabase.storage
-        .from(bucketName)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-
-      clearInterval(progressInterval);
-      setUploadProgress(100);
-
-      if (error) throw error;
 
       setUploadComplete(true);
       toast({
-        title: "Upload successful!",
-        description: `Video uploaded as ${filePath}`,
+        title: "All uploads successful!",
+        description: `${uploaded.length} videos uploaded for Module ${selectedModule}`,
       });
-
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from(bucketName)
-        .getPublicUrl(filePath);
-
-      console.log("Video URL:", urlData.publicUrl);
     } catch (error: any) {
       console.error("Upload error:", error);
       toast({
         title: "Upload failed",
-        description: error.message || "Failed to upload video",
+        description: error.message || "Failed to upload videos",
         variant: "destructive",
       });
       setUploadProgress(0);
@@ -161,38 +154,19 @@ const UploadMasterclass = () => {
               </div>
 
               {selectedCourse === "reset-discipline" && (
-                <>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Module</label>
-                    <Select value={selectedModule} onValueChange={setSelectedModule}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select module" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">Module 1: Getting Fit</SelectItem>
-                        <SelectItem value="2">Module 2: Knowing Who You Are</SelectItem>
-                        <SelectItem value="3">Module 3: Become Your Own Boss</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Lesson</label>
-                    <Select value={selectedLesson} onValueChange={setSelectedLesson}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select lesson" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">Lesson 1</SelectItem>
-                        <SelectItem value="2">Lesson 2</SelectItem>
-                        <SelectItem value="3">Lesson 3</SelectItem>
-                        <SelectItem value="4">Lesson 4</SelectItem>
-                        <SelectItem value="5">Lesson 5</SelectItem>
-                        <SelectItem value="6">Lesson 6</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Module</label>
+                  <Select value={selectedModule} onValueChange={setSelectedModule}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select module" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">Module 1: Getting Fit</SelectItem>
+                      <SelectItem value="2">Module 2: Knowing Who You Are</SelectItem>
+                      <SelectItem value="3">Module 3: Become Your Own Boss</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               )}
             </div>
             {!uploadComplete ? (
@@ -207,6 +181,7 @@ const UploadMasterclass = () => {
                       id="video-upload"
                       type="file"
                       accept="video/*"
+                      multiple
                       onChange={handleFileUpload}
                       disabled={uploading}
                       className="hidden"
@@ -217,22 +192,29 @@ const UploadMasterclass = () => {
                       asChild
                     >
                       <span>
-                        {uploading ? "Uploading..." : "Choose Video File"}
+                        {uploading ? "Uploading..." : "Choose Video Files"}
                       </span>
                     </Button>
                   </label>
                   <p className="text-sm text-muted-foreground mt-2">
-                    Supports MP4, WebM, MOV (Max 500MB)
+                    Select multiple videos • Supports MP4, WebM, MOV (Max 500MB each)
                   </p>
                 </div>
 
                 {uploading && (
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">{fileName}</span>
+                      <span className="text-muted-foreground">
+                        Uploading {uploadedFiles.length} files...
+                      </span>
                       <span className="font-medium">{uploadProgress}%</span>
                     </div>
                     <Progress value={uploadProgress} className="h-2" />
+                    {uploadedFiles.length > 0 && (
+                      <div className="text-xs text-muted-foreground">
+                        Completed: {uploadedFiles.join(", ")}
+                      </div>
+                    )}
                   </div>
                 )}
               </>
@@ -240,9 +222,14 @@ const UploadMasterclass = () => {
               <div className="text-center py-8">
                 <CheckCircle2 className="w-16 h-16 mx-auto mb-4 text-green-500" />
                 <h3 className="text-xl font-semibold mb-2">Upload Complete!</h3>
-                <p className="text-muted-foreground mb-6">
-                  {fileName} is ready for the interactive course module.
+                <p className="text-muted-foreground mb-4">
+                  {uploadedFiles.length} videos uploaded for Module {selectedModule}
                 </p>
+                <div className="text-xs text-muted-foreground mb-6 max-w-md mx-auto">
+                  {uploadedFiles.map((file, i) => (
+                    <div key={i}>✓ {file}</div>
+                  ))}
+                </div>
                 <Button onClick={() => navigate("/dashboard")} variant="hero">
                   Return to Dashboard
                 </Button>
@@ -256,16 +243,16 @@ const UploadMasterclass = () => {
           <ul className="text-sm text-muted-foreground space-y-1">
             {selectedCourse === "reset-discipline" ? (
               <>
-                <li>✓ Upload each lesson video separately (18 total)</li>
-                <li>✓ Select Module and Lesson number before uploading</li>
-                <li>✓ File will be named: module{selectedModule}-lesson{selectedLesson}.mp4</li>
-                <li>✓ Each lesson should cover its specific content and timestamps</li>
+                <li>✓ Select all videos for a module (up to 6 lessons)</li>
+                <li>✓ Videos will be named: module{selectedModule}-lesson1.mp4, module{selectedModule}-lesson2.mp4, etc.</li>
+                <li>✓ Upload order determines lesson numbers (1-6)</li>
+                <li>✓ 18 total videos needed (3 modules × 6 lessons)</li>
               </>
             ) : (
               <>
-                <li>✓ Video will be stored securely in your backend</li>
-                <li>✓ 12 lessons will reference specific timestamps</li>
-                <li>✓ Each lesson plays only its designated segment</li>
+                <li>✓ Select multiple videos to upload at once</li>
+                <li>✓ Videos stored securely in your backend</li>
+                <li>✓ Each lesson references specific timestamps</li>
                 <li>✓ Interactive elements trigger after each segment</li>
               </>
             )}
