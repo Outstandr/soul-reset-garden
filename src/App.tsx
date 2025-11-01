@@ -13,6 +13,8 @@ import Journal from "./pages/Journal";
 import Auth from "./pages/Auth";
 import UploadMasterclass from "./pages/UploadMasterclass";
 import MentalPillar from "./pages/MentalPillar";
+import PhysicalPillar from "./pages/PhysicalPillar";
+import SpiritualPillar from "./pages/SpiritualPillar";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/upload-masterclass" element={<UploadMasterclass />} />
           <Route path="/mental-pillar/:lessonNumber?" element={<MentalPillar />} />
+          <Route path="/physical-pillar/:lessonNumber?" element={<PhysicalPillar />} />
+          <Route path="/spiritual-pillar/:lessonNumber?" element={<SpiritualPillar />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
