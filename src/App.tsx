@@ -17,6 +17,8 @@ import PhysicalPillar from "./pages/PhysicalPillar";
 import SpiritualPillar from "./pages/SpiritualPillar";
 import ResetByDiscipline from "./pages/ResetByDiscipline";
 import MasterclassLibrary from "./pages/MasterclassLibrary";
+import ResetByDisciplineCourse from "./pages/ResetByDisciplineCourse";
+import Certificate from "./pages/Certificate";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +43,8 @@ const App = () => (
           <Route path="/spiritual-pillar/:lessonNumber?" element={<SpiritualPillar />} />
           <Route path="/reset-by-discipline" element={<ResetByDiscipline />} />
           <Route path="/masterclass-library" element={<MasterclassLibrary />} />
+          <Route path="/reset-discipline-course/:moduleNumber/:lessonNumber?" element={<ResetByDisciplineCourse />} />
+          <Route path="/certificate/:certificateNumber" element={<Certificate />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

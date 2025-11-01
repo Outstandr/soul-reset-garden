@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      course_modules: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          module_number: number
+          passing_score: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          module_number: number
+          passing_score?: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          module_number?: number
+          passing_score?: number
+          title?: string
+        }
+        Relationships: []
+      }
       journal_entries: {
         Row: {
           challenges: string | null
@@ -98,6 +125,83 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_questions: {
+        Row: {
+          correct_answer: string
+          created_at: string
+          id: string
+          lesson_id: string
+          options: Json | null
+          order_number: number
+          points: number
+          question_text: string
+          question_type: string
+        }
+        Insert: {
+          correct_answer: string
+          created_at?: string
+          id?: string
+          lesson_id: string
+          options?: Json | null
+          order_number: number
+          points?: number
+          question_text: string
+          question_type: string
+        }
+        Update: {
+          correct_answer?: string
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          options?: Json | null
+          order_number?: number
+          points?: number
+          question_text?: string
+          question_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_questions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "masterclass_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_certificates: {
+        Row: {
+          certificate_number: string
+          course_name: string
+          created_at: string
+          final_score: number
+          id: string
+          issue_date: string
+          module_name: string | null
+          user_id: string
+        }
+        Insert: {
+          certificate_number: string
+          course_name: string
+          created_at?: string
+          final_score: number
+          id?: string
+          issue_date?: string
+          module_name?: string | null
+          user_id: string
+        }
+        Update: {
+          certificate_number?: string
+          course_name?: string
+          created_at?: string
+          final_score?: number
+          id?: string
+          issue_date?: string
+          module_name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_lesson_progress: {
         Row: {
           completed: boolean | null
@@ -135,6 +239,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "user_lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "masterclass_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_quiz_attempts: {
+        Row: {
+          answers: Json
+          attempt_number: number
+          completed_at: string
+          created_at: string
+          id: string
+          lesson_id: string
+          passed: boolean
+          percentage: number
+          score: number
+          total_points: number
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          attempt_number?: number
+          completed_at?: string
+          created_at?: string
+          id?: string
+          lesson_id: string
+          passed: boolean
+          percentage: number
+          score: number
+          total_points: number
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          attempt_number?: number
+          completed_at?: string
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          passed?: boolean
+          percentage?: number
+          score?: number
+          total_points?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_quiz_attempts_lesson_id_fkey"
             columns: ["lesson_id"]
             isOneToOne: false
             referencedRelation: "masterclass_lessons"

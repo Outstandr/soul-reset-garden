@@ -31,11 +31,16 @@ export default function ResetByDiscipline() {
     },
     {
       id: "integration",
-      title: "Integration & Practice",
-      subtitle: "Apply What You've Learned",
-      description: "Complete exercises and challenges to integrate discipline into your daily life.",
+      title: "Elite Self Discipline Course",
+      subtitle: "18-Lesson Certification Program",
+      description: "Deep dive into 3 modules with quizzes and certification. Must pass each lesson to progress.",
       icon: <CheckCircle2 className="w-8 h-8" />,
-      status: "locked"
+      status: "available",
+      modules: [
+        { name: "Module 1: Getting Fit", route: "/reset-discipline-course/1/1", lessons: 6 },
+        { name: "Module 2: Knowing Who You Are", route: "/reset-discipline-course/2/1", lessons: 6 },
+        { name: "Module 3: Become Your Own Boss", route: "/reset-discipline-course/3/1", lessons: 6 }
+      ]
     }
   ];
 
@@ -147,6 +152,39 @@ export default function ResetByDiscipline() {
                             >
                               Start Lessons
                             </Button>
+                          </CardHeader>
+                        </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                )}
+
+                {stage.modules && (
+                  <CardContent>
+                    <div className="space-y-3 mt-4">
+                      {stage.modules.map((module: any) => (
+                        <Card 
+                          key={module.name}
+                          className="hover:shadow-soft transition-shadow cursor-pointer"
+                          onClick={() => navigate(module.route)}
+                        >
+                          <CardHeader>
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <CardTitle className="text-lg">{module.name}</CardTitle>
+                                <p className="text-sm text-muted-foreground">{module.lessons} lessons with quizzes</p>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(module.route);
+                                }}
+                              >
+                                Start Module
+                              </Button>
+                            </div>
                           </CardHeader>
                         </Card>
                       ))}
