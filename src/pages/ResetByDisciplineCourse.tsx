@@ -36,9 +36,9 @@ export default function ResetByDisciplineCourse() {
   ];
 
   const videoUrls = [
-    "masterclass-videos/reset-discipline-course/module1.mp4",
-    "masterclass-videos/reset-discipline-course/module2.mp4",
-    "masterclass-videos/reset-discipline-course/module3.mp4"
+    "reset-discipline-course/module1-lesson",
+    "reset-discipline-course/module2-lesson",
+    "reset-discipline-course/module3-lesson"
   ];
 
   useEffect(() => {
@@ -194,7 +194,7 @@ export default function ResetByDisciplineCourse() {
                     </CardHeader>
                     <CardContent>
                       <VideoPlayer
-                        videoUrl={videoUrls[parseInt(moduleNumber || "1") - 1]}
+                        videoUrl={`${videoUrls[parseInt(moduleNumber || "1") - 1]}${currentLesson.lesson_number}.mp4`}
                         startTime={currentLesson.video_start_time}
                         endTime={currentLesson.video_end_time}
                         onComplete={handleLessonComplete}

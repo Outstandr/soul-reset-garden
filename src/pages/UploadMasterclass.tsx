@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, ArrowLeft, CheckCircle2 } from "lucide-react";
 
@@ -14,6 +15,9 @@ const UploadMasterclass = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadComplete, setUploadComplete] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState<string>("reset-discipline");
+  const [selectedModule, setSelectedModule] = useState<string>("1");
+  const [selectedLesson, setSelectedLesson] = useState<string>("1");
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -44,7 +48,7 @@ const UploadMasterclass = () => {
     setFileName(file.name);
 
     try {
-      // Simulate upload progress (since Supabase doesn't provide native progress)
+      // Simulate upload progress
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 90) {
@@ -55,9 +59,19 @@ const UploadMasterclass = () => {
         });
       }, 500);
 
+      let bucketName = "masterclass-videos";
+      let filePath = "";
+
+      if (selectedCourse === "reset-discipline") {
+        bucketName = "reset-discipline-course";
+        filePath = `module${selectedModule}-lesson${selectedLesson}.mp4`;
+      } else {
+        filePath = `mental-mastery/${file.name}`;
+      }
+
       const { data, error } = await supabase.storage
-        .from("masterclass-videos")
-        .upload(`mental-mastery/${file.name}`, file, {
+        .from(bucketName)
+        .upload(filePath, file, {
           cacheControl: "3600",
           upsert: true,
         });
@@ -70,13 +84,13 @@ const UploadMasterclass = () => {
       setUploadComplete(true);
       toast({
         title: "Upload successful!",
-        description: `${file.name} has been uploaded successfully.`,
+        description: `Video uploaded as ${filePath}`,
       });
 
       // Get public URL
       const { data: urlData } = supabase.storage
-        .from("masterclass-videos")
-        .getPublicUrl(`mental-mastery/${file.name}`);
+        .from(bucketName)
+        .getPublicUrl(filePath);
 
       console.log("Video URL:", urlData.publicUrl);
     } catch (error: any) {
@@ -106,13 +120,61 @@ const UploadMasterclass = () => {
 
         <Card className="shadow-strong">
           <CardHeader>
-            <CardTitle className="text-2xl">Upload Masterclass Video</CardTitle>
+            <CardTitle className="text-2xl">Upload Course Video</CardTitle>
             <CardDescription>
-              Upload the Mental Mastery masterclass video (full length). The system will
-              automatically segment it for the 12 interactive lessons.
+              Upload videos for Reset by Discipline course or other masterclasses.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Course</label>
+                <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select course" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="reset-discipline">Reset by Discipline Course</SelectItem>
+                    <SelectItem value="mental-mastery">Mental Mastery Masterclass</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {selectedCourse === "reset-discipline" && (
+                <>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Module</label>
+                    <Select value={selectedModule} onValueChange={setSelectedModule}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select module" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Module 1: Getting Fit</SelectItem>
+                        <SelectItem value="2">Module 2: Knowing Who You Are</SelectItem>
+                        <SelectItem value="3">Module 3: Become Your Own Boss</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Lesson</label>
+                    <Select value={selectedLesson} onValueChange={setSelectedLesson}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select lesson" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Lesson 1</SelectItem>
+                        <SelectItem value="2">Lesson 2</SelectItem>
+                        <SelectItem value="3">Lesson 3</SelectItem>
+                        <SelectItem value="4">Lesson 4</SelectItem>
+                        <SelectItem value="5">Lesson 5</SelectItem>
+                        <SelectItem value="6">Lesson 6</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </>
+              )}
+            </div>
             {!uploadComplete ? (
               <>
                 <div className="border-2 border-dashed border-primary/20 rounded-lg p-12 text-center hover:border-primary/40 transition-colors">
@@ -170,12 +232,23 @@ const UploadMasterclass = () => {
         </Card>
 
         <div className="mt-6 p-4 bg-card rounded-lg border">
-          <h4 className="font-semibold mb-2">What happens next?</h4>
+          <h4 className="font-semibold mb-2">Upload Instructions</h4>
           <ul className="text-sm text-muted-foreground space-y-1">
-            <li>✓ Video will be stored securely in your backend</li>
-            <li>✓ 12 lessons will reference specific timestamps</li>
-            <li>✓ Each lesson plays only its designated segment</li>
-            <li>✓ Interactive elements trigger after each segment</li>
+            {selectedCourse === "reset-discipline" ? (
+              <>
+                <li>✓ Upload each lesson video separately (18 total)</li>
+                <li>✓ Select Module and Lesson number before uploading</li>
+                <li>✓ File will be named: module{selectedModule}-lesson{selectedLesson}.mp4</li>
+                <li>✓ Each lesson should cover its specific content and timestamps</li>
+              </>
+            ) : (
+              <>
+                <li>✓ Video will be stored securely in your backend</li>
+                <li>✓ 12 lessons will reference specific timestamps</li>
+                <li>✓ Each lesson plays only its designated segment</li>
+                <li>✓ Interactive elements trigger after each segment</li>
+              </>
+            )}
           </ul>
         </div>
       </div>
