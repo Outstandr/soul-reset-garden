@@ -32,7 +32,7 @@ export default function ResetByDiscipline() {
     {
       id: "integration",
       title: "Elite Self Discipline Course",
-      subtitle: "18-Lesson Certification Program",
+      subtitle: "18-Lesson Certification Program + Final Exam",
       description: "Deep dive into 3 modules with quizzes and certification. Must pass each lesson to progress.",
       icon: <CheckCircle2 className="w-8 h-8" />,
       status: "available",
@@ -40,7 +40,8 @@ export default function ResetByDiscipline() {
         { name: "Module 1: Getting Fit", route: "/reset-discipline-course/1/1", lessons: 6 },
         { name: "Module 2: Knowing Who You Are", route: "/reset-discipline-course/2/1", lessons: 6 },
         { name: "Module 3: Become Your Own Boss", route: "/reset-discipline-course/3/1", lessons: 6 }
-      ]
+      ],
+      finalExam: { name: "Final Certification Exam", route: "/final-exam" }
     }
   ];
 
@@ -188,6 +189,34 @@ export default function ResetByDiscipline() {
                           </CardHeader>
                         </Card>
                       ))}
+                      
+                      {stage.finalExam && (
+                        <Card className="border-2 border-primary/30 bg-primary/5 hover:shadow-soft transition-shadow cursor-pointer"
+                          onClick={() => navigate(stage.finalExam.route)}
+                        >
+                          <CardHeader>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <CheckCircle2 className="w-6 h-6 text-primary" />
+                                <div>
+                                  <CardTitle className="text-lg text-primary">{stage.finalExam.name}</CardTitle>
+                                  <p className="text-sm text-muted-foreground">Complete all modules to unlock • 80% required to pass</p>
+                                </div>
+                              </div>
+                              <Button 
+                                variant="default" 
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  navigate(stage.finalExam.route);
+                                }}
+                              >
+                                Take Exam
+                              </Button>
+                            </div>
+                          </CardHeader>
+                        </Card>
+                      )}
                     </div>
                   </CardContent>
                 )}
