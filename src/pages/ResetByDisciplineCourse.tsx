@@ -35,10 +35,12 @@ export default function ResetByDisciplineCourse() {
     "Module 3: Become Your Own Boss"
   ];
 
+  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+  
   const videoUrls = [
-    "reset-discipline-course/module1-lesson",
-    "reset-discipline-course/module2-lesson",
-    "reset-discipline-course/module3-lesson"
+    `${SUPABASE_URL}/storage/v1/object/public/reset-discipline-course/module1-lesson`,
+    `${SUPABASE_URL}/storage/v1/object/public/reset-discipline-course/module2-lesson`,
+    `${SUPABASE_URL}/storage/v1/object/public/reset-discipline-course/module3-lesson`
   ];
 
   useEffect(() => {
