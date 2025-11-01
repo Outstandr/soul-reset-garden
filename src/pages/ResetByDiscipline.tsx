@@ -41,7 +41,7 @@ export default function ResetByDiscipline() {
         { name: "Module 2: Knowing Who You Are", route: "/reset-discipline-course/2/1", lessons: 6 },
         { name: "Module 3: Become Your Own Boss", route: "/reset-discipline-course/3/1", lessons: 6 }
       ],
-      finalExam: { name: "Final Certification Exam", route: "/final-exam" }
+      finalExam: { name: "Final Certification Exam", route: "/final-certification-exam" }
     }
   ];
 
