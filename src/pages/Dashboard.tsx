@@ -190,7 +190,7 @@ const Dashboard = () => {
                   onStart={() => {
                     if (module.status !== "locked") {
                       if (module.title === "Reset by Discipline") {
-                        navigate("/book/reset-by-discipline");
+                        navigate("/reset-by-discipline");
                       } else {
                         navigate("/journey/reset-in-you");
                       }
@@ -212,14 +212,14 @@ const Dashboard = () => {
           <div className="grid gap-6 md:grid-cols-3">
             <Card 
               className="hover:shadow-medium transition-shadow cursor-pointer"
-              onClick={() => navigate("/mental-pillar")}
+              onClick={() => navigate("/masterclass-library")}
             >
               <CardHeader>
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <Library className="w-6 h-6 text-primary" />
                 </div>
                 <CardTitle>Masterclass Library</CardTitle>
-                <CardDescription>Access all five in-depth courses</CardDescription>
+                <CardDescription>Full masterclass videos for each pillar</CardDescription>
               </CardHeader>
             </Card>
 
@@ -229,7 +229,7 @@ const Dashboard = () => {
                   <BookOpen className="w-6 h-6 text-reset-energy" />
                 </div>
                 <CardTitle>E-Reader</CardTitle>
-                <CardDescription>Read your RESET books</CardDescription>
+                <CardDescription>Complete RESET book series</CardDescription>
               </CardHeader>
             </Card>
 
@@ -242,7 +242,7 @@ const Dashboard = () => {
                   <PenLine className="w-6 h-6 text-reset-systems" />
                 </div>
                 <CardTitle>Digital Journal</CardTitle>
-                <CardDescription>Your private reflection space</CardDescription>
+                <CardDescription>RESET series journals</CardDescription>
               </CardHeader>
             </Card>
           </div>

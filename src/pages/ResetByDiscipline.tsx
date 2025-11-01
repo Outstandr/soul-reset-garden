@@ -1,0 +1,176 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, BookOpen, Mountain, Play, CheckCircle2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+export default function ResetByDiscipline() {
+  const navigate = useNavigate();
+
+  const stages = [
+    {
+      id: "book",
+      title: "The Book",
+      subtitle: "Foundation",
+      description: "Start with the Reset by Discipline book to build your foundation of elite self-discipline.",
+      icon: <BookOpen className="w-8 h-8" />,
+      status: "active",
+      action: () => navigate("/book/reset-by-discipline")
+    },
+    {
+      id: "masterclass",
+      title: "Elite Self Discipline Masterclass",
+      subtitle: "3 Pillars Deep Dive",
+      description: "Master the Mental, Physical, and Spiritual pillars through interactive lessons.",
+      icon: <Mountain className="w-8 h-8" />,
+      status: "available",
+      pillars: [
+        { name: "Mental Pillar", route: "/mental-pillar", completed: false },
+        { name: "Physical Pillar", route: "/physical-pillar", completed: false },
+        { name: "Spiritual Pillar", route: "/spiritual-pillar", completed: false }
+      ]
+    },
+    {
+      id: "integration",
+      title: "Integration & Practice",
+      subtitle: "Apply What You've Learned",
+      description: "Complete exercises and challenges to integrate discipline into your daily life.",
+      icon: <CheckCircle2 className="w-8 h-8" />,
+      status: "locked"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
+      <div className="fixed inset-0 bg-grid-pattern opacity-20" />
+      
+      <div className="relative z-10">
+        <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+          <div className="zen-container py-4">
+            <div className="flex items-center justify-between">
+              <Button
+                variant="ghost"
+                onClick={() => navigate("/dashboard")}
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Back to Dashboard
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <main className="zen-container py-12 space-y-12">
+          <section className="text-center animate-fade-in-up">
+            <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-gradient-to-r from-reset-execution/20 to-reset-execution/10 rounded-full border border-reset-execution/30">
+              <Mountain className="w-6 h-6 text-reset-execution" />
+              <span className="text-lg font-bold text-reset-execution">Execution & Action</span>
+            </div>
+            <h1 className="text-5xl font-black gradient-text mb-4">Reset by Discipline</h1>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Master elite self-discipline through three progressive stages: Foundation, Mastery, and Integration
+            </p>
+          </section>
+
+          <section className="space-y-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-2">Your Journey Path</h2>
+              <p className="text-muted-foreground">Complete each stage in order to build unshakable discipline</p>
+            </div>
+
+            {stages.map((stage, index) => (
+              <Card 
+                key={stage.id}
+                className={`animate-fade-in-up ${
+                  stage.status === "locked" 
+                    ? "opacity-60" 
+                    : "hover:shadow-medium transition-all"
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <CardHeader>
+                  <div className="flex items-start gap-6">
+                    <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${
+                      stage.status === "active" 
+                        ? "bg-reset-execution/20 text-reset-execution" 
+                        : stage.status === "available"
+                        ? "bg-primary/20 text-primary"
+                        : "bg-muted text-muted-foreground"
+                    }`}>
+                      {stage.icon}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <CardTitle className="text-2xl">{stage.title}</CardTitle>
+                          <p className="text-sm text-muted-foreground mt-1">{stage.subtitle}</p>
+                        </div>
+                        {stage.status === "active" && (
+                          <span className="px-3 py-1 rounded-full bg-reset-execution/20 text-reset-execution text-sm font-semibold">
+                            Start Here
+                          </span>
+                        )}
+                        {stage.status === "locked" && (
+                          <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-sm font-semibold">
+                            Locked
+                          </span>
+                        )}
+                      </div>
+                      <CardDescription className="text-base">{stage.description}</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+
+                {stage.pillars && (
+                  <CardContent>
+                    <div className="grid md:grid-cols-3 gap-4 mt-4">
+                      {stage.pillars.map((pillar) => (
+                        <Card 
+                          key={pillar.name}
+                          className="hover:shadow-soft transition-shadow cursor-pointer"
+                          onClick={() => navigate(pillar.route)}
+                        >
+                          <CardHeader>
+                            <div className="flex items-center justify-between mb-2">
+                              <CardTitle className="text-lg">{pillar.name}</CardTitle>
+                              {pillar.completed ? (
+                                <CheckCircle2 className="w-5 h-5 text-primary" />
+                              ) : (
+                                <Play className="w-5 h-5 text-muted-foreground" />
+                              )}
+                            </div>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(pillar.route);
+                              }}
+                            >
+                              Start Lessons
+                            </Button>
+                          </CardHeader>
+                        </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                )}
+
+                {stage.action && stage.status !== "locked" && (
+                  <CardContent>
+                    <Button 
+                      variant={stage.status === "active" ? "default" : "outline"}
+                      size="lg"
+                      onClick={stage.action}
+                      className="w-full md:w-auto"
+                    >
+                      {stage.status === "active" ? "Begin Foundation" : "Continue"}
+                    </Button>
+                  </CardContent>
+                )}
+              </Card>
+            ))}
+          </section>
+        </main>
+      </div>
+    </div>
+  );
+}
