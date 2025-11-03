@@ -8,6 +8,7 @@ import { VideoPlayer } from "@/components/VideoPlayer";
 import { QuizComponent } from "@/components/quiz/QuizComponent";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
+import { InteractiveWrapper } from "@/components/interactive/InteractiveWrapper";
 
 interface Lesson {
   id: string;
@@ -17,6 +18,8 @@ interface Lesson {
   video_start_time: string;
   video_end_time: string;
   module_name: string;
+  interactive_type?: string;
+  interactive_config?: any;
 }
 
 export default function ResetByDisciplineCourse() {
@@ -26,6 +29,8 @@ export default function ResetByDisciplineCourse() {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
   const [showQuiz, setShowQuiz] = useState(false);
+  const [interactiveResponse, setInteractiveResponse] = useState<any>(null);
+  const [showInteractive, setShowInteractive] = useState(false);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -53,8 +58,12 @@ export default function ResetByDisciplineCourse() {
       const lesson = lessons.find(l => l.lesson_number === parseInt(lessonNumber));
       setCurrentLesson(lesson || lessons[0]);
       setShowQuiz(false);
+      setShowInteractive(false);
+      setInteractiveResponse(null);
+      loadInteractiveProgress(lesson || lessons[0]);
     } else if (lessons.length > 0) {
       setCurrentLesson(lessons[0]);
+      loadInteractiveProgress(lessons[0]);
     }
   }, [lessons, lessonNumber]);
 
@@ -94,8 +103,61 @@ export default function ResetByDisciplineCourse() {
     }
   };
 
+  const loadInteractiveProgress = async (lesson: Lesson | null) => {
+    if (!lesson || !lesson.interactive_type) return;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('user_lesson_progress')
+        .select('interactive_responses')
+        .eq('user_id', user.id)
+        .eq('lesson_id', lesson.id)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (data?.interactive_responses) {
+        setInteractiveResponse(data.interactive_responses);
+      }
+    } catch (error) {
+      console.error('Error loading interactive progress:', error);
+    }
+  };
+
   const handleLessonComplete = () => {
-    setShowQuiz(true);
+    if (currentLesson?.interactive_type && !interactiveResponse) {
+      setShowInteractive(true);
+    } else {
+      setShowQuiz(true);
+    }
+  };
+
+  const handleInteractiveComplete = async (response: any) => {
+    if (!currentLesson) return;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('user_lesson_progress')
+        .upsert({
+          user_id: user.id,
+          lesson_id: currentLesson.id,
+          interactive_responses: response,
+          video_progress: 100
+        });
+
+      if (error) throw error;
+
+      setInteractiveResponse(response);
+      setShowInteractive(false);
+      setShowQuiz(true);
+    } catch (error) {
+      console.error('Error saving interactive response:', error);
+    }
   };
 
   const handleQuizPass = async () => {
@@ -203,6 +265,15 @@ export default function ResetByDisciplineCourse() {
                       />
                     </CardContent>
                   </Card>
+
+                  {showInteractive && currentLesson.interactive_type && (
+                    <InteractiveWrapper
+                      type={currentLesson.interactive_type}
+                      config={currentLesson.interactive_config}
+                      onComplete={handleInteractiveComplete}
+                      savedResponse={interactiveResponse}
+                    />
+                  )}
 
                   {showQuiz && (
                     <QuizComponent
