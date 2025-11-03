@@ -1,1 +1,7 @@
 project_id = "cvrpucnzpzzbmckphtks"
+
+[functions.hello-world]
+verify_jwt = false
+
+[functions.lionel-coach]
+verify_jwt = true

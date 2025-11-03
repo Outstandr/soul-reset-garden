@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { LionelCoach } from "@/components/LionelCoach";
 
 const journeySteps = [
   {
@@ -246,6 +247,15 @@ const Dashboard = () => {
               </CardHeader>
             </Card>
           </div>
+        </section>
+
+        {/* Lionel Coach */}
+        <section className="animate-fade-in-up animation-delay-600">
+          <div className="mb-8">
+            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
+            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
+          </div>
+          <LionelCoach />
         </section>
       </main>
     </div>
