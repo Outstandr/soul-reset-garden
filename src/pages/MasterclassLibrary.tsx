@@ -13,7 +13,7 @@ export default function MasterclassLibrary() {
       description: "Master your mind, master your reality. Complete mental mastery training.",
       duration: "47:00",
       thumbnail: "mental",
-      videoUrl: `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/masterclass-videos/mental-mastery/Masterclass%20final%20aproved%20edit%20-%20mental%20mastery_compressed.mp4`,
+      videoUrl: `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/masterclass-videos/mental-mastery/Masterclass%20Final%20Aproved%20Edit%20-%20Mental%20mastery%20_compressed.mp4`,
       color: "from-blue-500/20 to-purple-500/20"
     },
     {
