@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ArrowLeft } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -61,7 +62,16 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4">
-      <Card className="w-full max-w-md p-8">
+      <div className="w-full max-w-md">
+        <Button
+          variant="ghost"
+          onClick={() => navigate("/")}
+          className="mb-4 -ml-2"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Home
+        </Button>
+        <Card className="w-full p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">
             {isLogin ? "Welcome Back" : "Create Account"}
@@ -113,6 +123,7 @@ const Auth = () => {
           </button>
         </div>
       </Card>
+      </div>
     </div>
   );
 };
