@@ -11,6 +11,13 @@ import { DragDropScheduler } from "./DragDropScheduler";
 import { DragDropMatch } from "./DragDropMatch";
 import { CommitmentCheckbox } from "./CommitmentCheckbox";
 import { ActionChecklist } from "./ActionChecklist";
+import { FocusFortress } from "./FocusFortress";
+import { DiscomfortBreath } from "./DiscomfortBreath";
+import { DecisionFilter } from "./DecisionFilter";
+import { ActionCommitment } from "./ActionCommitment";
+import { VisionJournal } from "./VisionJournal";
+import { ScenarioQuiz } from "./ScenarioQuiz";
+import { AlreadyGood } from "./AlreadyGood";
 
 interface InteractiveWrapperProps {
   type: string;
@@ -47,6 +54,22 @@ export const InteractiveWrapper = ({ type, config, onComplete, savedResponse }: 
       return <CommitmentCheckbox config={config} onComplete={onComplete} savedResponse={savedResponse} />;
     case "action-checklist":
       return <ActionChecklist config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "focus-fortress":
+      return <FocusFortress config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "discomfort-breath":
+      return <DiscomfortBreath config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "decision-filter":
+      return <DecisionFilter config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "action-commitment":
+      return <ActionCommitment config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "vision-journal":
+      return <VisionJournal config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "scenario-quiz":
+      return <ScenarioQuiz config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "already-good":
+      return <AlreadyGood config={config} onComplete={onComplete} savedResponse={savedResponse} />;
+    case "none":
+      return null;
     default:
       return (
         <div className="p-6 border-2 border-dashed border-muted rounded-lg text-center text-muted-foreground">
