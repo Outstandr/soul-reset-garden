@@ -233,13 +233,23 @@ const Dashboard = () => {
               </CardHeader>
             </Card>
 
-            <Card className="hover:shadow-medium transition-shadow cursor-pointer">
+            <Card 
+              className="hover:shadow-medium transition-shadow cursor-pointer"
+              onClick={() => {
+                const link = document.createElement('a');
+                link.href = '/RESET_BY_DISCIPLINE_FINAL_V4.pdf';
+                link.download = 'RESET_BY_DISCIPLINE_FINAL_V4.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              }}
+            >
               <CardHeader>
                 <div className="w-12 h-12 rounded-xl bg-reset-energy/10 flex items-center justify-center mb-4">
                   <BookOpen className="w-6 h-6 text-reset-energy" />
                 </div>
                 <CardTitle>E-Reader</CardTitle>
-                <CardDescription>Complete RESET book series</CardDescription>
+                <CardDescription>Download RESET by Discipline book</CardDescription>
               </CardHeader>
             </Card>
 
