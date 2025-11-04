@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Book, Star, Flame, Trophy } from "lucide-react";
+import { ArrowLeft, Book, Star, Flame, Trophy, Download } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { BookLessonCard } from "@/components/BookLessonCard";
 
@@ -315,6 +315,38 @@ export default function BookLessons() {
               </span>
             </div>
             <Progress value={progressPercent} className="h-3" />
+          </div>
+
+          {/* Download Full Book */}
+          <div className="mt-8 max-w-2xl mx-auto">
+            <div className="p-6 rounded-2xl bg-gradient-to-r from-reset-energy/10 to-reset-execution/10 border border-reset-energy/30 backdrop-blur-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-reset-energy/20">
+                    <Book className="w-6 h-6 text-reset-energy" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-lg text-white">Download Full Book</h3>
+                    <p className="text-sm text-gray-400">Get the complete Reset by Discipline PDF</p>
+                  </div>
+                </div>
+                <Button
+                  variant="hero"
+                  className="gap-2"
+                  onClick={() => {
+                    const link = document.createElement('a');
+                    link.href = '/RESET_BY_DISCIPLINE_FINAL_V4.pdf';
+                    link.download = 'RESET_BY_DISCIPLINE_FINAL_V4.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                >
+                  <Download className="w-4 h-4" />
+                  Download PDF
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
