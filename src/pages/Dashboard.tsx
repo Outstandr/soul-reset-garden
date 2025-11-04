@@ -203,8 +203,17 @@ const Dashboard = () => {
           </div>
         </section>
 
-        {/* Quick Access */}
+        {/* Lionel Coach */}
         <section className="animate-fade-in-up animation-delay-500">
+          <div className="mb-8">
+            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
+            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
+          </div>
+          <LionelCoach />
+        </section>
+
+        {/* Quick Access */}
+        <section className="animate-fade-in-up animation-delay-600">
           <div className="mb-8">
             <h3 className="text-3xl font-bold mb-2">Quick Access</h3>
             <p className="text-muted-foreground">Jump to your favorite resources</p>
@@ -247,15 +256,6 @@ const Dashboard = () => {
               </CardHeader>
             </Card>
           </div>
-        </section>
-
-        {/* Lionel Coach */}
-        <section className="animate-fade-in-up animation-delay-600">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
-            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
-          </div>
-          <LionelCoach />
         </section>
       </main>
     </div>
