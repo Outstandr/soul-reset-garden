@@ -30,7 +30,7 @@ export const VisionJournal = ({ config, onComplete, savedResponse }: VisionJourn
     setSubmitted(true);
   };
 
-  const allFilled = config.prompts.every(prompt => responses[prompt]?.trim());
+  const allFilled = (config.prompts || []).every(prompt => responses[prompt]?.trim());
 
   return (
     <Card className="glass-effect">
@@ -48,7 +48,7 @@ export const VisionJournal = ({ config, onComplete, savedResponse }: VisionJourn
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        {config.prompts.map((prompt, index) => (
+        {(config.prompts || []).map((prompt, index) => (
           <div key={index} className="space-y-2">
             <Label htmlFor={`prompt-${index}`} className="text-sm font-medium">
               {prompt}
