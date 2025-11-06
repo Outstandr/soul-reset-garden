@@ -8,84 +8,82 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Dark Blue-Grey Palette - Bold & Dramatic */
-    --background: 222 47% 8%;  /* Deep charcoal blue-black */
-    --foreground: 210 40% 98%;  /* Bright white with blue tint */
+    /* Dark Blue-Grey Palette from Color Wheel */
+    --background: 210 28% 10%;  /* Deep navy background */
+    --foreground: 0 0% 98%;  /* Clean white */
 
-    --card: 220 40% 12%;  /* Dark blue-grey cards */
-    --card-foreground: 210 40% 98%;
+    --card: 210 28% 15%;  /* Dark navy cards */
+    --card-foreground: 0 0% 98%;
 
-    --popover: 220 40% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 210 28% 15%;
+    --popover-foreground: 0 0% 98%;
 
-    /* Primary: Vibrant Cyan - Energy & Growth */
-    --primary: 189 94% 43%;
+    /* Primary: Slate Blue - Professional & Trustworthy */
+    --primary: 207 25% 38%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Electric Purple - Premium & Modern */
-    --secondary: 262 83% 58%;
+    /* Secondary: Deep Purple - Wisdom & Growth */
+    --secondary: 269 25% 49%;
     --secondary-foreground: 0 0% 100%;
 
     /* Muted: Dark backgrounds */
-    --muted: 220 40% 16%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 210 25% 20%;
+    --muted-foreground: 215 15% 65%;
 
-    /* Accent: Neon Pink - Attention & Fun */
-    --accent: 330 85% 60%;
+    /* Accent: Forest Green - Balance & Health */
+    --accent: 143 26% 39%;
     --accent-foreground: 0 0% 100%;
 
     /* Destructive */
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 40% 20%;
-    --input: 220 40% 20%;
-    --ring: 189 94% 43%;
+    --border: 210 25% 25%;
+    --input: 210 25% 25%;
+    --ring: 207 25% 38%;
 
     --radius: 1rem;
 
-    /* RESET Journey Colors - Vibrant on Dark */
-    --reset-rhythm: 158 64% 52%;  /* Vibrant emerald */
-    --reset-energy: 38 92% 50%;  /* Electric orange */
-    --reset-systems: 340 82% 52%;  /* Hot pink */
-    --reset-execution: 217 91% 60%;  /* Bright blue */
-    --reset-transformation: 45 93% 47%;  /* Rich gold */
+    /* RESET Journey Colors - From Color Wheel */
+    --reset-rhythm: 143 26% 45%;  /* Forest green - Fit Worden */
+    --reset-energy: 207 25% 42%;  /* Slate blue - Word Eigen Baas */
+    --reset-systems: 269 25% 52%;  /* Purple - Weten Wie Je Bent */
+    --reset-execution: 210 28% 35%;  /* Dark navy - Doing */
+    --reset-transformation: 269 30% 55%;  /* Lighter purple */
 
     /* Premium Accents */
-    --gold: 45 93% 47%;
-    --cinnabar: 0 84% 60%;
-    --electric-purple: 262 83% 58%;
-    --neon-cyan: 189 94% 43%;
+    --gold: 45 80% 50%;
+    --cinnabar: 0 70% 50%;
+    --electric-purple: 269 25% 49%;
+    --neon-cyan: 190 30% 45%;
 
-    /* Dark Dramatic Gradients */
+    /* Professional Gradients */
     --gradient-hero: linear-gradient(135deg, 
-      hsl(222 47% 8%) 0%,
-      hsl(220 40% 12%) 50%,
-      hsl(222 47% 8%) 100%);
+      hsl(210 28% 10%) 0%,
+      hsl(210 28% 15%) 50%,
+      hsl(210 28% 10%) 100%);
     
     --gradient-card: linear-gradient(135deg, 
-      hsl(220 40% 12%) 0%, 
-      hsl(220 40% 16%) 100%);
+      hsl(210 28% 15%) 0%, 
+      hsl(210 25% 20%) 100%);
     
     --gradient-journey: linear-gradient(90deg, 
-      hsl(158 64% 52%) 0%,
-      hsl(38 92% 50%) 20%,
-      hsl(340 82% 52%) 40%,
-      hsl(217 91% 60%) 60%,
-      hsl(262 83% 58%) 80%,
-      hsl(45 93% 47%) 100%);
+      hsl(143 26% 45%) 0%,
+      hsl(207 25% 42%) 33%,
+      hsl(269 25% 52%) 66%,
+      hsl(210 28% 35%) 100%);
     
     --gradient-dark-blue: linear-gradient(135deg,
-      hsl(222 47% 8%),
-      hsl(220 40% 12%),
-      hsl(217 91% 60% / 0.2));
+      hsl(210 28% 10%),
+      hsl(210 28% 15%),
+      hsl(207 25% 38% / 0.2));
 
-    /* Dramatic Shadows with Neon Glow */
+    /* Refined Shadows */
     --shadow-soft: 0 2px 12px hsl(0 0% 0% / 0.5);
     --shadow-medium: 0 8px 32px hsl(0 0% 0% / 0.6);
     --shadow-strong: 0 16px 48px hsl(0 0% 0% / 0.7);
-    --shadow-glow: 0 0 40px hsl(189 94% 43% / 0.6);
-    --shadow-neon: 0 0 60px hsl(262 83% 58% / 0.7);
+    --shadow-glow: 0 0 40px hsl(207 25% 38% / 0.4);
+    --shadow-neon: 0 0 60px hsl(269 25% 49% / 0.5);
 
     /* Transitions - Bouncy & Playful */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -94,42 +92,42 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 230 25% 12%;
-    --foreground: 35 20% 95%;
+    --background: 210 28% 12%;
+    --foreground: 0 0% 95%;
 
-    --card: 230 25% 15%;
-    --card-foreground: 35 20% 95%;
+    --card: 210 28% 15%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 230 25% 15%;
-    --popover-foreground: 35 20% 95%;
+    --popover: 210 28% 15%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 150 30% 55%;
-    --primary-foreground: 230 25% 12%;
+    --primary: 207 25% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 230 20% 20%;
-    --secondary-foreground: 35 20% 95%;
+    --secondary: 269 25% 55%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 230 20% 20%;
-    --muted-foreground: 35 15% 65%;
+    --muted: 210 25% 22%;
+    --muted-foreground: 215 15% 70%;
 
-    --accent: 0 70% 55%;
+    --accent: 143 26% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 230 20% 25%;
-    --input: 230 20% 25%;
-    --ring: 150 30% 55%;
+    --border: 210 25% 28%;
+    --input: 210 25% 28%;
+    --ring: 207 25% 45%;
 
-    /* Dark mode journey colors - slightly brighter */
-    --reset-rhythm: 150 30% 55%;
-    --reset-energy: 38 90% 65%;
-    --reset-systems: 15 80% 70%;
-    --reset-execution: 210 65% 55%;
-    --reset-transformation: 45 85% 60%;
+    /* Dark mode journey colors */
+    --reset-rhythm: 143 26% 48%;
+    --reset-energy: 207 25% 45%;
+    --reset-systems: 269 25% 55%;
+    --reset-execution: 210 28% 40%;
+    --reset-transformation: 269 30% 58%;
 
-    --gold: 45 85% 60%;
+    --gold: 45 80% 55%;
     --cinnabar: 0 70% 55%;
   }
 }
