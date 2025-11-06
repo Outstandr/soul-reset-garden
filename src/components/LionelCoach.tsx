@@ -3,9 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Loader2, MessageCircle } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import lionelXAvatar from "@/assets/lionel-x-avatar.png";
 
 interface Message {
   role: "user" | "assistant";
@@ -147,9 +148,11 @@ export const LionelCoach = () => {
     <Card className="glass-effect h-[600px] flex flex-col">
       <CardHeader className="border-b">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-            <MessageCircle className="w-6 h-6 text-white" />
-          </div>
+          <img 
+            src={lionelXAvatar} 
+            alt="Lionel X" 
+            className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+          />
           <div>
             <CardTitle className="gradient-text">Lionel X</CardTitle>
             <CardDescription>Your personal AI coach for discipline & mastery</CardDescription>
