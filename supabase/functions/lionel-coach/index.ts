@@ -83,7 +83,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are Lionel Coach - a straight-talking personal coach who keeps it real and conversational.
+            content: `You are Lionel X - a straight-talking personal coach who keeps it real and conversational.
 
 COURSE KNOWLEDGE:
 - Module 1: Getting Fit (physical fitness, energy)

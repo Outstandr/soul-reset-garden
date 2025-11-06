@@ -16,7 +16,7 @@ export const LionelCoach = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hey there! I'm Lionel Coach, your personal guide on this journey to discipline and self-mastery. I've reviewed your progress, and I'm here to help you level up. What's on your mind today?"
+      content: "Hey there! I'm Lionel X, your personal guide on this journey to discipline and self-mastery. I've reviewed your progress, and I'm here to help you level up. What's on your mind today?"
     }
   ]);
   const [input, setInput] = useState("");
@@ -40,7 +40,7 @@ export const LionelCoach = () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        throw new Error("Please sign in to use Lionel Coach");
+        throw new Error("Please sign in to use Lionel X");
       }
 
       const response = await fetch(
@@ -62,7 +62,7 @@ export const LionelCoach = () => {
         if (response.status === 402) {
           throw new Error("AI service temporarily unavailable. Please try again later.");
         }
-        throw new Error("Failed to get response from Lionel Coach");
+        throw new Error("Failed to get response from Lionel X");
       }
 
       if (!response.body) {
@@ -151,7 +151,7 @@ export const LionelCoach = () => {
             <MessageCircle className="w-6 h-6 text-white" />
           </div>
           <div>
-            <CardTitle className="gradient-text">Lionel Coach</CardTitle>
+            <CardTitle className="gradient-text">Lionel X</CardTitle>
             <CardDescription>Your personal AI coach for discipline & mastery</CardDescription>
           </div>
         </div>
@@ -192,7 +192,7 @@ export const LionelCoach = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask Lionel Coach anything..."
+              placeholder="Ask Lionel X anything..."
               disabled={isLoading}
               className="flex-1"
             />
