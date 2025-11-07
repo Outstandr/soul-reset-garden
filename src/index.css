@@ -12,10 +12,10 @@ All colors MUST be HSL.
     --background: 0 0% 96%;  /* Light grey background */
     --foreground: 222 47% 11%;  /* Dark text for readability */
 
-    --card: 0 0% 100%;  /* White cards */
+    --card: 207 90% 98%;  /* Subtle blue tint for cards */
     --card-foreground: 222 47% 11%;
 
-    --popover: 0 0% 100%;
+    --popover: 269 60% 98%;  /* Subtle purple tint */
     --popover-foreground: 222 47% 11%;
 
     /* Primary: Vibrant Blue - Stands out on light bg */
@@ -26,12 +26,12 @@ All colors MUST be HSL.
     --secondary: 269 80% 55%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Muted: Light grey tones */
-    --muted: 210 40% 94%;
+    /* Muted: Light grey with subtle tint */
+    --muted: 210 30% 92%;
     --muted-foreground: 215 16% 40%;
 
     /* Accent: Bright Green - Balance & Health */
-    --accent: 143 64% 42%;
+    --accent: 143 64% 45%;
     --accent-foreground: 0 0% 100%;
 
     /* Destructive */
@@ -44,18 +44,18 @@ All colors MUST be HSL.
 
     --radius: 1rem;
 
-    /* RESET Journey Colors - Vibrant for Light Theme */
-    --reset-rhythm: 143 64% 38%;  /* Bright forest green */
-    --reset-energy: 207 90% 50%;  /* Vibrant blue */
-    --reset-systems: 269 80% 52%;  /* Vibrant purple */
-    --reset-execution: 210 70% 45%;  /* Strong blue */
-    --reset-transformation: 269 75% 58%;  /* Bright purple */
+    /* RESET Journey Colors - Vibrant & Distinct */
+    --reset-rhythm: 143 70% 42%;  /* Vibrant forest green - Physical */
+    --reset-energy: 207 85% 48%;  /* Deep vibrant blue - Energy */
+    --reset-systems: 269 75% 55%;  /* Rich purple - Mental/Spiritual */
+    --reset-execution: 190 80% 45%;  /* Teal/cyan - Action */
+    --reset-transformation: 280 70% 52%;  /* Bright violet - Growth */
 
-    /* Premium Accents */
-    --gold: 45 80% 50%;
-    --cinnabar: 0 70% 50%;
-    --electric-purple: 269 25% 49%;
-    --neon-cyan: 190 30% 45%;
+    /* Premium Accents - Vibrant */
+    --gold: 45 90% 55%;
+    --cinnabar: 0 85% 58%;
+    --electric-purple: 269 80% 58%;
+    --neon-cyan: 190 75% 50%;
 
     /* Professional Gradients - Light Theme */
     --gradient-hero: linear-gradient(135deg, 
