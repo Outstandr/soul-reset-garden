@@ -221,9 +221,9 @@ Which one will you choose?
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Fixed Header */}
-      <div className="sticky top-0 z-50 border-b border-slate-800/50 bg-slate-950/80 backdrop-blur-xl">
+      <div className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between mb-3">
             <Button
@@ -234,17 +234,17 @@ Which one will you choose?
               <ArrowLeft className="w-4 h-4" />
               Back to Book
             </Button>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30">
-              <Star className="w-4 h-4 text-amber-500" />
-              <span className="font-black text-amber-400">{lesson.xp} XP</span>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-400">
+              <Star className="w-4 h-4 text-amber-600" />
+              <span className="font-black text-amber-700">{lesson.xp} XP</span>
             </div>
           </div>
           <div>
             <h1 className="text-2xl font-black mb-2">
               Lesson {lesson.lessonNumber}: {lesson.title}
             </h1>
-            <div className="flex items-center gap-4 text-sm text-gray-400">
-              <span className="capitalize px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <span className="capitalize px-3 py-1 rounded-full bg-primary/20 text-primary font-bold border-2 border-primary/40">
                 {lesson.category}
               </span>
               <span>⏱️ {lesson.readingTime}</span>
@@ -262,7 +262,7 @@ Which one will you choose?
         style={{ maxHeight: 'calc(100vh - 200px)' }}
       >
         {/* Interactive Lesson Content */}
-        <div className="prose prose-invert prose-lg max-w-none mb-12" ref={contentRef}>
+        <div className="prose prose-lg max-w-none mb-12" ref={contentRef}>
           {lesson.content.split('\n\n').map((paragraph, idx) => {
             if (paragraph.startsWith('# ')) {
               return (
@@ -273,7 +273,7 @@ Which one will you choose?
             }
             if (paragraph.startsWith('## ')) {
               return (
-                <h2 key={idx} className="text-3xl font-black mb-4 mt-8 text-reset-rhythm animate-fade-in">
+                <h2 key={idx} className="text-3xl font-black mb-4 mt-8 text-reset-energy animate-fade-in">
                   {paragraph.slice(3)}
                 </h2>
               );
@@ -282,7 +282,7 @@ Which one will you choose?
               const text = paragraph.slice(2, -2);
               return (
                 <div key={idx} className="relative group my-6 animate-fade-in">
-                  <p className="text-xl font-black text-reset-energy p-4 bg-reset-energy/10 border-l-4 border-reset-energy rounded-r-lg cursor-pointer transition-all hover:bg-reset-energy/20">
+                  <p className="text-xl font-black text-primary p-4 bg-primary/10 border-l-4 border-primary rounded-r-lg cursor-pointer transition-all hover:bg-primary/20">
                     {text}
                   </p>
                   <Button
@@ -301,8 +301,8 @@ Which one will you choose?
               return (
                 <ul key={idx} className="space-y-2 my-6 animate-fade-in">
                   {items.map((item, i) => (
-                    <li key={i} className="ml-6 text-gray-300 flex items-start gap-3 group cursor-pointer hover:text-white transition-colors">
-                      <span className="text-reset-rhythm mt-1">•</span>
+                    <li key={i} className="ml-6 text-muted-foreground flex items-start gap-3 group cursor-pointer hover:text-foreground transition-colors">
+                      <span className="text-accent mt-1">•</span>
                       <span className="flex-1">{item.slice(2)}</span>
                       <Button
                         size="sm"
@@ -319,7 +319,7 @@ Which one will you choose?
             }
             if (paragraph.trim() === '' || paragraph === '---') return null;
             return (
-              <p key={idx} className="my-4 text-gray-300 leading-relaxed animate-fade-in group relative cursor-pointer hover:text-white transition-colors">
+              <p key={idx} className="my-4 text-muted-foreground leading-relaxed animate-fade-in group relative cursor-pointer hover:text-foreground transition-colors">
                 {paragraph}
                 <Button
                   size="sm"
@@ -336,14 +336,14 @@ Which one will you choose?
 
         {/* Highlights Section */}
         {highlights.length > 0 && (
-          <Card className="mb-8 p-6 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border-2 border-yellow-500/30 animate-scale-in">
+          <Card className="mb-8 p-6 bg-gradient-to-br from-yellow-100 to-amber-100 border-2 border-yellow-400 animate-scale-in">
             <div className="flex items-center gap-3 mb-4">
-              <Sparkles className="w-6 h-6 text-yellow-400" />
-              <h3 className="text-2xl font-black text-yellow-400">Your Highlights ({highlights.length})</h3>
+              <Sparkles className="w-6 h-6 text-yellow-600" />
+              <h3 className="text-2xl font-black text-yellow-700">Your Highlights ({highlights.length})</h3>
             </div>
             <div className="space-y-3">
               {highlights.map((highlight, idx) => (
-                <div key={idx} className="p-3 bg-yellow-500/5 border-l-2 border-yellow-500 rounded-r text-gray-300">
+                <div key={idx} className="p-3 bg-yellow-50 border-l-2 border-yellow-500 rounded-r text-foreground">
                   {highlight}
                 </div>
               ))}
@@ -352,16 +352,16 @@ Which one will you choose?
         )}
 
         {/* Key Takeaways */}
-        <Card className="mb-8 p-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border-2 border-blue-500/30">
+        <Card className="mb-8 p-6 bg-gradient-to-br from-blue-100 to-cyan-100 border-2 border-primary">
           <div className="flex items-center gap-3 mb-4">
-            <Lightbulb className="w-6 h-6 text-blue-400" />
-            <h3 className="text-2xl font-black text-blue-400">Key Takeaways</h3>
+            <Lightbulb className="w-6 h-6 text-primary" />
+            <h3 className="text-2xl font-black text-primary">Key Takeaways</h3>
           </div>
           <ul className="space-y-3">
             {lesson.keyTakeaways.map((takeaway, idx) => (
               <li key={idx} className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-300 font-semibold">{takeaway}</span>
+                <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                <span className="text-foreground font-semibold">{takeaway}</span>
               </li>
             ))}
           </ul>
@@ -370,14 +370,14 @@ Which one will you choose?
         {/* Interactive Action Step */}
         <Card className={`mb-8 p-6 transition-all duration-300 ${
           actionCompleted 
-            ? 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/50' 
-            : 'bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-2 border-green-500/30'
+            ? 'bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-accent' 
+            : 'bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-accent/50'
         }`}>
           <div className="flex items-center gap-3 mb-4">
-            <Target className="w-6 h-6 text-green-400" />
-            <h3 className="text-2xl font-black text-green-400">Your Action Step</h3>
+            <Target className="w-6 h-6 text-accent" />
+            <h3 className="text-2xl font-black text-accent">Your Action Step</h3>
           </div>
-          <p className="text-gray-300 font-semibold leading-relaxed mb-4">{lesson.actionStep}</p>
+          <p className="text-foreground font-semibold leading-relaxed mb-4">{lesson.actionStep}</p>
           {!actionCompleted ? (
             <Button
               variant="hero"
@@ -388,7 +388,7 @@ Which one will you choose?
               Mark Action Complete
             </Button>
           ) : (
-            <div className="flex items-center gap-2 text-green-400 font-bold animate-scale-in">
+            <div className="flex items-center gap-2 text-accent font-bold animate-scale-in">
               <CheckCircle className="w-5 h-5" />
               <span>Action Completed! +10 XP</span>
             </div>
@@ -396,12 +396,12 @@ Which one will you choose?
         </Card>
 
         {/* Interactive Reflection Prompt */}
-        <Card className="mb-8 p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-2 border-purple-500/30">
+        <Card className="mb-8 p-6 bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-secondary">
           <div className="flex items-center gap-3 mb-4">
-            <MessageSquare className="w-6 h-6 text-purple-400" />
-            <h3 className="text-2xl font-black text-purple-400">Reflection Question</h3>
+            <MessageSquare className="w-6 h-6 text-secondary" />
+            <h3 className="text-2xl font-black text-secondary">Reflection Question</h3>
           </div>
-          <p className="text-gray-300 font-semibold leading-relaxed mb-4">{lesson.reflectionPrompt}</p>
+          <p className="text-foreground font-semibold leading-relaxed mb-4">{lesson.reflectionPrompt}</p>
           
           {!showReflection ? (
             <Button
@@ -418,7 +418,7 @@ Which one will you choose?
                 placeholder="Write your thoughts here..."
                 value={reflectionText}
                 onChange={(e) => setReflectionText(e.target.value)}
-                className="min-h-[120px] bg-purple-500/5 border-purple-500/30 text-white placeholder:text-gray-500"
+                className="min-h-[120px] bg-card border-secondary/50 text-foreground"
               />
               <div className="flex gap-3">
                 <Button

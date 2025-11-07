@@ -20,10 +20,10 @@ interface BookLessonCardProps {
 }
 
 const categoryColors = {
-  concept: { bg: "from-blue-500/10 to-cyan-500/10", border: "border-blue-500/30", text: "text-blue-400", icon: "bg-blue-500/20" },
-  practice: { bg: "from-green-500/10 to-emerald-500/10", border: "border-green-500/30", text: "text-green-400", icon: "bg-green-500/20" },
-  reflection: { bg: "from-purple-500/10 to-pink-500/10", border: "border-purple-500/30", text: "text-purple-400", icon: "bg-purple-500/20" },
-  exercise: { bg: "from-orange-500/10 to-red-500/10", border: "border-orange-500/30", text: "text-orange-400", icon: "bg-orange-500/20" },
+  concept: { bg: "from-blue-100 to-cyan-100", border: "border-primary", text: "text-primary", icon: "bg-primary/20" },
+  practice: { bg: "from-green-100 to-emerald-100", border: "border-accent", text: "text-accent", icon: "bg-accent/20" },
+  reflection: { bg: "from-purple-100 to-pink-100", border: "border-secondary", text: "text-secondary", icon: "bg-secondary/20" },
+  exercise: { bg: "from-orange-100 to-red-100", border: "border-orange-500", text: "text-orange-600", icon: "bg-orange-500/20" },
 };
 
 export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
@@ -36,24 +36,24 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
     <Card
       className={`group relative overflow-hidden transition-all duration-500 hover-lift border-2 ${
         isCompleted
-          ? "bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30"
+          ? "bg-gradient-to-br from-green-100 to-emerald-100 border-accent"
           : isInProgress
           ? `bg-gradient-to-br ${colors.bg} ${colors.border} animate-glow-border`
           : isLocked
-          ? "bg-slate-900/30 border-slate-700/30 opacity-60 grayscale"
-          : `bg-slate-900/50 border-slate-700/50 hover:${colors.border}`
+          ? "bg-muted/50 border-border opacity-60 grayscale"
+          : `bg-card border-border hover:${colors.border}`
       }`}
     >
       {/* Lesson Number Badge */}
       <div
         className={`absolute -top-3 -left-3 w-12 h-12 rounded-full flex items-center justify-center text-lg font-black border-4 ${
           isCompleted
-            ? "bg-green-500 border-green-400 text-white"
+            ? "bg-accent border-accent/70 text-white"
             : isInProgress
             ? `bg-gradient-to-br ${colors.bg} ${colors.border} ${colors.text} animate-scale-pulse`
             : isLocked
-            ? "bg-slate-700 border-slate-600 text-slate-500"
-            : "bg-slate-800 border-slate-700 text-white"
+            ? "bg-muted border-border text-muted-foreground"
+            : "bg-card border-border text-foreground"
         }`}
       >
         {isCompleted ? "✓" : lesson.lessonNumber}
@@ -63,8 +63,8 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
       <div
         className={`absolute top-4 right-4 flex items-center gap-1 px-3 py-1 rounded-full text-sm font-black ${
           isLocked
-            ? "bg-slate-700/50 text-slate-500"
-            : "bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-400 border border-amber-500/30"
+            ? "bg-muted/50 text-muted-foreground"
+            : "bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-700 border-2 border-amber-400"
         }`}
       >
         <Star className="w-4 h-4" />
@@ -76,8 +76,8 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
         <div
           className={`inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full text-sm font-bold ${
             isLocked
-              ? "bg-slate-700/50 text-slate-400"
-              : `${colors.icon} ${colors.text} border ${colors.border}`
+              ? "bg-muted text-muted-foreground"
+              : `${colors.icon} ${colors.text} border-2 ${colors.border}`
           }`}
         >
           <BookOpen className="w-4 h-4" />
@@ -86,21 +86,21 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
 
         {/* Title & Description */}
         <h3 className={`text-xl font-black mb-3 transition-colors ${
-          isLocked ? "text-gray-500" : "text-white group-hover:text-reset-rhythm"
+          isLocked ? "text-muted-foreground" : "text-foreground group-hover:text-accent"
         }`}>
           {lesson.title}
         </h3>
-        <p className={`mb-4 leading-relaxed ${isLocked ? "text-gray-600" : "text-gray-400"}`}>
+        <p className={`mb-4 leading-relaxed ${isLocked ? "text-muted-foreground/60" : "text-muted-foreground"}`}>
           {lesson.description}
         </p>
 
         {/* Key Takeaway */}
         {!isLocked && (
-          <div className={`mb-4 p-3 rounded-lg ${colors.icon} border ${colors.border}`}>
+          <div className={`mb-4 p-3 rounded-lg ${colors.icon} border-2 ${colors.border}`}>
             <div className="flex items-start gap-2">
               <Lightbulb className={`w-4 h-4 mt-0.5 ${colors.text}`} />
               <div>
-                <p className="text-xs font-bold text-gray-400 mb-1">KEY TAKEAWAY</p>
+                <p className="text-xs font-bold text-muted-foreground mb-1">KEY TAKEAWAY</p>
                 <p className={`text-sm font-semibold ${colors.text}`}>
                   {lesson.keyTakeaway}
                 </p>
@@ -111,11 +111,11 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
 
         {/* Reading Time */}
         <div className="flex items-center justify-between mb-6">
-          <span className={`text-sm font-semibold ${isLocked ? "text-gray-600" : "text-gray-500"}`}>
+          <span className={`text-sm font-semibold ${isLocked ? "text-muted-foreground/60" : "text-muted-foreground"}`}>
             ⏱️ {lesson.readingTime}
           </span>
           {isCompleted && (
-            <div className="flex items-center gap-2 text-green-500 font-bold">
+            <div className="flex items-center gap-2 text-accent font-bold">
               <CheckCircle className="w-5 h-5" />
               Completed
             </div>

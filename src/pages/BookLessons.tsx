@@ -255,14 +255,14 @@ export default function BookLessons() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-reset-energy/20 rounded-full blur-[120px] animate-float"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-reset-execution/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-reset-energy/10 rounded-full blur-[120px] animate-float"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-reset-systems/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: '2s' }}></div>
 
       {/* Header */}
-      <div className="relative z-10 border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-xl sticky top-0">
+      <div className="relative z-10 border-b border-border bg-card/95 backdrop-blur-xl sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <Button
@@ -276,13 +276,13 @@ export default function BookLessons() {
 
             {/* Stats */}
             <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30">
-                <Flame className="w-5 h-5 text-orange-500" />
-                <span className="font-black text-orange-400">{currentStreak} Day Streak</span>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-red-100 border-2 border-orange-500">
+                <Flame className="w-5 h-5 text-orange-600" />
+                <span className="font-black text-orange-700">{currentStreak} Day Streak</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30">
-                <Star className="w-5 h-5 text-amber-500" />
-                <span className="font-black text-amber-400">{totalXP} XP</span>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-500">
+                <Star className="w-5 h-5 text-amber-600" />
+                <span className="font-black text-amber-700">{totalXP} XP</span>
               </div>
             </div>
           </div>
@@ -293,24 +293,24 @@ export default function BookLessons() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Book Header */}
         <div className="mb-12 text-center">
-          <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 rounded-full bg-gradient-to-r from-reset-energy/20 to-reset-execution/20 border border-reset-energy/30">
-            <Book className="w-6 h-6 text-reset-energy" />
-            <span className="font-black text-reset-energy">BOOK</span>
+          <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 rounded-full bg-gradient-to-r from-blue-100 to-cyan-100 border-2 border-primary">
+            <Book className="w-6 h-6 text-primary" />
+            <span className="font-black text-primary">BOOK</span>
           </div>
-          <h1 className="text-6xl font-black mb-4 bg-gradient-to-r from-white via-reset-rhythm to-white bg-clip-text text-transparent">
+          <h1 className="text-6xl font-black mb-4 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
             The Reset by Discipline
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
             Master the art of self-discipline through 20 transformative lessons. Each lesson is a building block in your journey to becoming unstoppable.
           </p>
 
           {/* Progress Bar */}
           <div className="max-w-2xl mx-auto">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-bold text-gray-400">
+              <span className="text-sm font-bold text-muted-foreground">
                 {completedLessons} of {lessons.length} Lessons Complete
               </span>
-              <span className="text-sm font-black text-reset-rhythm">
+              <span className="text-sm font-black text-accent">
                 {Math.round(progressPercent)}%
               </span>
             </div>
@@ -332,10 +332,10 @@ export default function BookLessons() {
         {/* Completion Badge (if all done) */}
         {completedLessons === lessons.length && (
           <div className="mt-16 text-center animate-scale-in">
-            <div className="inline-flex flex-col items-center gap-4 px-12 py-8 rounded-3xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-2 border-green-500/50">
-              <Trophy className="w-16 h-16 text-green-500" />
-              <h3 className="text-3xl font-black text-green-500">Book Complete!</h3>
-              <p className="text-gray-400">You've mastered all 20 lessons. Ready for the Masterclass?</p>
+            <div className="inline-flex flex-col items-center gap-4 px-12 py-8 rounded-3xl bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-accent">
+              <Trophy className="w-16 h-16 text-accent" />
+              <h3 className="text-3xl font-black text-accent">Book Complete!</h3>
+              <p className="text-muted-foreground">You've mastered all 20 lessons. Ready for the Masterclass?</p>
               <Button
                 variant="hero"
                 onClick={() => navigate("/journey/reset-discipline")}
