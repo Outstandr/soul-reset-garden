@@ -6,6 +6,7 @@ import { ArrowLeft, CheckCircle, BookmarkPlus, MessageSquare, Lightbulb, Star, S
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
+import { LionelReflectionDialog } from "@/components/LionelReflectionDialog";
 
 export default function BookLessonContent() {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ export default function BookLessonContent() {
   const [actionCompleted, setActionCompleted] = useState(false);
   const [reflectionText, setReflectionText] = useState("");
   const [showReflection, setShowReflection] = useState(false);
+  const [showLionelDialog, setShowLionelDialog] = useState(false);
+  const [hasShownLionelDialog, setHasShownLionelDialog] = useState(false);
 
   // Mock lesson data (in real app, fetch based on lessonId)
   const lesson = {
@@ -149,7 +152,12 @@ Which one will you choose?
         description: "+15 bonus XP - Final stretch!",
       });
     }
-  }, [readingProgress, checkpoints, toast]);
+    // Show Lionel dialog when reader hits 90%
+    if (readingProgress >= 90 && !hasShownLionelDialog) {
+      setShowLionelDialog(true);
+      setHasShownLionelDialog(true);
+    }
+  }, [readingProgress, checkpoints, toast, hasShownLionelDialog]);
 
   const handleComplete = () => {
     setIsCompleted(true);
@@ -190,6 +198,20 @@ Which one will you choose?
       setShowReflection(false);
     }
   };
+
+  const handleLionelReflections = (responses: string[]) => {
+    console.log("Lionel reflections:", responses);
+    toast({
+      title: "💡 Reflections Saved!",
+      description: "Your insights have been saved. +15 bonus XP!",
+    });
+  };
+
+  const lionelQuestions = [
+    "What was the most powerful insight you gained from this lesson?",
+    "How does this change your perspective on discipline versus motivation?",
+    "What's one specific action you'll take in the next 48 hours based on what you learned?"
+  ];
 
   // Simulate reading progress on scroll
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -444,6 +466,13 @@ Which one will you choose?
           </div>
         )}
       </div>
+
+      <LionelReflectionDialog
+        open={showLionelDialog}
+        onOpenChange={setShowLionelDialog}
+        questions={lionelQuestions}
+        onSubmit={handleLionelReflections}
+      />
     </div>
   );
 }
