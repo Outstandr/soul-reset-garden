@@ -207,7 +207,7 @@ Which one will you choose?
     });
   };
 
-  const lionelQuestions = [
+  const reflectionQuestions = [
     "What was the most powerful insight you gained from this lesson?",
     "How does this change your perspective on discipline versus motivation?",
     "What's one specific action you'll take in the next 48 hours based on what you learned?"
@@ -470,8 +470,9 @@ Which one will you choose?
       <LionelReflectionDialog
         open={showLionelDialog}
         onOpenChange={setShowLionelDialog}
-        questions={lionelQuestions}
+        questions={reflectionQuestions}
         onSubmit={handleLionelReflections}
+        lessonTitle={lesson.title}
       />
     </div>
   );
