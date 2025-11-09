@@ -11,7 +11,6 @@ import BookLessons from "./pages/BookLessons";
 import BookLessonContent from "./pages/BookLessonContent";
 import Journal from "./pages/Journal";
 import Auth from "./pages/Auth";
-import UploadMasterclass from "./pages/UploadMasterclass";
 import MentalPillar from "./pages/MentalPillar";
 import PhysicalPillar from "./pages/PhysicalPillar";
 import SpiritualPillar from "./pages/SpiritualPillar";
@@ -38,7 +37,6 @@ const App = () => (
           <Route path="/book-lesson/:lessonId" element={<BookLessonContent />} />
           <Route path="/journal" element={<Journal />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/upload-masterclass" element={<UploadMasterclass />} />
           <Route path="/mental-pillar/:lessonNumber?" element={<MentalPillar />} />
           <Route path="/physical-pillar/:lessonNumber?" element={<PhysicalPillar />} />
           <Route path="/spiritual-pillar/:lessonNumber?" element={<SpiritualPillar />} />
