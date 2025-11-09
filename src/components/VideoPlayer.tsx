@@ -1,12 +1,25 @@
 import { useEffect, useRef, useState } from "react";
-import { Play, Pause, Volume2, VolumeX, Maximize } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Maximize, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+interface SubtitleTrack {
+  src: string;
+  lang: string;
+  label: string;
+}
 
 interface VideoPlayerProps {
   videoUrl: string;
   startTime: string;
   endTime: string;
+  subtitles?: SubtitleTrack[];
   onProgress?: (progress: number) => void;
   onComplete?: () => void;
 }
@@ -19,13 +32,14 @@ const timeToSeconds = (time: string): number => {
   return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
 };
 
-export const VideoPlayer = ({ videoUrl, startTime, endTime, onProgress, onComplete }: VideoPlayerProps) => {
+export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgress, onComplete }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [activeSubtitle, setActiveSubtitle] = useState<string>("off");
 
   const startSeconds = timeToSeconds(startTime);
   const endSeconds = timeToSeconds(endTime);
@@ -104,6 +118,17 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, onProgress, onComple
     }
   };
 
+  const handleSubtitleChange = (lang: string) => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const tracks = video.textTracks;
+    for (let i = 0; i < tracks.length; i++) {
+      tracks[i].mode = tracks[i].language === lang ? "showing" : "hidden";
+    }
+    setActiveSubtitle(lang);
+  };
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -117,7 +142,19 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, onProgress, onComple
         className="w-full aspect-video"
         src={videoUrl}
         playsInline
-      />
+        crossOrigin="anonymous"
+      >
+        {subtitles?.map((subtitle) => (
+          <track
+            key={subtitle.lang}
+            kind="subtitles"
+            src={subtitle.src}
+            srcLang={subtitle.lang}
+            label={subtitle.label}
+            default={subtitle.lang === "en"}
+          />
+        ))}
+      </video>
       
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4">
         <Slider
@@ -153,14 +190,43 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, onProgress, onComple
             </span>
           </div>
           
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={toggleFullscreen}
-            className="text-white hover:bg-white/20"
-          >
-            <Maximize className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            {subtitles && subtitles.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="text-white hover:bg-white/20"
+                  >
+                    <Languages className="w-5 h-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => handleSubtitleChange("off")}>
+                    Off
+                  </DropdownMenuItem>
+                  {subtitles.map((subtitle) => (
+                    <DropdownMenuItem
+                      key={subtitle.lang}
+                      onClick={() => handleSubtitleChange(subtitle.lang)}
+                    >
+                      {subtitle.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={toggleFullscreen}
+              className="text-white hover:bg-white/20"
+            >
+              <Maximize className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
