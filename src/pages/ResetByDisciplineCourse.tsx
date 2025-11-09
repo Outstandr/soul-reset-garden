@@ -318,23 +318,38 @@ export default function ResetByDisciplineCourse() {
                     return (
                       <Button
                         key={lesson.id}
-                        variant={isCurrent ? "default" : "ghost"}
-                        className="w-full justify-start"
+                        variant={isCurrent ? "default" : isCompleted ? "outline" : "ghost"}
+                        className={`w-full justify-start relative transition-all ${
+                          isCompleted ? 'bg-primary/10 border-primary/30 hover:bg-primary/20' : ''
+                        } ${
+                          isCurrent ? 'ring-2 ring-primary shadow-lg' : ''
+                        } ${
+                          !isUnlocked ? 'opacity-50' : ''
+                        }`}
                         disabled={!isUnlocked}
                         onClick={() => navigate(`/reset-discipline-course/${moduleNumber}/${lesson.lesson_number}`)}
                       >
-                        <span className="mr-2">
+                        <span className={`mr-2 ${isCompleted ? 'text-primary' : ''}`}>
                           {isCompleted ? (
-                            <CheckCircle2 className="w-4 h-4 text-primary" />
+                            <CheckCircle2 className="w-5 h-5 fill-primary text-primary-foreground" />
                           ) : !isUnlocked ? (
-                            <Lock className="w-4 h-4" />
+                            <Lock className="w-5 h-5 text-muted-foreground" />
+                          ) : isCurrent ? (
+                            <Play className="w-5 h-5" />
                           ) : (
-                            <Play className="w-4 h-4" />
+                            <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30" />
                           )}
                         </span>
-                        <span className="flex-1 text-left truncate">
-                          {lesson.lesson_number}. {lesson.title}
+                        <span className={`flex-1 text-left truncate ${
+                          isCompleted ? 'font-semibold' : ''
+                        }`}>
+                          Lesson {lesson.lesson_number}: {lesson.title}
                         </span>
+                        {isCompleted && (
+                          <span className="ml-2 text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
+                            ✓ Done
+                          </span>
+                        )}
                       </Button>
                     );
                   })}
