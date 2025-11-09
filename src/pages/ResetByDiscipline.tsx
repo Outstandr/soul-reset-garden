@@ -205,7 +205,7 @@ export default function ResetByDiscipline() {
                             <CardHeader>
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                  {isLocked && <Lock className="w-5 h-5 text-muted-foreground" />}
+                                  {isLocked && <Lock className="w-5 h-5 text-destructive" />}
                                   <div>
                                     <CardTitle className="text-lg">{module.name}</CardTitle>
                                     <p className="text-sm text-muted-foreground">
