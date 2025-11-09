@@ -38,6 +38,7 @@ export default function ResetByDisciplineCourse() {
   const [showInteractive, setShowInteractive] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showCompletionDialog, setShowCompletionDialog] = useState(false);
+  const [newlyUnlockedLesson, setNewlyUnlockedLesson] = useState<string | null>(null);
   const { toast } = useToast();
 
   const moduleNames = [
@@ -219,9 +220,16 @@ export default function ResetByDisciplineCourse() {
       await generateCertificate();
     }
 
-    // Move to next lesson
+    // Find and highlight the next lesson
     const nextLesson = lessons.find(l => l.lesson_number === currentLesson.lesson_number + 1);
     if (nextLesson) {
+      setNewlyUnlockedLesson(nextLesson.id);
+      
+      // Remove highlight after 3 seconds
+      setTimeout(() => {
+        setNewlyUnlockedLesson(null);
+      }, 3000);
+      
       navigate(`/reset-discipline-course/${moduleNumber}/${nextLesson.lesson_number}`);
     }
   };
@@ -379,6 +387,7 @@ export default function ResetByDisciplineCourse() {
                     const isUnlocked = isLessonUnlocked(lesson);
                     const isCompleted = completedLessons.has(lesson.id);
                     const isCurrent = currentLesson?.id === lesson.id;
+                    const isNewlyUnlocked = newlyUnlockedLesson === lesson.id;
                     const progress = videoProgress.get(lesson.id) || 0;
 
                     return (
@@ -391,6 +400,8 @@ export default function ResetByDisciplineCourse() {
                             isCurrent ? 'ring-2 ring-primary shadow-lg' : ''
                           } ${
                             !isUnlocked ? 'opacity-50' : ''
+                          } ${
+                            isNewlyUnlocked ? 'animate-[pulse_1s_ease-in-out_3] ring-2 ring-primary shadow-[0_0_20px_rgba(var(--primary),0.5)]' : ''
                           }`}
                           disabled={!isUnlocked}
                           onClick={() => navigate(`/reset-discipline-course/${moduleNumber}/${lesson.lesson_number}`)}
