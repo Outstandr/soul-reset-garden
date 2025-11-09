@@ -55,9 +55,14 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
 
     const handleTimeUpdate = () => {
       const current = video.currentTime;
-      if (current >= endSeconds) {
+      // Check if we've reached or passed the end time, or if we're very close (within 1 second)
+      // or if the video has naturally ended
+      const isAtEnd = current >= endSeconds || (endSeconds - current < 1 && current > startSeconds);
+      
+      if (isAtEnd) {
         video.pause();
         setIsPlaying(false);
+        setProgress(100);
         onComplete?.();
       } else if (current >= startSeconds) {
         const elapsed = current - startSeconds;
@@ -69,12 +74,21 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
       }
     };
 
+    const handleVideoEnded = () => {
+      // Handle when video naturally ends (might be shorter than expected end time)
+      setIsPlaying(false);
+      setProgress(100);
+      onComplete?.();
+    };
+
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
     video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("ended", handleVideoEnded);
 
     return () => {
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
       video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("ended", handleVideoEnded);
     };
   }, [startSeconds, endSeconds, onProgress, onComplete]);
 
