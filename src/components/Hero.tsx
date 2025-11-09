@@ -53,7 +53,14 @@ export const Hero = () => {
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
               </Button>
             </Link>
-            <Button size="lg" variant="zen" className="text-lg px-8 py-6 hover-lift">
+            <Button 
+              size="lg" 
+              variant="zen" 
+              className="text-lg px-8 py-6 hover-lift"
+              onClick={() => {
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               📖 Learn More
             </Button>
           </div>
