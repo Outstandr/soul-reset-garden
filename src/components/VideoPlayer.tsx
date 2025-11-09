@@ -50,14 +50,20 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
 
     const handleLoadedMetadata = () => {
       video.currentTime = startSeconds;
-      setDuration(endSeconds - startSeconds);
+      const videoDuration = video.duration;
+      // Use the shorter of configured end time or actual video duration
+      const effectiveEndTime = Math.min(endSeconds, videoDuration);
+      setDuration(effectiveEndTime - startSeconds);
     };
 
     const handleTimeUpdate = () => {
       const current = video.currentTime;
-      // Check if we've reached or passed the end time, or if we're very close (within 1 second)
-      // or if the video has naturally ended
-      const isAtEnd = current >= endSeconds || (endSeconds - current < 1 && current > startSeconds);
+      const videoDuration = video.duration;
+      // Use actual video duration if it's shorter than configured end time
+      const effectiveEndTime = Math.min(endSeconds, videoDuration);
+      
+      // Check if we've reached the end (within 1 second buffer)
+      const isAtEnd = current >= effectiveEndTime - 1 || (effectiveEndTime - current < 1 && current > startSeconds);
       
       if (isAtEnd) {
         video.pause();
@@ -66,16 +72,16 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
         onComplete?.();
       } else if (current >= startSeconds) {
         const elapsed = current - startSeconds;
-        const segmentDuration = endSeconds - startSeconds;
+        const segmentDuration = effectiveEndTime - startSeconds;
         const progressPercent = (elapsed / segmentDuration) * 100;
-        setProgress(progressPercent);
+        setProgress(Math.min(progressPercent, 100));
         setCurrentTime(elapsed);
-        onProgress?.(progressPercent);
+        onProgress?.(Math.min(progressPercent, 100));
       }
     };
 
     const handleVideoEnded = () => {
-      // Handle when video naturally ends (might be shorter than expected end time)
+      // Handle when video naturally ends
       setIsPlaying(false);
       setProgress(100);
       onComplete?.();
