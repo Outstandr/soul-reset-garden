@@ -95,6 +95,9 @@ export type Database = {
           interactive_type: string
           lesson_number: number
           module_name: string
+          subtitle_en_url: string | null
+          subtitle_nl_url: string | null
+          subtitle_ru_url: string | null
           title: string
           video_end_time: string
           video_start_time: string
@@ -107,6 +110,9 @@ export type Database = {
           interactive_type: string
           lesson_number: number
           module_name: string
+          subtitle_en_url?: string | null
+          subtitle_nl_url?: string | null
+          subtitle_ru_url?: string | null
           title: string
           video_end_time: string
           video_start_time: string
@@ -119,6 +125,9 @@ export type Database = {
           interactive_type?: string
           lesson_number?: number
           module_name?: string
+          subtitle_en_url?: string | null
+          subtitle_nl_url?: string | null
+          subtitle_ru_url?: string | null
           title?: string
           video_end_time?: string
           video_start_time?: string
@@ -162,6 +171,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "quiz_questions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "masterclass_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subtitle_generation_jobs: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          lesson_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          lesson_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          lesson_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subtitle_generation_jobs_lesson_id_fkey"
             columns: ["lesson_id"]
             isOneToOne: false
             referencedRelation: "masterclass_lessons"

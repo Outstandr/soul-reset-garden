@@ -21,6 +21,9 @@ interface Lesson {
   module_name: string;
   interactive_type?: string;
   interactive_config?: any;
+  subtitle_en_url?: string;
+  subtitle_nl_url?: string;
+  subtitle_ru_url?: string;
 }
 
 export default function ResetByDisciplineCourse() {
@@ -290,6 +293,11 @@ export default function ResetByDisciplineCourse() {
                         videoUrl={getVideoUrl(parseInt(moduleNumber || "1"), currentLesson.lesson_number)}
                         startTime={currentLesson.video_start_time}
                         endTime={currentLesson.video_end_time}
+                        subtitles={[
+                          currentLesson.subtitle_en_url && { src: currentLesson.subtitle_en_url, lang: "en", label: "English" },
+                          currentLesson.subtitle_nl_url && { src: currentLesson.subtitle_nl_url, lang: "nl", label: "Nederlands" },
+                          currentLesson.subtitle_ru_url && { src: currentLesson.subtitle_ru_url, lang: "ru", label: "Русский" }
+                        ].filter(Boolean) as any}
                         onComplete={handleLessonComplete}
                       />
                     </CardContent>

@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.lionel-coach]
 verify_jwt = true
+
+[functions.generate-subtitles]
+verify_jwt = false
