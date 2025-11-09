@@ -169,9 +169,11 @@ export default function ResetByDisciplineCourse() {
 
   const handleCompletionContinue = () => {
     setShowCompletionDialog(false);
-    if (currentLesson?.interactive_type && !interactiveResponse) {
+    // Show interactive element only if it exists and is not "none"
+    if (currentLesson?.interactive_type && currentLesson.interactive_type !== "none" && !interactiveResponse) {
       setShowInteractive(true);
     } else {
+      // Go straight to quiz
       setShowQuiz(true);
     }
   };
