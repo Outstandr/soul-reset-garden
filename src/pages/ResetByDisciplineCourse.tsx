@@ -42,11 +42,26 @@ export default function ResetByDisciplineCourse() {
 
   const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
   
-  const videoUrls = [
-    `${SUPABASE_URL}/storage/v1/object/public/reset-discipline-course/module1-lesson`,
-    `${SUPABASE_URL}/storage/v1/object/public/reset-discipline-course/module2-lesson`,
-    `${SUPABASE_URL}/storage/v1/object/public/reset-discipline-course/module3-lesson`
-  ];
+  // Video file mapping for Module 1: Getting Fit
+  const module1VideoMapping: Record<number, string> = {
+    1: 'module1-lesson5.mp4', // Introduction to Getting Fit
+    2: 'module1-lesson4.mp4', // Fitness Assessment & Safe Progression
+    3: 'module1-lesson2.mp4', // Goal Setting with SMARTER Framework
+    4: 'module1-lesson6.mp4', // Training Fundamentals
+    5: 'module1-lesson1.mp4', // Sleep & Recovery Systems
+    6: 'module1-lesson3.mp4', // Nutrition & Energy Management
+  };
+  
+  const getVideoUrl = (moduleNum: number, lessonNum: number): string => {
+    const basePath = `${SUPABASE_URL}/storage/v1/object/public/reset-discipline-course/`;
+    
+    if (moduleNum === 1 && module1VideoMapping[lessonNum]) {
+      return basePath + module1VideoMapping[lessonNum];
+    }
+    
+    // Default mapping for other modules
+    return `${basePath}module${moduleNum}-lesson${lessonNum}.mp4`;
+  };
 
   useEffect(() => {
     loadLessons();
@@ -258,7 +273,7 @@ export default function ResetByDisciplineCourse() {
                     </CardHeader>
                     <CardContent>
                       <VideoPlayer
-                        videoUrl={`${videoUrls[parseInt(moduleNumber || "1") - 1]}${currentLesson.lesson_number}.mp4`}
+                        videoUrl={getVideoUrl(parseInt(moduleNumber || "1"), currentLesson.lesson_number)}
                         startTime={currentLesson.video_start_time}
                         endTime={currentLesson.video_end_time}
                         onComplete={handleLessonComplete}
