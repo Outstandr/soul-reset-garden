@@ -5,15 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format, addDays, subDays } from "date-fns";
 
 const Journal = () => {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   
   // Journal entry state
@@ -28,57 +26,19 @@ const Journal = () => {
   const moods = ["😊 Great", "🙂 Good", "😐 Okay", "😔 Low", "😫 Struggling"];
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        setUser(session.user);
-        loadJournalEntry(format(currentDate, "yyyy-MM-dd"));
-      } else {
-        navigate("/auth");
-      }
-      setLoading(false);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      if (!session?.user) {
-        navigate("/auth");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  useEffect(() => {
-    if (user) {
-      loadJournalEntry(format(currentDate, "yyyy-MM-dd"));
-    }
-  }, [currentDate, user]);
-
-  const loadJournalEntry = async (date: string) => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from("journal_entries")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("entry_date", date)
-      .maybeSingle();
-
-    if (error) {
-      console.error("Error loading journal entry:", error);
-      return;
-    }
-
-    if (data) {
-      setGratitude(data.gratitude || "");
-      setGoals(data.goals || "");
-      setWins(data.wins || "");
-      setChallenges(data.challenges || "");
-      setReflection(data.reflection || "");
-      setMood(data.mood || "");
-      setEnergyLevel([data.energy_level || 5]);
+    // Load from localStorage for the selected date
+    const savedEntry = localStorage.getItem(`journal-${format(currentDate, "yyyy-MM-dd")}`);
+    if (savedEntry) {
+      const entry = JSON.parse(savedEntry);
+      setGratitude(entry.gratitude || "");
+      setGoals(entry.goals || "");
+      setWins(entry.wins || "");
+      setChallenges(entry.challenges || "");
+      setReflection(entry.reflection || "");
+      setMood(entry.mood || "");
+      setEnergyLevel(entry.energy_level ? [entry.energy_level] : [5]);
     } else {
-      // Clear form for new entry
+      // Reset form if no saved data
       setGratitude("");
       setGoals("");
       setWins("");
@@ -87,35 +47,26 @@ const Journal = () => {
       setMood("");
       setEnergyLevel([5]);
     }
-  };
+  }, [currentDate]);
 
   const saveJournalEntry = async () => {
-    if (!user) return;
-
     setSaving(true);
-    const entryDate = format(currentDate, "yyyy-MM-dd");
+    
+    const entry = {
+      gratitude,
+      goals,
+      wins,
+      challenges,
+      reflection,
+      mood,
+      energy_level: energyLevel[0],
+      entry_date: format(currentDate, "yyyy-MM-dd")
+    };
 
-    const { error } = await supabase
-      .from("journal_entries")
-      .upsert({
-        user_id: user.id,
-        entry_date: entryDate,
-        gratitude,
-        goals,
-        wins,
-        challenges,
-        reflection,
-        mood,
-        energy_level: energyLevel[0],
-      });
-
-    if (error) {
-      toast.error("Failed to save journal entry");
-      console.error("Error saving journal entry:", error);
-    } else {
-      toast.success("Journal entry saved!");
-    }
-
+    // Save to localStorage
+    localStorage.setItem(`journal-${format(currentDate, "yyyy-MM-dd")}`, JSON.stringify(entry));
+    
+    toast.success("Journal entry saved!");
     setSaving(false);
   };
 
