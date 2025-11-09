@@ -7,4 +7,7 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.generate-subtitles]
-verify_jwt = false
+verify_jwt = true
+
+[functions.lionel-reflection-feedback]
+verify_jwt = true
