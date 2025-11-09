@@ -1,15 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, BookOpen, Mountain, Play, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, BookOpen, Mountain, Play, CheckCircle2, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function ResetByDiscipline() {
   const navigate = useNavigate();
+  const [module1Completed, setModule1Completed] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    checkModule1Completion();
   }, []);
+
+  const checkModule1Completion = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('user_certificates')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('module_name', 'Module 1: Getting Fit')
+        .maybeSingle();
+
+      if (error) throw error;
+      setModule1Completed(!!data);
+    } catch (error) {
+      console.error('Error checking module completion:', error);
+    }
+  };
 
   const stages = [
     {
@@ -168,32 +190,48 @@ export default function ResetByDiscipline() {
                 {stage.modules && (
                   <CardContent>
                     <div className="space-y-3 mt-4">
-                      {stage.modules.map((module: any) => (
-                        <Card 
-                          key={module.name}
-                          className="hover:shadow-soft transition-shadow cursor-pointer"
-                          onClick={() => navigate(module.route)}
-                        >
-                          <CardHeader>
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <CardTitle className="text-lg">{module.name}</CardTitle>
-                                <p className="text-sm text-muted-foreground">{module.lessons} lessons with quizzes</p>
+                      {stage.modules.map((module: any, idx: number) => {
+                        const isLocked = idx > 0 && !module1Completed;
+                        return (
+                          <Card 
+                            key={module.name}
+                            className={`transition-shadow ${
+                              isLocked 
+                                ? "opacity-60 cursor-not-allowed" 
+                                : "hover:shadow-soft cursor-pointer"
+                            }`}
+                            onClick={() => !isLocked && navigate(module.route)}
+                          >
+                            <CardHeader>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  {isLocked && <Lock className="w-5 h-5 text-muted-foreground" />}
+                                  <div>
+                                    <CardTitle className="text-lg">{module.name}</CardTitle>
+                                    <p className="text-sm text-muted-foreground">
+                                      {isLocked 
+                                        ? "Complete Module 1 to unlock" 
+                                        : `${module.lessons} lessons with quizzes`
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  disabled={isLocked}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (!isLocked) navigate(module.route);
+                                  }}
+                                >
+                                  {isLocked ? "Locked" : "Start Module"}
+                                </Button>
                               </div>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  navigate(module.route);
-                                }}
-                              >
-                                Start Module
-                              </Button>
-                            </div>
-                          </CardHeader>
-                        </Card>
-                      ))}
+                            </CardHeader>
+                          </Card>
+                        );
+                      })}
                       
                       {stage.finalExam && (
                         <Card className="border-2 border-primary/30 bg-primary/5 hover:shadow-soft transition-shadow cursor-pointer"
