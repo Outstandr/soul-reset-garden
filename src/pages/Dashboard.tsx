@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { JourneyCircle } from "@/components/JourneyCircle";
 import { ModuleCard } from "@/components/ModuleCard";
 import { Button } from "@/components/ui/button";
@@ -104,6 +105,10 @@ const modules = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
