@@ -67,15 +67,15 @@ export const Hero = () => {
 
           {/* Social Proof */}
           <div className="flex flex-wrap justify-center gap-12 pt-16 animate-fade-in-up animation-delay-400">
-            <div className="text-center hover-lift cursor-pointer">
+            <div className="text-center hover-lift">
               <div className="text-5xl font-black gradient-text animate-scale-pulse">10K+</div>
               <div className="text-base font-semibold text-foreground/70 mt-2">🌟 Students Transformed</div>
             </div>
-            <div className="text-center hover-lift cursor-pointer">
+            <div className="text-center hover-lift">
               <div className="text-5xl font-black gradient-text animate-scale-pulse" style={{ animationDelay: "0.5s" }}>95%</div>
               <div className="text-base font-semibold text-foreground/70 mt-2">💯 Success Rate</div>
             </div>
-            <div className="text-center hover-lift cursor-pointer">
+            <div className="text-center hover-lift">
               <div className="text-5xl font-black gradient-text animate-scale-pulse" style={{ animationDelay: "1s" }}>5 Steps</div>
               <div className="text-base font-semibold text-foreground/70 mt-2">🎊 To Transformation</div>
             </div>
