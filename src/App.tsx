@@ -20,6 +20,7 @@ import MasterclassLibrary from "./pages/MasterclassLibrary";
 import ResetByDisciplineCourse from "./pages/ResetByDisciplineCourse";
 import Certificate from "./pages/Certificate";
 import FinalCertificationExam from "./pages/FinalCertificationExam";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/reset-discipline-course/:moduleNumber/:lessonNumber?" element={<ProtectedRoute><ResetByDisciplineCourse /></ProtectedRoute>} />
           <Route path="/final-certification-exam" element={<ProtectedRoute><FinalCertificationExam /></ProtectedRoute>} />
           <Route path="/certificate/:certificateNumber" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User, Shield } from "lucide-react";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ export const UserMenu = () => {
   const [userEmail, setUserEmail] = useState<string>("");
   const [userRole, setUserRole] = useState<string | null>(null);
   const [initials, setInitials] = useState<string>("U");
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -36,10 +37,32 @@ export const UserMenu = () => {
           .from('user_roles')
           .select('role')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
         
         if (roleData) {
           setUserRole(roleData.role);
+        }
+
+        // Fetch user profile for avatar
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('avatar_url, full_name')
+          .eq('id', user.id)
+          .maybeSingle();
+        
+        if (profileData) {
+          setAvatarUrl(profileData.avatar_url || "");
+          
+          // Update initials from full name if available
+          if (profileData.full_name) {
+            const nameInitials = profileData.full_name
+              .split(' ')
+              .map(n => n[0])
+              .join('')
+              .toUpperCase()
+              .slice(0, 2);
+            setInitials(nameInitials);
+          }
         }
       }
     };
@@ -63,6 +86,7 @@ export const UserMenu = () => {
       <DropdownMenuTrigger asChild>
         <button className="focus:outline-none focus:ring-2 focus:ring-primary rounded-full">
           <Avatar className="w-10 h-10 cursor-pointer border-2 border-primary hover:border-primary/70 transition-colors">
+            <AvatarImage src={avatarUrl} alt="User avatar" />
             <AvatarFallback className="bg-primary/10 text-primary font-semibold">
               {initials}
             </AvatarFallback>
@@ -88,9 +112,9 @@ export const UserMenu = () => {
             <DropdownMenuSeparator />
           </>
         )}
-        <DropdownMenuItem disabled className="cursor-default">
+        <DropdownMenuItem onClick={() => navigate("/profile")} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
-          <span>Profile (Coming Soon)</span>
+          <span>Profile</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive cursor-pointer">
