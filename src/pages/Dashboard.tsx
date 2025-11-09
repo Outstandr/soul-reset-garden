@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LionelCoach } from "@/components/LionelCoach";
+import { UserMenu } from "@/components/UserMenu";
 
 const journeySteps = [
   {
@@ -126,7 +127,7 @@ const Dashboard = () => {
                 <PenLine className="w-4 h-4 mr-2" />
                 Journal
               </Button>
-              <div className="w-10 h-10 rounded-full bg-primary/10 border-2 border-primary" />
+              <UserMenu />
             </nav>
           </div>
         </div>
