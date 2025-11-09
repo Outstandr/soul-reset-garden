@@ -17,13 +17,13 @@ const Auth = () => {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        navigate("/upload-masterclass");
+        navigate("/dashboard");
       }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        navigate("/upload-masterclass");
+        navigate("/dashboard");
       }
     });
 
@@ -78,8 +78,8 @@ const Auth = () => {
           </h1>
           <p className="text-muted-foreground">
             {isLogin
-              ? "Sign in to upload course videos"
-              : "Create admin account"}
+              ? "Sign in to continue your learning journey"
+              : "Create your account to get started"}
           </p>
         </div>
 

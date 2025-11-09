@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import ModuleJourney from "./pages/ModuleJourney";
@@ -31,20 +32,20 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/journey/:moduleId" element={<ModuleJourney />} />
-          <Route path="/book/:bookId" element={<BookLessons />} />
-          <Route path="/book-lesson/:lessonId" element={<BookLessonContent />} />
-          <Route path="/journal" element={<Journal />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/mental-pillar/:lessonNumber?" element={<MentalPillar />} />
-          <Route path="/physical-pillar/:lessonNumber?" element={<PhysicalPillar />} />
-          <Route path="/spiritual-pillar/:lessonNumber?" element={<SpiritualPillar />} />
-          <Route path="/reset-by-discipline" element={<ResetByDiscipline />} />
-          <Route path="/masterclass-library" element={<MasterclassLibrary />} />
-          <Route path="/reset-discipline-course/:moduleNumber/:lessonNumber?" element={<ResetByDisciplineCourse />} />
-          <Route path="/final-certification-exam" element={<FinalCertificationExam />} />
-          <Route path="/certificate/:certificateNumber" element={<Certificate />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/journey/:moduleId" element={<ProtectedRoute><ModuleJourney /></ProtectedRoute>} />
+          <Route path="/book/:bookId" element={<ProtectedRoute><BookLessons /></ProtectedRoute>} />
+          <Route path="/book-lesson/:lessonId" element={<ProtectedRoute><BookLessonContent /></ProtectedRoute>} />
+          <Route path="/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>} />
+          <Route path="/mental-pillar/:lessonNumber?" element={<ProtectedRoute><MentalPillar /></ProtectedRoute>} />
+          <Route path="/physical-pillar/:lessonNumber?" element={<ProtectedRoute><PhysicalPillar /></ProtectedRoute>} />
+          <Route path="/spiritual-pillar/:lessonNumber?" element={<ProtectedRoute><SpiritualPillar /></ProtectedRoute>} />
+          <Route path="/reset-by-discipline" element={<ProtectedRoute><ResetByDiscipline /></ProtectedRoute>} />
+          <Route path="/masterclass-library" element={<ProtectedRoute><MasterclassLibrary /></ProtectedRoute>} />
+          <Route path="/reset-discipline-course/:moduleNumber/:lessonNumber?" element={<ProtectedRoute><ResetByDisciplineCourse /></ProtectedRoute>} />
+          <Route path="/final-certification-exam" element={<ProtectedRoute><FinalCertificationExam /></ProtectedRoute>} />
+          <Route path="/certificate/:certificateNumber" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
