@@ -32,6 +32,7 @@ export default function ResetByDisciplineCourse() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
+  const [videoProgress, setVideoProgress] = useState<Map<string, number>>(new Map());
   const [showQuiz, setShowQuiz] = useState(false);
   const [interactiveResponse, setInteractiveResponse] = useState<any>(null);
   const [showInteractive, setShowInteractive] = useState(false);
@@ -110,14 +111,29 @@ export default function ResetByDisciplineCourse() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      // Load completed lessons (passed quizzes)
+      const { data: quizData, error: quizError } = await supabase
         .from('user_quiz_attempts')
         .select('lesson_id')
         .eq('user_id', user.id)
         .eq('passed', true);
 
-      if (error) throw error;
-      setCompletedLessons(new Set(data?.map(d => d.lesson_id) || []));
+      if (quizError) throw quizError;
+      setCompletedLessons(new Set(quizData?.map(d => d.lesson_id) || []));
+
+      // Load video progress for all lessons
+      const { data: progressData, error: progressError } = await supabase
+        .from('user_lesson_progress')
+        .select('lesson_id, video_progress')
+        .eq('user_id', user.id);
+
+      if (progressError) throw progressError;
+      
+      const progressMap = new Map();
+      progressData?.forEach(p => {
+        progressMap.set(p.lesson_id, p.video_progress || 0);
+      });
+      setVideoProgress(progressMap);
     } catch (error) {
       console.error('Error loading progress:', error);
     }
@@ -298,6 +314,22 @@ export default function ResetByDisciplineCourse() {
                           currentLesson.subtitle_nl_url && { src: currentLesson.subtitle_nl_url, lang: "nl", label: "Nederlands" },
                           currentLesson.subtitle_ru_url && { src: currentLesson.subtitle_ru_url, lang: "ru", label: "Русский" }
                         ].filter(Boolean) as any}
+                        onProgress={async (progress) => {
+                          // Update video progress in real-time
+                          const { data: { user } } = await supabase.auth.getUser();
+                          if (!user) return;
+                          
+                          await supabase
+                            .from('user_lesson_progress')
+                            .upsert({
+                              user_id: user.id,
+                              lesson_id: currentLesson.id,
+                              video_progress: progress
+                            });
+                          
+                          // Update local state
+                          setVideoProgress(prev => new Map(prev).set(currentLesson.id, progress));
+                        }}
                         onComplete={handleLessonComplete}
                       />
                     </CardContent>
@@ -343,43 +375,57 @@ export default function ResetByDisciplineCourse() {
                     const isUnlocked = isLessonUnlocked(lesson);
                     const isCompleted = completedLessons.has(lesson.id);
                     const isCurrent = currentLesson?.id === lesson.id;
+                    const progress = videoProgress.get(lesson.id) || 0;
 
                     return (
-                      <Button
-                        key={lesson.id}
-                        variant={isCurrent ? "default" : isCompleted ? "outline" : "ghost"}
-                        className={`w-full justify-start relative transition-all ${
-                          isCompleted ? 'bg-primary/10 border-primary/30 hover:bg-primary/20' : ''
-                        } ${
-                          isCurrent ? 'ring-2 ring-primary shadow-lg' : ''
-                        } ${
-                          !isUnlocked ? 'opacity-50' : ''
-                        }`}
-                        disabled={!isUnlocked}
-                        onClick={() => navigate(`/reset-discipline-course/${moduleNumber}/${lesson.lesson_number}`)}
-                      >
-                        <span className={`mr-2 ${isCompleted ? 'text-primary' : ''}`}>
-                          {isCompleted ? (
-                            <CheckCircle2 className="w-5 h-5 fill-primary text-primary-foreground" />
-                          ) : !isUnlocked ? (
-                            <Lock className="w-5 h-5 text-muted-foreground" />
-                          ) : isCurrent ? (
-                            <Play className="w-5 h-5" />
-                          ) : (
-                            <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30" />
-                          )}
-                        </span>
-                        <span className={`flex-1 text-left truncate ${
-                          isCompleted ? 'font-semibold' : ''
-                        }`}>
-                          Lesson {lesson.lesson_number}: {lesson.title}
-                        </span>
-                        {isCompleted && (
-                          <span className="ml-2 text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
-                            Done
+                      <div key={lesson.id} className="relative">
+                        <Button
+                          variant={isCurrent ? "default" : isCompleted ? "outline" : "ghost"}
+                          className={`w-full justify-start relative transition-all ${
+                            isCompleted ? 'bg-primary/10 border-primary/30 hover:bg-primary/20' : ''
+                          } ${
+                            isCurrent ? 'ring-2 ring-primary shadow-lg' : ''
+                          } ${
+                            !isUnlocked ? 'opacity-50' : ''
+                          }`}
+                          disabled={!isUnlocked}
+                          onClick={() => navigate(`/reset-discipline-course/${moduleNumber}/${lesson.lesson_number}`)}
+                        >
+                          <span className={`mr-2 ${isCompleted ? 'text-primary' : ''}`}>
+                            {isCompleted ? (
+                              <CheckCircle2 className="w-5 h-5 fill-primary text-primary-foreground" />
+                            ) : !isUnlocked ? (
+                              <Lock className="w-5 h-5 text-muted-foreground" />
+                            ) : isCurrent ? (
+                              <Play className="w-5 h-5" />
+                            ) : (
+                              <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30" />
+                            )}
                           </span>
+                          <span className={`flex-1 text-left truncate ${
+                            isCompleted ? 'font-semibold' : ''
+                          }`}>
+                            Lesson {lesson.lesson_number}: {lesson.title}
+                          </span>
+                          {isCompleted ? (
+                            <span className="ml-2 text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
+                              Done
+                            </span>
+                          ) : progress > 0 && (
+                            <span className="ml-2 text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">
+                              {Math.round(progress)}%
+                            </span>
+                          )}
+                        </Button>
+                        {!isCompleted && progress > 0 && (
+                          <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted rounded-b-md overflow-hidden">
+                            <div 
+                              className="h-full bg-primary transition-all duration-300"
+                              style={{ width: `${progress}%` }}
+                            />
+                          </div>
                         )}
-                      </Button>
+                      </div>
                     );
                   })}
                 </CardContent>
