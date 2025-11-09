@@ -217,7 +217,7 @@ export default function ResetByDiscipline() {
                                   </div>
                                 </div>
                                 <Button 
-                                  variant="outline" 
+                                  variant={isLocked ? "destructive" : "outline"}
                                   size="sm"
                                   disabled={isLocked}
                                   onClick={(e) => {
