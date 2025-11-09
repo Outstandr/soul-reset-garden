@@ -26,6 +26,19 @@ export const DecisionFilter = ({ config, onComplete, savedResponse }: DecisionFi
     setSubmitted(true);
   };
 
+  // Handle missing or invalid config
+  if (!config?.options || !Array.isArray(config.options)) {
+    return (
+      <Card className="glass-effect">
+        <CardContent className="p-6">
+          <p className="text-muted-foreground text-center">
+            Interactive configuration not available for this lesson.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="glass-effect">
       <CardHeader>
