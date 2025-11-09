@@ -9,6 +9,7 @@ import { QuizComponent } from "@/components/quiz/QuizComponent";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { InteractiveWrapper } from "@/components/interactive/InteractiveWrapper";
+import { LessonCompletionDialog } from "@/components/LessonCompletionDialog";
 
 interface Lesson {
   id: string;
@@ -32,6 +33,7 @@ export default function ResetByDisciplineCourse() {
   const [interactiveResponse, setInteractiveResponse] = useState<any>(null);
   const [showInteractive, setShowInteractive] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showCompletionDialog, setShowCompletionDialog] = useState(false);
   const { toast } = useToast();
 
   const moduleNames = [
@@ -142,6 +144,11 @@ export default function ResetByDisciplineCourse() {
   };
 
   const handleLessonComplete = () => {
+    setShowCompletionDialog(true);
+  };
+
+  const handleCompletionContinue = () => {
+    setShowCompletionDialog(false);
     if (currentLesson?.interactive_type && !interactiveResponse) {
       setShowInteractive(true);
     } else {
@@ -233,6 +240,13 @@ export default function ResetByDisciplineCourse() {
 
   const moduleProgress = (completedLessons.size / lessons.length) * 100;
 
+  // Determine pillar type from module number
+  const getPillarType = (): "physical" | "mental" | "spiritual" => {
+    if (moduleNumber === "1") return "physical";
+    if (moduleNumber === "2") return "mental";
+    return "spiritual";
+  };
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
@@ -297,6 +311,13 @@ export default function ResetByDisciplineCourse() {
                       onPass={handleQuizPass}
                     />
                   )}
+
+                  <LessonCompletionDialog
+                    open={showCompletionDialog}
+                    onContinue={handleCompletionContinue}
+                    pillarType={getPillarType()}
+                    lessonTitle={currentLesson.title}
+                  />
                 </>
               )}
             </div>
