@@ -34,6 +34,19 @@ export const FocusFortress = ({ config, onComplete, savedResponse }: FocusFortre
     setSubmitted(true);
   };
 
+  // Handle missing or invalid config
+  if (!config?.distractions || !Array.isArray(config.distractions)) {
+    return (
+      <Card className="glass-effect">
+        <CardContent className="p-6">
+          <p className="text-muted-foreground text-center">
+            Interactive configuration not available for this lesson.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="glass-effect">
       <CardHeader>
