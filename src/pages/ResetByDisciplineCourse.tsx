@@ -204,7 +204,11 @@ export default function ResetByDisciplineCourse() {
   const handleQuizPass = async () => {
     if (!currentLesson) return;
     
+    // Update local state immediately for UI feedback
     setCompletedLessons(prev => new Set([...prev, currentLesson.id]));
+    
+    // Reload progress from database to ensure consistency
+    await loadProgress();
     
     // Check if module is complete
     const allPassed = lessons.every(l => 
