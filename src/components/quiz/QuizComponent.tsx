@@ -114,7 +114,7 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
 
       if (passed) {
         toast({
-          title: "Congratulations! 🎉",
+          title: "Congratulations!",
           description: `You passed with ${percentage}%`,
         });
         onPass();

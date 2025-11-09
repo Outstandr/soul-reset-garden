@@ -41,15 +41,15 @@ export const Hero = () => {
 
           {/* Subheading */}
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/80 font-semibold max-w-2xl mx-auto animate-fade-in-up animation-delay-200">
-            🚀 A full-circle journey from foundation to transformation<br className="hidden sm:block"/>
-            <span className="sm:hidden"> </span>✨ Master the R.E.S.E.T. system and unlock your true potential
+            A full-circle journey from foundation to transformation<br className="hidden sm:block"/>
+            <span className="sm:hidden"> </span>Master the R.E.S.E.T. system and unlock your true potential
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center animate-fade-in-up animation-delay-300 w-full sm:w-auto">
             <Link to="/dashboard" className="w-full sm:w-auto">
               <Button size="lg" variant="hero" className="group text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 shadow-neon hover-lift w-full sm:w-auto">
-                🎯 Begin Your Journey
+                Begin Your Journey
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-2" />
               </Button>
             </Link>
@@ -61,7 +61,7 @@ export const Hero = () => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              📖 Learn More
+              Learn More
             </Button>
           </div>
 
@@ -69,15 +69,15 @@ export const Hero = () => {
           <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 pt-12 md:pt-16 animate-fade-in-up animation-delay-400">
             <div className="text-center hover-lift">
               <div className="text-3xl sm:text-4xl md:text-5xl font-black gradient-text animate-scale-pulse">10K+</div>
-              <div className="text-sm sm:text-base font-semibold text-foreground/70 mt-1 sm:mt-2">🌟 Students Transformed</div>
+              <div className="text-sm sm:text-base font-semibold text-foreground/70 mt-1 sm:mt-2">Students Transformed</div>
             </div>
             <div className="text-center hover-lift">
               <div className="text-3xl sm:text-4xl md:text-5xl font-black gradient-text animate-scale-pulse" style={{ animationDelay: "0.5s" }}>95%</div>
-              <div className="text-sm sm:text-base font-semibold text-foreground/70 mt-1 sm:mt-2">💯 Success Rate</div>
+              <div className="text-sm sm:text-base font-semibold text-foreground/70 mt-1 sm:mt-2">Success Rate</div>
             </div>
             <div className="text-center hover-lift">
               <div className="text-3xl sm:text-4xl md:text-5xl font-black gradient-text animate-scale-pulse" style={{ animationDelay: "1s" }}>5 Steps</div>
-              <div className="text-sm sm:text-base font-semibold text-foreground/70 mt-1 sm:mt-2">🎊 To Transformation</div>
+              <div className="text-sm sm:text-base font-semibold text-foreground/70 mt-1 sm:mt-2">To Transformation</div>
             </div>
           </div>
         </div>

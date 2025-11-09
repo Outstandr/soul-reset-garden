@@ -77,13 +77,13 @@ export const TimerChallenge = ({ config, onComplete, savedResponse }: TimerChall
 
         {!isRunning && timeLeft === 0 && !completed && (
           <Button onClick={markComplete} className="w-full" size="lg">
-            I Did It! ✓
+            I Did It!
           </Button>
         )}
 
         {completed && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg text-center">
-            <p className="text-lg font-semibold text-primary">Challenge Complete! 🎉</p>
+            <p className="text-lg font-semibold text-primary">Challenge Complete!</p>
           </div>
         )}
       </CardContent>

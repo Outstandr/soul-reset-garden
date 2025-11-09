@@ -66,8 +66,8 @@ export const ResetOverview = () => {
             The <span className="gradient-text neon-text">RESET</span> Blueprint®️
           </h2>
           <p className="text-2xl text-foreground/80 font-bold max-w-2xl mx-auto">
-            🌈 A full-circle journey from doing to becoming<br/>
-            ⭐ Each step builds upon the last, creating holistic transformation
+            A full-circle journey from doing to becoming<br/>
+            Each step builds upon the last, creating holistic transformation
           </p>
         </div>
 
@@ -138,7 +138,7 @@ export const ResetOverview = () => {
                   {/* Symbolism with icon */}
                   <div className="relative pt-4 border-t-2" style={{ borderColor: `hsl(var(--${step.color}) / 0.3)` }}>
                     <p className="text-sm text-foreground/60 font-semibold">
-                      ✨ {step.symbolism}
+                      {step.symbolism}
                     </p>
                   </div>
                 </div>

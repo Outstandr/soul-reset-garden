@@ -64,7 +64,7 @@ export const TextInputPair = ({ config, onComplete, savedResponse }: TextInputPa
 
         {submitted && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">✓ Formula completed</p>
+            <p className="text-sm text-muted-foreground">Formula completed</p>
           </div>
         )}
       </CardContent>

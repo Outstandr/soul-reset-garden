@@ -23,7 +23,7 @@ const Journal = () => {
   const [mood, setMood] = useState("");
   const [energyLevel, setEnergyLevel] = useState([5]);
 
-  const moods = ["😊 Great", "🙂 Good", "😐 Okay", "😔 Low", "😫 Struggling"];
+  const moods = ["Great", "Good", "Okay", "Low", "Struggling"];
 
   useEffect(() => {
     // Load from localStorage for the selected date
@@ -180,7 +180,7 @@ const Journal = () => {
         {/* Gratitude */}
         <Card className="p-6 mb-6">
           <label className="text-sm font-semibold mb-3 block">
-            🙏 What are you grateful for today?
+            What are you grateful for today?
           </label>
           <Textarea
             value={gratitude}
@@ -193,7 +193,7 @@ const Journal = () => {
         {/* Goals */}
         <Card className="p-6 mb-6">
           <label className="text-sm font-semibold mb-3 block">
-            🎯 Today's Goals & Intentions
+            Today's Goals & Intentions
           </label>
           <Textarea
             value={goals}
@@ -206,7 +206,7 @@ const Journal = () => {
         {/* Wins */}
         <Card className="p-6 mb-6">
           <label className="text-sm font-semibold mb-3 block">
-            🏆 Today's Wins & Achievements
+            Today's Wins & Achievements
           </label>
           <Textarea
             value={wins}
@@ -219,7 +219,7 @@ const Journal = () => {
         {/* Challenges */}
         <Card className="p-6 mb-6">
           <label className="text-sm font-semibold mb-3 block">
-            💪 Challenges & Lessons Learned
+            Challenges & Lessons Learned
           </label>
           <Textarea
             value={challenges}
@@ -232,7 +232,7 @@ const Journal = () => {
         {/* Reflection */}
         <Card className="p-6 mb-6">
           <label className="text-sm font-semibold mb-3 block">
-            ✨ Daily Reflection & Notes
+            Daily Reflection & Notes
           </label>
           <Textarea
             value={reflection}

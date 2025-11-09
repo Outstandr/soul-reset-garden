@@ -48,7 +48,7 @@ export const CommitmentCheckbox = ({ config, onComplete, savedResponse }: Commit
 
         {submitted && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg text-center">
-            <p className="text-sm font-semibold text-primary">✓ Commitment Made!</p>
+            <p className="text-sm font-semibold text-primary">Commitment Made!</p>
           </div>
         )}
       </CardContent>

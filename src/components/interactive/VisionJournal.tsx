@@ -72,7 +72,7 @@ export const VisionJournal = ({ config, onComplete, savedResponse }: VisionJourn
 
         {submitted && (
           <div className="p-4 bg-reset-mind/10 border border-reset-mind/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">✓ Vision captured</p>
+            <p className="text-sm text-muted-foreground">Vision captured</p>
           </div>
         )}
       </CardContent>

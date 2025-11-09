@@ -80,7 +80,7 @@ export const AchievementBadge = ({
         {/* Earned indicator */}
         {earned && (
           <div className="mt-3 inline-block px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-xs font-bold text-green-400">
-            ✓ Earned
+            Earned
           </div>
         )}
       </div>

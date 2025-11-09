@@ -227,7 +227,7 @@ const UploadMasterclass = () => {
                 </p>
                 <div className="text-xs text-muted-foreground mb-6 max-w-md mx-auto">
                   {uploadedFiles.map((file, i) => (
-                    <div key={i}>✓ {file}</div>
+                    <div key={i}>{file}</div>
                   ))}
                 </div>
                 <Button onClick={() => navigate("/dashboard")} variant="hero">
@@ -243,17 +243,17 @@ const UploadMasterclass = () => {
           <ul className="text-sm text-muted-foreground space-y-1">
             {selectedCourse === "reset-discipline" ? (
               <>
-                <li>✓ Select all videos for a module (up to 6 lessons)</li>
-                <li>✓ Videos will be named: module{selectedModule}-lesson1.mp4, module{selectedModule}-lesson2.mp4, etc.</li>
-                <li>✓ Upload order determines lesson numbers (1-6)</li>
-                <li>✓ 18 total videos needed (3 modules × 6 lessons)</li>
+                <li>Select all videos for a module (up to 6 lessons)</li>
+                <li>Videos will be named: module{selectedModule}-lesson1.mp4, module{selectedModule}-lesson2.mp4, etc.</li>
+                <li>Upload order determines lesson numbers (1-6)</li>
+                <li>18 total videos needed (3 modules × 6 lessons)</li>
               </>
             ) : (
               <>
-                <li>✓ Select multiple videos to upload at once</li>
-                <li>✓ Videos stored securely in your backend</li>
-                <li>✓ Each lesson references specific timestamps</li>
-                <li>✓ Interactive elements trigger after each segment</li>
+                <li>Select multiple videos to upload at once</li>
+                <li>Videos stored securely in your backend</li>
+                <li>Each lesson references specific timestamps</li>
+                <li>Interactive elements trigger after each segment</li>
               </>
             )}
           </ul>

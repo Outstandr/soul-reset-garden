@@ -65,7 +65,7 @@ export const StateAssessment = ({ config, onComplete, savedResponse }: StateAsse
 
         {submitted && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">✓ Assessment completed</p>
+            <p className="text-sm text-muted-foreground">Assessment completed</p>
           </div>
         )}
       </CardContent>

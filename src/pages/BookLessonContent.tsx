@@ -134,21 +134,21 @@ Which one will you choose?
     if (readingProgress >= 25 && !checkpoints.includes(25)) {
       setCheckpoints([...checkpoints, 25]);
       toast({
-        title: "🎯 Checkpoint Reached!",
+        title: "Checkpoint Reached!",
         description: "+5 bonus XP - You're making great progress!",
       });
     }
     if (readingProgress >= 50 && !checkpoints.includes(50)) {
       setCheckpoints([...checkpoints, 50]);
       toast({
-        title: "🎯 Halfway There!",
+        title: "Halfway There!",
         description: "+10 bonus XP - Keep going!",
       });
     }
     if (readingProgress >= 75 && !checkpoints.includes(75)) {
       setCheckpoints([...checkpoints, 75]);
       toast({
-        title: "🎯 Almost Done!",
+        title: "Almost Done!",
         description: "+15 bonus XP - Final stretch!",
       });
     }
@@ -162,7 +162,7 @@ Which one will you choose?
   const handleComplete = () => {
     setIsCompleted(true);
     toast({
-      title: "🎉 Lesson Complete!",
+      title: "Lesson Complete!",
       description: `+${lesson.xp} XP earned!`,
     });
     
@@ -175,7 +175,7 @@ Which one will you choose?
     if (!highlights.includes(text)) {
       setHighlights([...highlights, text]);
       toast({
-        title: "✨ Highlighted!",
+        title: "Highlighted!",
         description: "Saved to your highlights",
       });
     }
@@ -184,7 +184,7 @@ Which one will you choose?
   const handleActionComplete = () => {
     setActionCompleted(true);
     toast({
-      title: "💪 Action Completed!",
+      title: "Action Completed!",
       description: "+10 bonus XP for taking action!",
     });
   };
@@ -192,7 +192,7 @@ Which one will you choose?
   const handleReflectionSave = () => {
     if (reflectionText.trim()) {
       toast({
-        title: "💭 Reflection Saved!",
+        title: "Reflection Saved!",
         description: "Your insights have been saved to your journal",
       });
       setShowReflection(false);
@@ -202,7 +202,7 @@ Which one will you choose?
   const handleLionelReflections = (responses: string[]) => {
     console.log("Lionel reflections:", responses);
     toast({
-      title: "💡 Reflections Saved!",
+      title: "Reflections Saved!",
       description: "Your insights have been saved. +15 bonus XP!",
     });
   };
@@ -247,7 +247,7 @@ Which one will you choose?
               <span className="capitalize px-3 py-1 rounded-full bg-primary/20 text-primary font-bold border-2 border-primary/40">
                 {lesson.category}
               </span>
-              <span>⏱️ {lesson.readingTime}</span>
+              <span>{lesson.readingTime}</span>
               <span className="font-bold text-reset-rhythm">{readingProgress}% Complete</span>
             </div>
           </div>

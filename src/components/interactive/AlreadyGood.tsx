@@ -60,7 +60,7 @@ export const AlreadyGood = ({ config, onComplete, savedResponse }: AlreadyGoodPr
 
         {submitted && (
           <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">✓ Reflection saved</p>
+            <p className="text-sm text-muted-foreground">Reflection saved</p>
           </div>
         )}
       </CardContent>

@@ -63,7 +63,7 @@ export const LessonCard = ({ lesson, lessonNumber, onStart }: LessonCardProps) =
             : "bg-slate-800 border-slate-700 text-white"
         }`}
       >
-        {isCompleted ? "✓" : lessonNumber}
+        {isCompleted ? "" : lessonNumber}
       </div>
 
       {/* XP Badge */}
@@ -118,7 +118,7 @@ export const LessonCard = ({ lesson, lessonNumber, onStart }: LessonCardProps) =
 
         {/* Duration */}
         <div className="flex items-center justify-between mb-6">
-          <span className="text-sm text-gray-500 font-semibold">⏱️ {lesson.duration}</span>
+          <span className="text-sm text-gray-500 font-semibold">{lesson.duration}</span>
           {isCompleted && (
             <div className="flex items-center gap-2 text-green-500 font-bold">
               <CheckCircle className="w-5 h-5" />
@@ -134,7 +134,7 @@ export const LessonCard = ({ lesson, lessonNumber, onStart }: LessonCardProps) =
             className="w-full text-base py-5 font-black"
             onClick={onStart}
           >
-            ♻️ Review Lesson
+            Review Lesson
           </Button>
         )}
 
@@ -144,7 +144,7 @@ export const LessonCard = ({ lesson, lessonNumber, onStart }: LessonCardProps) =
             className="w-full text-base py-5 font-black shadow-neon animate-scale-pulse"
             onClick={onStart}
           >
-            ▶️ Continue Learning
+            Continue Learning
           </Button>
         )}
 
@@ -154,7 +154,7 @@ export const LessonCard = ({ lesson, lessonNumber, onStart }: LessonCardProps) =
             className="w-full text-base py-5 font-black"
             onClick={onStart}
           >
-            🚀 Start Lesson
+            Start Lesson
           </Button>
         )}
 

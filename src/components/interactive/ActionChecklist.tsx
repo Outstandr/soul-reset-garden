@@ -76,7 +76,7 @@ export const ActionChecklist = ({ config, onComplete, savedResponse }: ActionChe
 
         {submitted && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg text-center">
-            <p className="text-lg font-semibold text-primary">✓ Challenge Accepted! 🚀</p>
+            <p className="text-lg font-semibold text-primary">Challenge Accepted!</p>
           </div>
         )}
       </CardContent>

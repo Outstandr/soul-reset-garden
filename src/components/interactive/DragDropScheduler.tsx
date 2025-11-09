@@ -69,7 +69,7 @@ export const DragDropScheduler = ({ config, onComplete, savedResponse }: DragDro
 
         {submitted && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">✓ Daily system created</p>
+            <p className="text-sm text-muted-foreground">Daily system created</p>
           </div>
         )}
       </CardContent>

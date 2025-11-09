@@ -47,7 +47,7 @@ export const EnergyAudit = ({ config, onComplete, savedResponse }: EnergyAuditPr
 
         {submitted && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-            <p className="text-sm font-medium mb-2">✓ Audit completed</p>
+            <p className="text-sm font-medium mb-2">Audit completed</p>
             <p className="text-sm text-muted-foreground">{config.message}</p>
           </div>
         )}

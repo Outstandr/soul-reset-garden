@@ -94,7 +94,7 @@ export const FocusFortress = ({ config, onComplete, savedResponse }: FocusFortre
         {submitted && (
           <div className="p-4 bg-reset-energy/10 border border-reset-energy/20 rounded-lg">
             <p className="text-sm text-muted-foreground">
-              ✓ You've identified {selectedDistractions.length} distraction(s) to eliminate
+              You've identified {selectedDistractions.length} distraction(s) to eliminate
             </p>
           </div>
         )}

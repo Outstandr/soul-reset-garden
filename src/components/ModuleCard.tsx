@@ -76,7 +76,7 @@ export const ModuleCard = ({
             className="text-lg font-bold" 
             style={{ color: `hsl(var(--${color}))` }}
           >
-            ✨ {subtitle}
+            {subtitle}
           </CardDescription>
         </div>
       </CardHeader>
@@ -113,7 +113,7 @@ export const ModuleCard = ({
             className="w-full group/btn text-lg py-6 shadow-neon font-black hover-lift"
             onClick={onStart}
           >
-            🚀 {progress > 0 ? "Continue Journey" : "Start Journey"}
+            {progress > 0 ? "Continue Journey" : "Start Journey"}
             <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" />
           </Button>
         )}
@@ -124,13 +124,13 @@ export const ModuleCard = ({
             className="w-full text-lg py-6 font-black hover-lift"
             onClick={onStart}
           >
-            ✅ Review Module
+            Review Module
           </Button>
         )}
 
         {status === "locked" && (
           <Button variant="ghost" className="w-full text-base py-6 font-bold" disabled>
-            🔒 Complete Previous Modules
+            Complete Previous Modules
           </Button>
         )}
       </CardContent>

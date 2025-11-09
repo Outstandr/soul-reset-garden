@@ -102,7 +102,7 @@ export const ScenarioQuiz = ({ config, onComplete, savedResponse }: ScenarioQuiz
               : "bg-red-500/10 border-red-500/20"
           }`}>
             <p className="text-sm font-medium mb-2">
-              {isCorrect ? "✓ Correct!" : "✗ Not quite"}
+              {isCorrect ? "Correct!" : "Not quite"}
             </p>
             {scenario.explanation && (
               <p className="text-sm text-muted-foreground">{scenario.explanation}</p>
@@ -119,7 +119,7 @@ export const ScenarioQuiz = ({ config, onComplete, savedResponse }: ScenarioQuiz
         {submitted && (
           <div className="p-4 bg-reset-mind/10 border border-reset-mind/20 rounded-lg">
             <p className="text-sm text-muted-foreground">
-              ✓ Quiz completed - {selectedAnswers.filter((ans, idx) => ans === config.scenarios[idx].correctAnswer).length} / {config.scenarios.length} correct
+              Quiz completed - {selectedAnswers.filter((ans, idx) => ans === config.scenarios[idx].correctAnswer).length} / {config.scenarios.length} correct
             </p>
           </div>
         )}

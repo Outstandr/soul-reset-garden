@@ -44,7 +44,7 @@ export function LessonCompletionDialog({ open, onContinue, pillarType, lessonTit
           </div>
           <AlertDialogTitle className="text-center text-2xl font-black">
             <span className={`bg-gradient-to-r ${styles.gradient} bg-clip-text text-transparent`}>
-              Lesson Complete! 🎉
+              Lesson Complete!
             </span>
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-base space-y-2">

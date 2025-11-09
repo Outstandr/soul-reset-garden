@@ -100,7 +100,7 @@ export const DiscomfortBreath = ({ config, onComplete, savedResponse }: Discomfo
         {submitted && (
           <div className="p-4 bg-reset-mind/10 border border-reset-mind/20 rounded-lg">
             <p className="text-sm text-muted-foreground">
-              ✓ Breathing exercise completed
+              Breathing exercise completed
             </p>
           </div>
         )}

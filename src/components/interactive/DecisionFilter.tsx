@@ -89,7 +89,7 @@ export const DecisionFilter = ({ config, onComplete, savedResponse }: DecisionFi
 
         {submitted && (
           <div className="p-4 bg-reset-execution/10 border border-reset-execution/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">✓ Decision recorded</p>
+            <p className="text-sm text-muted-foreground">Decision recorded</p>
           </div>
         )}
       </CardContent>

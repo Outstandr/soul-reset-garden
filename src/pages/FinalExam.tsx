@@ -98,7 +98,7 @@ export default function FinalExam() {
       if (error) throw error;
 
       toast({
-        title: "Congratulations! 🎉🏆",
+        title: "Congratulations!",
         description: "You've completed the entire Reset by Discipline course!",
       });
 
@@ -156,7 +156,7 @@ export default function FinalExam() {
                     <span className="font-semibold">{module.name}</span>
                   </div>
                   {modulesCompleted.includes(module.num) ? (
-                    <span className="text-sm text-primary font-semibold">Complete ✓</span>
+                    <span className="text-sm text-primary font-semibold">Complete</span>
                   ) : (
                     <Button 
                       variant="outline" 

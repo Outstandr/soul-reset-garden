@@ -64,7 +64,7 @@ export const DragDropMatch = ({ config, onComplete, savedResponse }: DragDropMat
             </Select>
             {showResults && (
               <p className={`text-sm ${matches[activity] === config.correctMatches[activity] ? 'text-primary' : 'text-destructive'}`}>
-                {matches[activity] === config.correctMatches[activity] ? '✓ Correct!' : `✗ Correct answer: ${config.correctMatches[activity]}`}
+                {matches[activity] === config.correctMatches[activity] ? 'Correct!' : `Correct answer: ${config.correctMatches[activity]}`}
               </p>
             )}
           </div>
@@ -81,7 +81,7 @@ export const DragDropMatch = ({ config, onComplete, savedResponse }: DragDropMat
             <p className="text-sm font-medium mb-1">
               Score: {correctCount}/{config.activities.length}
             </p>
-            <p className="text-sm text-muted-foreground">✓ Quiz completed</p>
+            <p className="text-sm text-muted-foreground">Quiz completed</p>
           </div>
         )}
       </CardContent>

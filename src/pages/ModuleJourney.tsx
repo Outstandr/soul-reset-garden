@@ -181,7 +181,7 @@ export default function ModuleJourney() {
           {/* Module Header */}
           <div className="mb-12 text-center">
             <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-gradient-to-r from-reset-rhythm/20 to-purple-500/20 rounded-full border border-reset-rhythm/30">
-              <div className="text-4xl">🎯</div>
+              <div className="text-4xl"></div>
               <span className="text-2xl font-black text-white">R - The Reset in You</span>
             </div>
             <h1 className="text-5xl font-black text-white mb-4 gradient-text">

@@ -56,7 +56,7 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
             : "bg-card border-border text-foreground"
         }`}
       >
-        {isCompleted ? "✓" : lesson.lessonNumber}
+        {isCompleted ? "" : lesson.lessonNumber}
       </div>
 
       {/* XP Badge */}
@@ -112,7 +112,7 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
         {/* Reading Time */}
         <div className="flex items-center justify-between mb-6">
           <span className={`text-sm font-semibold ${isLocked ? "text-muted-foreground/60" : "text-muted-foreground"}`}>
-            ⏱️ {lesson.readingTime}
+            {lesson.readingTime}
           </span>
           {isCompleted && (
             <div className="flex items-center gap-2 text-accent font-bold">
@@ -129,7 +129,7 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
             className="w-full text-base py-5 font-black"
             onClick={onStart}
           >
-            ♻️ Review Lesson
+            Review Lesson
           </Button>
         )}
 
@@ -139,7 +139,7 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
             className="w-full text-base py-5 font-black shadow-neon animate-scale-pulse"
             onClick={onStart}
           >
-            ▶️ Continue Reading
+            Continue Reading
           </Button>
         )}
 
@@ -149,7 +149,7 @@ export const BookLessonCard = ({ lesson, onStart }: BookLessonCardProps) => {
             className="w-full text-base py-5 font-black"
             onClick={onStart}
           >
-            📖 Start Lesson
+            Start Lesson
           </Button>
         )}
 

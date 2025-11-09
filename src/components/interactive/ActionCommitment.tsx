@@ -90,7 +90,7 @@ export const ActionCommitment = ({ config, onComplete, savedResponse }: ActionCo
 
         {submitted && (
           <div className="p-4 bg-reset-execution/10 border border-reset-execution/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">✓ Commitment locked in</p>
+            <p className="text-sm text-muted-foreground">Commitment locked in</p>
           </div>
         )}
       </CardContent>

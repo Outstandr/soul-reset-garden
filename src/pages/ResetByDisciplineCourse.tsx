@@ -225,7 +225,7 @@ export default function ResetByDisciplineCourse() {
       if (error) throw error;
 
       toast({
-        title: "Module Complete! 🎉",
+        title: "Module Complete!",
         description: "You've earned your certificate!",
       });
 
@@ -376,7 +376,7 @@ export default function ResetByDisciplineCourse() {
                         </span>
                         {isCompleted && (
                           <span className="ml-2 text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
-                            ✓ Done
+                            Done
                           </span>
                         )}
                       </Button>
