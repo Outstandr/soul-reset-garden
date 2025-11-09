@@ -2,11 +2,13 @@ import { Hero } from "@/components/Hero";
 import { ResetOverview } from "@/components/ResetOverview";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, BookOpen, Users, Video } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Video, Menu, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen">
@@ -14,8 +16,10 @@ const Index = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-sm border-b border-border">
         <div className="zen-container py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold gradient-text">RESET Blueprint®️</h1>
-            <div className="flex items-center gap-4">
+            <h1 className="text-xl md:text-2xl font-bold gradient-text">RESET Blueprint®️</h1>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-4">
               <Button variant="ghost" size="sm" onClick={() => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
               }}>About</Button>
@@ -30,7 +34,64 @@ const Index = () => {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
           </div>
+
+          {/* Mobile Menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 space-y-2 animate-fade-in-up">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start"
+                onClick={() => {
+                  document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+              >
+                About
+              </Button>
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start"
+                onClick={() => {
+                  document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Testimonials
+              </Button>
+              <Button 
+                variant="zen" 
+                className="w-full"
+                onClick={() => {
+                  navigate('/dashboard');
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Sign In
+              </Button>
+              <Button 
+                variant="hero" 
+                className="w-full"
+                onClick={() => {
+                  navigate('/dashboard');
+                  setMobileMenuOpen(false);
+                }}
+              >
+                Get Started
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          )}
         </div>
       </nav>
 
