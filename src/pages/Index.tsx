@@ -16,12 +16,16 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold gradient-text">RESET Blueprint®️</h1>
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm">About</Button>
-              <Button variant="ghost" size="sm">Testimonials</Button>
+              <Button variant="ghost" size="sm" onClick={() => {
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+              }}>About</Button>
+              <Button variant="ghost" size="sm" onClick={() => {
+                document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
+              }}>Testimonials</Button>
               <Button variant="zen" size="sm" onClick={() => navigate('/dashboard')}>
                 Sign In
               </Button>
-              <Button variant="hero" size="sm">
+              <Button variant="hero" size="sm" onClick={() => navigate('/dashboard')}>
                 Get Started
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -33,8 +37,10 @@ const Index = () => {
       {/* Hero Section */}
       <Hero />
 
-      {/* RESET Overview */}
-      <ResetOverview />
+      {/* RESET Overview - About Section */}
+      <div id="about">
+        <ResetOverview />
+      </div>
 
       {/* Features Section */}
       <section className="py-24 bg-muted/30">
@@ -88,8 +94,48 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-24 bg-gradient-to-br from-primary/5 via-reset-energy/5 to-reset-transformation/5">
+        <div className="zen-container">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">
+              What Our <span className="gradient-text">Community</span> Says
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Real transformations from real people
+            </p>
+          </div>
+          <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+            <Card className="border-0 shadow-medium">
+              <CardContent className="pt-8 space-y-4">
+                <p className="text-muted-foreground italic">
+                  "The RESET Blueprint transformed how I approach every day. I've built rhythms that actually stick."
+                </p>
+                <p className="font-semibold">- Sarah M.</p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-medium">
+              <CardContent className="pt-8 space-y-4">
+                <p className="text-muted-foreground italic">
+                  "Finally, a program that goes beyond surface-level changes. This is about becoming, not just doing."
+                </p>
+                <p className="font-semibold">- James K.</p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-medium">
+              <CardContent className="pt-8 space-y-4">
+                <p className="text-muted-foreground italic">
+                  "The five pillars gave me a complete framework. I'm not just productive, I'm fulfilled."
+                </p>
+                <p className="font-semibold">- Maria L.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-primary/5 via-reset-energy/5 to-reset-transformation/5">
+      <section className="py-24 bg-muted/30">
         <div className="zen-container text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="text-4xl md:text-5xl font-bold">
