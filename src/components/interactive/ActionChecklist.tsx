@@ -29,6 +29,19 @@ export const ActionChecklist = ({ config, onComplete, savedResponse }: ActionChe
     setSubmitted(true);
   };
 
+  // Handle missing or invalid config
+  if (!config?.items || !Array.isArray(config.items)) {
+    return (
+      <Card className="glass-effect">
+        <CardContent className="p-6">
+          <p className="text-muted-foreground text-center">
+            Interactive configuration not available for this lesson.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const allChecked = config.items.every(item => checkedItems[item]);
 
   return (
