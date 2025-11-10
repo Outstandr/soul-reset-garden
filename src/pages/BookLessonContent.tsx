@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { LionelReflectionDialog } from "@/components/LionelReflectionDialog";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function BookLessonContent() {
   const navigate = useNavigate();
@@ -159,16 +160,52 @@ Which one will you choose?
     }
   }, [readingProgress, checkpoints, toast, hasShownLionelDialog]);
 
-  const handleComplete = () => {
-    setIsCompleted(true);
-    toast({
-      title: "Lesson Complete!",
-      description: `+${lesson.xp} XP earned!`,
-    });
-    
-    setTimeout(() => {
-      navigate("/book/reset-by-discipline");
-    }, 2000);
+  const handleComplete = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user && lessonId) {
+        // Save completion to database
+        const { error } = await supabase
+          .from('user_lesson_progress')
+          .upsert({
+            user_id: user.id,
+            lesson_id: lessonId,
+            completed: true,
+            video_progress: 100,
+            completed_at: new Date().toISOString(),
+          }, {
+            onConflict: 'user_id,lesson_id'
+          });
+
+        if (error) {
+          console.error('Error saving completion:', error);
+          toast({
+            title: "Error",
+            description: "Failed to save progress. Please try again.",
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
+      setIsCompleted(true);
+      toast({
+        title: "Lesson Complete!",
+        description: `+${lesson.xp} XP earned!`,
+      });
+      
+      setTimeout(() => {
+        navigate("/book/reset-by-discipline");
+      }, 2000);
+    } catch (error) {
+      console.error('Completion error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to complete lesson. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleHighlight = (text: string) => {
