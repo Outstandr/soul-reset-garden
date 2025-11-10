@@ -149,12 +149,12 @@ export const ResetOverview = () => {
 
         {/* Journey flow indicator - More dynamic */}
         <div className="mt-20 flex justify-center animate-fade-in-up animation-delay-700">
-          <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-card via-primary/10 to-card border-3 border-primary/30 shadow-glow">
-            <div className="flex items-center gap-4">
+          <div className="inline-flex items-center gap-1.5 sm:gap-3 px-3 sm:px-8 py-3 sm:py-4 rounded-full bg-gradient-to-r from-card via-primary/10 to-card border-2 sm:border-3 border-primary/30 shadow-glow">
+            <div className="flex items-center gap-1.5 sm:gap-4">
               {resetSteps.map((step, index) => (
-                <div key={step.letter} className="flex items-center gap-4">
+                <div key={step.letter} className="flex items-center gap-1.5 sm:gap-4">
                   <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center font-black text-base border-3 transition-all duration-300 hover:scale-125 cursor-pointer shadow-medium hover-lift animate-scale-pulse"
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-black text-sm sm:text-base border-2 sm:border-3 transition-all duration-300 hover:scale-125 cursor-pointer shadow-medium hover-lift animate-scale-pulse"
                     style={{
                       backgroundColor: `hsl(var(--${step.color}))`,
                       borderColor: `hsl(var(--${step.color}))`,
@@ -167,7 +167,7 @@ export const ResetOverview = () => {
                   </div>
                   {index < resetSteps.length - 1 && (
                     <div 
-                      className="w-12 h-1 rounded-full animate-shimmer"
+                      className="w-6 sm:w-12 h-1 rounded-full animate-shimmer"
                       style={{
                         background: `linear-gradient(90deg, hsl(var(--${step.color})), hsl(var(--${resetSteps[index + 1].color})))`,
                       }}
