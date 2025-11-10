@@ -205,31 +205,54 @@ export default function ResetByDisciplineCourse() {
   const handleQuizPass = async () => {
     if (!currentLesson) return;
     
-    // Reload progress from database to get updated completion status
-    await loadProgress();
-    
-    // Add current lesson to completed set
-    const updatedCompleted = new Set([...completedLessons, currentLesson.id]);
-    setCompletedLessons(updatedCompleted);
-    
-    // Check if module is complete
-    const allPassed = lessons.every(l => updatedCompleted.has(l.id));
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-    if (allPassed) {
-      await generateCertificate();
-    }
+      // Fetch fresh progress data directly from database
+      const { data: progressData, error } = await supabase
+        .from('user_lesson_progress')
+        .select('lesson_id, video_progress, completed')
+        .eq('user_id', user.id);
 
-    // Find and highlight the next lesson
-    const nextLesson = lessons.find(l => l.lesson_number === currentLesson.lesson_number + 1);
-    if (nextLesson) {
-      setNewlyUnlockedLesson(nextLesson.id);
+      if (error) throw error;
+
+      // Build fresh completed lessons set
+      const freshCompletedSet = new Set<string>();
+      const progressMap = new Map<string, number>();
       
-      // Remove highlight after 3 seconds
-      setTimeout(() => {
-        setNewlyUnlockedLesson(null);
-      }, 3000);
+      progressData?.forEach(p => {
+        if (p.completed) {
+          freshCompletedSet.add(p.lesson_id);
+        }
+        progressMap.set(p.lesson_id, p.video_progress || 0);
+      });
       
-      navigate(`/reset-discipline-course/${moduleNumber}/${nextLesson.lesson_number}`);
+      // Update state with fresh data
+      setCompletedLessons(freshCompletedSet);
+      setVideoProgress(progressMap);
+      
+      // Check if module is complete
+      const allPassed = lessons.every(l => freshCompletedSet.has(l.id));
+
+      if (allPassed) {
+        await generateCertificate();
+      }
+
+      // Find and highlight the next lesson
+      const nextLesson = lessons.find(l => l.lesson_number === currentLesson.lesson_number + 1);
+      if (nextLesson) {
+        setNewlyUnlockedLesson(nextLesson.id);
+        
+        // Remove highlight after 3 seconds
+        setTimeout(() => {
+          setNewlyUnlockedLesson(null);
+        }, 3000);
+        
+        navigate(`/reset-discipline-course/${moduleNumber}/${nextLesson.lesson_number}`);
+      }
+    } catch (error) {
+      console.error('Error updating progress after quiz pass:', error);
     }
   };
 
