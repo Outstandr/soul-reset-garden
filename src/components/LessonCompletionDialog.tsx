@@ -37,7 +37,7 @@ export function LessonCompletionDialog({ open, onContinue, pillarType, lessonTit
 
   return (
     <AlertDialog open={open}>
-      <AlertDialogContent className={`border-2 ${styles.border} ${styles.bg} max-w-md shadow-2xl ${styles.shadow}`}>
+      <AlertDialogContent className={`bg-black border-2 ${styles.border} ${styles.bg} max-w-md shadow-2xl ${styles.shadow}`}>
         <AlertDialogHeader className="space-y-4">
           <div className={`w-20 h-20 mx-auto rounded-full bg-gradient-to-br ${styles.gradient} flex items-center justify-center animate-bounce-slow shadow-lg ${styles.shadow}`}>
             <CheckCircle2 className="w-12 h-12 text-white" />
