@@ -458,75 +458,7 @@ Which one will you choose?
       >
         {/* Interactive Lesson Content */}
         <div className="prose prose-lg max-w-none mb-12" ref={contentRef}>
-          {lesson.content.split('\n\n').map((paragraph, idx) => {
-            if (paragraph.startsWith('# ')) {
-              return (
-                <h1 key={idx} className="text-4xl font-black mb-6 mt-8 animate-fade-in">
-                  {paragraph.slice(2)}
-                </h1>
-              );
-            }
-            if (paragraph.startsWith('## ')) {
-              return (
-                <h2 key={idx} className="text-3xl font-black mb-4 mt-8 text-reset-energy animate-fade-in">
-                  {paragraph.slice(3)}
-                </h2>
-              );
-            }
-            if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-              const text = paragraph.slice(2, -2);
-              return (
-                <div key={idx} className="relative group my-6 animate-fade-in">
-                  <p className="text-xl font-black text-primary p-4 bg-primary/10 border-l-4 border-primary rounded-r-lg cursor-pointer transition-all hover:bg-primary/20">
-                    {text}
-                  </p>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleHighlight(text)}
-                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                  </Button>
-                </div>
-              );
-            }
-            if (paragraph.includes('\n- ')) {
-              const items = paragraph.split('\n').filter(line => line.startsWith('- '));
-              return (
-                <ul key={idx} className="space-y-2 my-6 animate-fade-in">
-                  {items.map((item, i) => (
-                    <li key={i} className="ml-6 text-muted-foreground flex items-start gap-3 group cursor-pointer hover:text-foreground transition-colors">
-                      <span className="text-accent mt-1">•</span>
-                      <span className="flex-1">{item.slice(2)}</span>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => handleHighlight(item.slice(2))}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Sparkles className="w-3 h-3" />
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              );
-            }
-            if (paragraph.trim() === '' || paragraph === '---') return null;
-            return (
-              <p key={idx} className="my-4 text-muted-foreground leading-relaxed animate-fade-in group relative cursor-pointer hover:text-foreground transition-colors">
-                {paragraph}
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleHighlight(paragraph)}
-                  className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  <Sparkles className="w-3 h-3" />
-                </Button>
-              </p>
-            );
-          })}
+          <MarkdownRenderer content={lesson.content} />
         </div>
 
         {/* Highlights Section */}
