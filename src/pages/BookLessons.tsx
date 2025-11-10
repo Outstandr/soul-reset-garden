@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Book, Star, Flame, Trophy } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { BookLessonCard } from "@/components/BookLessonCard";
+import { useBookProgress } from "@/hooks/useBookProgress";
+import { Skeleton } from "@/components/ui/skeleton";
+import { supabase } from "@/integrations/supabase/client";
 
 interface BookLesson {
   id: string;
@@ -20,11 +23,52 @@ interface BookLesson {
 export default function BookLessons() {
   const navigate = useNavigate();
   const { bookId } = useParams();
-  const [currentStreak, setCurrentStreak] = useState(5);
-  const [totalXP, setTotalXP] = useState(450);
+  const { progress, isLoading, getLessonStatus, getCompletedCount } = useBookProgress("Book: Reset by Discipline");
+  const [dbLessons, setDbLessons] = useState<any[]>([]);
 
-  // Mock data - 20 lessons for "The Reset by Discipline" book
-  const lessons: BookLesson[] = [
+  useEffect(() => {
+    fetchLessonsFromDB();
+  }, []);
+
+  const fetchLessonsFromDB = async () => {
+    const { data, error } = await supabase
+      .from("masterclass_lessons")
+      .select("*")
+      .eq("module_name", "Book: Reset by Discipline")
+      .order("lesson_number");
+
+    if (error) {
+      console.error("Error fetching lessons:", error);
+      return;
+    }
+
+    setDbLessons(data || []);
+  };
+
+  // Map database lessons or use fallback
+  const lessons: BookLesson[] = useMemo(() => {
+    if (dbLessons.length > 0) {
+      return dbLessons.map((dbLesson, index) => ({
+        id: dbLesson.id,
+        lessonNumber: dbLesson.lesson_number,
+        title: dbLesson.title,
+        description: dbLesson.description || "",
+        readingTime: `${Math.ceil((Number(dbLesson.video_end_time?.split(':')[0]) * 60 + Number(dbLesson.video_end_time?.split(':')[1])) / 60)} min`,
+        xp: 25 + (index * 5), // Progressive XP
+        status: getLessonStatus(index),
+        category: (dbLesson.interactive_type === "none" ? "concept" : dbLesson.interactive_type) as any,
+        keyTakeaway: dbLesson.description || "Key lesson insights",
+      }));
+    }
+    
+    // Fallback static lessons if no DB data
+    return fallbackLessons.map((lesson, index) => ({
+      ...lesson,
+      status: getLessonStatus(index),
+    }));
+  }, [dbLessons, getLessonStatus]);
+
+  const fallbackLessons: Omit<BookLesson, "status">[] = [
     {
       id: "lesson-1",
       lessonNumber: 1,
@@ -32,7 +76,6 @@ export default function BookLessons() {
       description: "Discover why discipline beats motivation every time and how to build it from scratch.",
       readingTime: "8 min",
       xp: 25,
-      status: "completed",
       category: "concept",
       keyTakeaway: "Motivation is fleeting, discipline is forever"
     },
@@ -43,7 +86,6 @@ export default function BookLessons() {
       description: "Learn the neuroscience behind building unbreakable habits and routines.",
       readingTime: "10 min",
       xp: 30,
-      status: "completed",
       category: "concept",
       keyTakeaway: "Habits form neural pathways that become automatic"
     },
@@ -54,7 +96,6 @@ export default function BookLessons() {
       description: "Define who you want to become and align your actions with that identity.",
       readingTime: "12 min",
       xp: 35,
-      status: "in-progress",
       category: "reflection",
       keyTakeaway: "You become what you consistently do"
     },
@@ -65,7 +106,6 @@ export default function BookLessons() {
       description: "Why the world's most disciplined people start their day before sunrise.",
       readingTime: "9 min",
       xp: 30,
-      status: "available",
       category: "practice",
       keyTakeaway: "Win the morning, win the day"
     },
@@ -76,7 +116,6 @@ export default function BookLessons() {
       description: "Establish the core daily actions that are absolutely non-negotiable.",
       readingTime: "11 min",
       xp: 35,
-      status: "available",
       category: "exercise",
       keyTakeaway: "Non-negotiables create unshakeable structure"
     },
@@ -87,7 +126,6 @@ export default function BookLessons() {
       description: "Start impossibly small and build momentum through tiny wins.",
       readingTime: "8 min",
       xp: 25,
-      status: "locked",
       category: "concept",
       keyTakeaway: "2 minutes is better than 0 minutes"
     },
@@ -98,7 +136,6 @@ export default function BookLessons() {
       description: "Measure what matters and watch your discipline compound over time.",
       readingTime: "10 min",
       xp: 30,
-      status: "locked",
       category: "practice",
       keyTakeaway: "What gets measured gets improved"
     },
@@ -109,7 +146,6 @@ export default function BookLessons() {
       description: "Build an external system that keeps you honest when willpower fails.",
       readingTime: "12 min",
       xp: 35,
-      status: "locked",
       category: "exercise",
       keyTakeaway: "Accountability turns intentions into actions"
     },
@@ -120,7 +156,6 @@ export default function BookLessons() {
       description: "Recognize and defeat the internal voice that stops you from showing up.",
       readingTime: "13 min",
       xp: 40,
-      status: "locked",
       category: "concept",
       keyTakeaway: "Resistance is strongest before breakthroughs"
     },
@@ -131,7 +166,6 @@ export default function BookLessons() {
       description: "Commit to 21 days of perfect execution to rewire your brain.",
       readingTime: "15 min",
       xp: 50,
-      status: "locked",
       category: "practice",
       keyTakeaway: "21 days creates the foundation, 90 days makes it permanent"
     },
@@ -142,7 +176,6 @@ export default function BookLessons() {
       description: "Protect your energy like it's your most valuable resource—because it is.",
       readingTime: "11 min",
       xp: 35,
-      status: "locked",
       category: "concept",
       keyTakeaway: "Discipline requires energy, manage it wisely"
     },
@@ -153,7 +186,6 @@ export default function BookLessons() {
       description: "Design your physical space to make discipline effortless.",
       readingTime: "9 min",
       xp: 30,
-      status: "locked",
       category: "exercise",
       keyTakeaway: "Your environment shapes your behavior"
     },
@@ -164,7 +196,6 @@ export default function BookLessons() {
       description: "Master the art of selective focus by eliminating distractions.",
       readingTime: "10 min",
       xp: 30,
-      status: "locked",
       category: "practice",
       keyTakeaway: "Every yes to something is a no to something else"
     },
@@ -175,7 +206,6 @@ export default function BookLessons() {
       description: "Layer multiple habits together to create unstoppable momentum.",
       readingTime: "12 min",
       xp: 35,
-      status: "locked",
       category: "concept",
       keyTakeaway: "Stacked habits create compounding results"
     },
@@ -186,7 +216,6 @@ export default function BookLessons() {
       description: "Build discipline that lasts decades, not just days.",
       readingTime: "14 min",
       xp: 40,
-      status: "locked",
       category: "reflection",
       keyTakeaway: "Rest is part of the discipline process"
     },
@@ -197,7 +226,6 @@ export default function BookLessons() {
       description: "Permanently transform how you see yourself and what you believe is possible.",
       readingTime: "13 min",
       xp: 40,
-      status: "locked",
       category: "exercise",
       keyTakeaway: "Change your identity, change your life"
     },
@@ -208,7 +236,6 @@ export default function BookLessons() {
       description: "Maintain your standards when life throws curveballs.",
       readingTime: "11 min",
       xp: 35,
-      status: "locked",
       category: "practice",
       keyTakeaway: "True discipline shows up in adversity"
     },
@@ -219,7 +246,6 @@ export default function BookLessons() {
       description: "Weekly self-assessment to course-correct and stay aligned.",
       readingTime: "10 min",
       xp: 30,
-      status: "locked",
       category: "reflection",
       keyTakeaway: "Reflection prevents regression"
     },
@@ -230,7 +256,6 @@ export default function BookLessons() {
       description: "Raise the bar on what you consider acceptable behavior.",
       readingTime: "12 min",
       xp: 35,
-      status: "locked",
       category: "concept",
       keyTakeaway: "Your standards determine your reality"
     },
@@ -241,14 +266,13 @@ export default function BookLessons() {
       description: "Integrate everything and commit to lifelong mastery.",
       readingTime: "16 min",
       xp: 50,
-      status: "locked",
       category: "reflection",
       keyTakeaway: "Discipline is not a destination, it's a way of life"
     }
   ];
 
-  const completedLessons = lessons.filter(l => l.status === "completed").length;
-  const progressPercent = (completedLessons / lessons.length) * 100;
+  const completedLessons = getCompletedCount();
+  const progressPercent = lessons.length > 0 ? (completedLessons / lessons.length) * 100 : 0;
 
   const handleStartLesson = (lessonId: string) => {
     navigate(`/book-lesson/${lessonId}`);
@@ -278,11 +302,11 @@ export default function BookLessons() {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-red-100 border-2 border-orange-500">
                 <Flame className="w-5 h-5 text-orange-600" />
-                <span className="font-black text-orange-700">{currentStreak} Day Streak</span>
+                <span className="font-black text-orange-700">Track your streak</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-500">
                 <Star className="w-5 h-5 text-amber-600" />
-                <span className="font-black text-amber-700">{totalXP} XP</span>
+                <span className="font-black text-amber-700">{completedLessons * 25} XP</span>
               </div>
             </div>
           </div>
@@ -306,27 +330,39 @@ export default function BookLessons() {
 
           {/* Progress Bar */}
           <div className="max-w-2xl mx-auto">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-bold text-muted-foreground">
-                {completedLessons} of {lessons.length} Lessons Complete
-              </span>
-              <span className="text-sm font-black text-accent">
-                {Math.round(progressPercent)}%
-              </span>
-            </div>
-            <Progress value={progressPercent} className="h-3" />
+            {isLoading ? (
+              <Skeleton className="h-16 w-full" />
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-bold text-muted-foreground">
+                    {completedLessons} of {lessons.length} Lessons Complete
+                  </span>
+                  <span className="text-sm font-black text-accent">
+                    {Math.round(progressPercent)}%
+                  </span>
+                </div>
+                <Progress value={progressPercent} className="h-3" />
+              </>
+            )}
           </div>
         </div>
 
         {/* Lessons Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {lessons.map((lesson) => (
-            <BookLessonCard
-              key={lesson.id}
-              lesson={lesson}
-              onStart={() => handleStartLesson(lesson.id)}
-            />
-          ))}
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <Skeleton key={index} className="h-64 w-full" />
+            ))
+          ) : (
+            lessons.map((lesson) => (
+              <BookLessonCard
+                key={lesson.id}
+                lesson={lesson}
+                onStart={() => handleStartLesson(lesson.id)}
+              />
+            ))
+          )}
         </div>
 
         {/* Completion Badge (if all done) */}
