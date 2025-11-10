@@ -77,23 +77,18 @@ export default function BookLessons() {
   const lessons: BookLesson[] = useMemo(() => {
     if (dbLessons.length > 0) {
       return dbLessons.map((dbLesson, index) => {
-        // Parse video time (HH:MM:SS) to minutes
-        const timeParts = dbLesson.video_end_time?.split(':') || ['0', '0', '0'];
-        const hours = Number(timeParts[0]) || 0;
-        const minutes = Number(timeParts[1]) || 0;
-        const seconds = Number(timeParts[2]) || 0;
-        const totalMinutes = Math.ceil((hours * 60) + minutes + (seconds / 60));
+        const fallback = fallbackLessons[index];
         
         return {
           id: dbLesson.id,
           lessonNumber: dbLesson.lesson_number,
           title: dbLesson.title,
           description: dbLesson.description || "",
-          readingTime: `${totalMinutes} min`,
-          xp: 25 + (index * 5),
+          readingTime: fallback?.readingTime || "10 min",
+          xp: fallback?.xp || (25 + (index * 5)),
           status: getLessonStatus(index),
           category: (dbLesson.interactive_type === "none" ? "concept" : dbLesson.interactive_type) as any,
-          keyTakeaway: fallbackLessons[index]?.keyTakeaway || "Master this lesson to progress",
+          keyTakeaway: fallback?.keyTakeaway || "Master this lesson to progress",
         };
       });
     }
