@@ -88,49 +88,64 @@ export type Database = {
       }
       masterclass_lessons: {
         Row: {
+          action_step: string | null
+          content: string | null
           created_at: string
           description: string | null
           id: string
           interactive_config: Json | null
           interactive_type: string
+          key_takeaways: Json | null
           lesson_number: number
           module_name: string
+          reflection_prompt: string | null
           subtitle_en_url: string | null
           subtitle_nl_url: string | null
           subtitle_ru_url: string | null
           title: string
           video_end_time: string
           video_start_time: string
+          word_count: number | null
         }
         Insert: {
+          action_step?: string | null
+          content?: string | null
           created_at?: string
           description?: string | null
           id?: string
           interactive_config?: Json | null
           interactive_type: string
+          key_takeaways?: Json | null
           lesson_number: number
           module_name: string
+          reflection_prompt?: string | null
           subtitle_en_url?: string | null
           subtitle_nl_url?: string | null
           subtitle_ru_url?: string | null
           title: string
           video_end_time: string
           video_start_time: string
+          word_count?: number | null
         }
         Update: {
+          action_step?: string | null
+          content?: string | null
           created_at?: string
           description?: string | null
           id?: string
           interactive_config?: Json | null
           interactive_type?: string
+          key_takeaways?: Json | null
           lesson_number?: number
           module_name?: string
+          reflection_prompt?: string | null
           subtitle_en_url?: string | null
           subtitle_nl_url?: string | null
           subtitle_ru_url?: string | null
           title?: string
           video_end_time?: string
           video_start_time?: string
+          word_count?: number | null
         }
         Relationships: []
       }
