@@ -45,6 +45,15 @@ export default function BookLessons() {
     setDbLessons(data || []);
   };
 
+  // Fallback static lessons
+  const fallbackLessons = [
+    { id: "1", lessonNumber: 1, title: "Understanding Discipline vs. Motivation", description: "Discover why discipline beats motivation every time.", readingTime: "8 min", xp: 25, category: "concept" as const, keyTakeaway: "Motivation is fleeting, discipline is forever" },
+    { id: "2", lessonNumber: 2, title: "The Science of Habit Formation", description: "Learn the neuroscience behind building unbreakable habits.", readingTime: "10 min", xp: 30, category: "concept" as const, keyTakeaway: "Habits form neural pathways" },
+    { id: "3", lessonNumber: 3, title: "Your Discipline Identity", description: "Define who you want to become and align your actions.", readingTime: "12 min", xp: 35, category: "reflection" as const, keyTakeaway: "You become what you consistently do" },
+    { id: "4", lessonNumber: 4, title: "The 5 AM Advantage", description: "Why the world's most disciplined people start before sunrise.", readingTime: "9 min", xp: 30, category: "practice" as const, keyTakeaway: "Win the morning, win the day" },
+    { id: "5", lessonNumber: 5, title: "Creating Your Non-Negotiables", description: "Establish the core daily actions that are non-negotiable.", readingTime: "11 min", xp: 35, category: "exercise" as const, keyTakeaway: "Structure creates freedom" },
+  ];
+
   // Map database lessons to display format
   const lessons: BookLesson[] = useMemo(() => {
     if (dbLessons.length > 0) {
@@ -60,7 +69,12 @@ export default function BookLessons() {
         keyTakeaway: dbLesson.description || "Key lesson insights",
       }));
     }
-    return [];
+    
+    // Use fallback lessons with dynamic status
+    return fallbackLessons.map((lesson, index) => ({
+      ...lesson,
+      status: getLessonStatus(index),
+    }));
   }, [dbLessons, getLessonStatus]);
 
   const completedLessons = getCompletedCount();
