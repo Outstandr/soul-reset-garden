@@ -45,13 +45,28 @@ export default function BookLessons() {
     setDbLessons(data || []);
   };
 
-  // Fallback static lessons
+  // Fallback static lessons (all 20)
   const fallbackLessons = [
-    { id: "1", lessonNumber: 1, title: "Understanding Discipline vs. Motivation", description: "Discover why discipline beats motivation every time.", readingTime: "8 min", xp: 25, category: "concept" as const, keyTakeaway: "Motivation is fleeting, discipline is forever" },
-    { id: "2", lessonNumber: 2, title: "The Science of Habit Formation", description: "Learn the neuroscience behind building unbreakable habits.", readingTime: "10 min", xp: 30, category: "concept" as const, keyTakeaway: "Habits form neural pathways" },
-    { id: "3", lessonNumber: 3, title: "Your Discipline Identity", description: "Define who you want to become and align your actions.", readingTime: "12 min", xp: 35, category: "reflection" as const, keyTakeaway: "You become what you consistently do" },
-    { id: "4", lessonNumber: 4, title: "The 5 AM Advantage", description: "Why the world's most disciplined people start before sunrise.", readingTime: "9 min", xp: 30, category: "practice" as const, keyTakeaway: "Win the morning, win the day" },
-    { id: "5", lessonNumber: 5, title: "Creating Your Non-Negotiables", description: "Establish the core daily actions that are non-negotiable.", readingTime: "11 min", xp: 35, category: "exercise" as const, keyTakeaway: "Structure creates freedom" },
+    { id: "1", lessonNumber: 1, title: "Understanding Discipline vs. Motivation", description: "Discover why discipline beats motivation every time and how to build it from scratch.", readingTime: "8 min", xp: 25, category: "concept" as const, keyTakeaway: "Motivation is fleeting, discipline is forever" },
+    { id: "2", lessonNumber: 2, title: "The Science of Habit Formation", description: "Learn the neuroscience behind building unbreakable habits and routines.", readingTime: "10 min", xp: 30, category: "concept" as const, keyTakeaway: "Habits form neural pathways that become automatic" },
+    { id: "3", lessonNumber: 3, title: "Your Discipline Identity", description: "Define who you want to become and align your actions with that identity.", readingTime: "12 min", xp: 35, category: "reflection" as const, keyTakeaway: "You become what you consistently do" },
+    { id: "4", lessonNumber: 4, title: "The 5 AM Advantage", description: "Why the world's most disciplined people start their day before sunrise.", readingTime: "9 min", xp: 30, category: "practice" as const, keyTakeaway: "Win the morning, win the day" },
+    { id: "5", lessonNumber: 5, title: "Creating Your Non-Negotiables", description: "Establish the core daily actions that are absolutely non-negotiable.", readingTime: "11 min", xp: 35, category: "exercise" as const, keyTakeaway: "Non-negotiables create unshakeable structure" },
+    { id: "6", lessonNumber: 6, title: "The Power of Micro-Commitments", description: "Start impossibly small and build momentum through tiny wins.", readingTime: "8 min", xp: 25, category: "concept" as const, keyTakeaway: "2 minutes is better than 0 minutes" },
+    { id: "7", lessonNumber: 7, title: "Tracking Your Transformation", description: "Measure what matters and watch your discipline compound over time.", readingTime: "10 min", xp: 30, category: "practice" as const, keyTakeaway: "What gets measured gets improved" },
+    { id: "8", lessonNumber: 8, title: "The Accountability System", description: "Build an external system that keeps you honest when willpower fails.", readingTime: "12 min", xp: 35, category: "exercise" as const, keyTakeaway: "Accountability turns intentions into actions" },
+    { id: "9", lessonNumber: 9, title: "Overcoming Resistance", description: "Recognize and defeat the internal voice that stops you from showing up.", readingTime: "13 min", xp: 40, category: "concept" as const, keyTakeaway: "Resistance is strongest before breakthroughs" },
+    { id: "10", lessonNumber: 10, title: "The 21-Day Reset Challenge", description: "Commit to 21 days of perfect execution to rewire your brain.", readingTime: "15 min", xp: 50, category: "practice" as const, keyTakeaway: "21 days creates the foundation, 90 days makes it permanent" },
+    { id: "11", lessonNumber: 11, title: "Energy Management 101", description: "Protect your energy like it's your most valuable resource—because it is.", readingTime: "11 min", xp: 35, category: "concept" as const, keyTakeaway: "Discipline requires energy, manage it wisely" },
+    { id: "12", lessonNumber: 12, title: "The Environment Advantage", description: "Design your physical space to make discipline effortless.", readingTime: "9 min", xp: 30, category: "exercise" as const, keyTakeaway: "Your environment shapes your behavior" },
+    { id: "13", lessonNumber: 13, title: "Saying No With Power", description: "Master the art of selective focus by eliminating distractions.", readingTime: "10 min", xp: 30, category: "practice" as const, keyTakeaway: "Every yes to something is a no to something else" },
+    { id: "14", lessonNumber: 14, title: "The Discipline Stack", description: "Layer multiple habits together to create unstoppable momentum.", readingTime: "12 min", xp: 35, category: "concept" as const, keyTakeaway: "Stacked habits create compounding results" },
+    { id: "15", lessonNumber: 15, title: "Recovery & Sustainability", description: "Build discipline that lasts decades, not just days.", readingTime: "14 min", xp: 40, category: "reflection" as const, keyTakeaway: "Rest is part of the discipline process" },
+    { id: "16", lessonNumber: 16, title: "The Identity Shift Protocol", description: "Permanently transform how you see yourself and what you believe is possible.", readingTime: "13 min", xp: 40, category: "exercise" as const, keyTakeaway: "Change your identity, change your life" },
+    { id: "17", lessonNumber: 17, title: "Discipline in Chaos", description: "Maintain your standards when life throws curveballs.", readingTime: "11 min", xp: 35, category: "practice" as const, keyTakeaway: "True discipline shows up in adversity" },
+    { id: "18", lessonNumber: 18, title: "The Performance Review", description: "Weekly self-assessment to course-correct and stay aligned.", readingTime: "10 min", xp: 30, category: "reflection" as const, keyTakeaway: "Reflection prevents regression" },
+    { id: "19", lessonNumber: 19, title: "Leveling Up Your Standards", description: "Raise the bar on what you consider acceptable behavior.", readingTime: "12 min", xp: 35, category: "concept" as const, keyTakeaway: "Your standards determine your reality" },
+    { id: "20", lessonNumber: 20, title: "The Discipline Mindset Forever", description: "Integrate everything and commit to lifelong mastery.", readingTime: "16 min", xp: 50, category: "reflection" as const, keyTakeaway: "Discipline is not a destination, it's a way of life" },
   ];
 
   // Map database lessons to display format
@@ -70,7 +85,7 @@ export default function BookLessons() {
       }));
     }
     
-    // Use fallback lessons with dynamic status
+    // Use fallback lessons with dynamic status based on user progress
     return fallbackLessons.map((lesson, index) => ({
       ...lesson,
       status: getLessonStatus(index),
