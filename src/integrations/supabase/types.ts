@@ -273,6 +273,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_highlights: {
+        Row: {
+          created_at: string
+          highlight_text: string
+          id: string
+          lesson_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          highlight_text: string
+          id?: string
+          lesson_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          highlight_text?: string
+          id?: string
+          lesson_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_lesson_progress: {
         Row: {
           completed: boolean | null
@@ -366,6 +390,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_reflections: {
+        Row: {
+          created_at: string
+          id: string
+          lesson_id: string
+          reflection_text: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lesson_id: string
+          reflection_text: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          reflection_text?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

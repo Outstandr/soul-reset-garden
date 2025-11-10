@@ -73,11 +73,24 @@ export default function BookLessons() {
     { id: "20", lessonNumber: 20, title: "The Discipline Mindset Forever", description: "Integrate everything and commit to lifelong mastery.", readingTime: "16 min", xp: 50, category: "reflection" as const, keyTakeaway: "Discipline is not a destination, it's a way of life" },
   ];
 
+  const completedLessons = getCompletedCount();
+
   // Map database lessons to display format
   const lessons: BookLesson[] = useMemo(() => {
     if (dbLessons.length > 0) {
       return dbLessons.map((dbLesson, index) => {
         const fallback = fallbackLessons[index];
+        const lessonProgress = progress[index];
+        
+        // Determine status based on progress
+        let status: BookLesson["status"] = "locked";
+        if (lessonProgress?.completed) {
+          status = "completed";
+        } else if (lessonProgress && lessonProgress.videoProgress > 0) {
+          status = "in-progress";
+        } else if (completedLessons >= index) {
+          status = "available";
+        }
         
         return {
           id: dbLesson.id,
@@ -86,7 +99,7 @@ export default function BookLessons() {
           description: dbLesson.description || "",
           readingTime: fallback?.readingTime || "10 min",
           xp: fallback?.xp || (25 + (index * 5)),
-          status: getLessonStatus(index),
+          status,
           category: (dbLesson.interactive_type === "none" ? "concept" : dbLesson.interactive_type) as any,
           keyTakeaway: fallback?.keyTakeaway || "Master this lesson to progress",
         };
@@ -98,9 +111,8 @@ export default function BookLessons() {
       ...lesson,
       status: getLessonStatus(index),
     }));
-  }, [dbLessons, getLessonStatus]);
+  }, [dbLessons, progress, completedLessons, getLessonStatus]);
 
-  const completedLessons = getCompletedCount();
   const progressPercent = lessons.length > 0 ? (completedLessons / lessons.length) * 100 : 0;
   
   // Calculate actual total XP from completed lessons

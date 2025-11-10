@@ -7,6 +7,7 @@ import { MessageSquare, Send, Loader2 } from "lucide-react";
 import lionelAvatar from "@/assets/lionel-x-avatar.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 interface LionelReflectionDialogProps {
   open: boolean;
@@ -113,7 +114,7 @@ export const LionelReflectionDialog = ({
                 <MessageSquare className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                 <div className="flex-1 space-y-3">
                   <p className="font-semibold text-foreground">Lionel's Feedback</p>
-                  <p className="text-foreground leading-relaxed whitespace-pre-wrap">{lionelFeedback}</p>
+                  <MarkdownRenderer content={lionelFeedback} />
                 </div>
               </div>
             </div>

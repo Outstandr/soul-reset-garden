@@ -2,12 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, BookmarkPlus, MessageSquare, Lightbulb, Star, Sparkles, Target } from "lucide-react";
+import { ArrowLeft, CheckCircle, MessageSquare, Lightbulb, Star, Sparkles, Target, X } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { LionelReflectionDialog } from "@/components/LionelReflectionDialog";
 import { supabase } from "@/integrations/supabase/client";
+import { MarkdownRenderer } from "@/components/MarkdownRenderer";
 
 interface Lesson {
   id: string;
@@ -39,7 +40,7 @@ export default function BookLessonContent() {
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch lesson data from database
+  // Fetch lesson data, highlights, and reflections
   useEffect(() => {
     const fetchLesson = async () => {
       try {
@@ -48,6 +49,8 @@ export default function BookLessonContent() {
           return;
         }
         
+        const { data: { user } } = await supabase.auth.getUser();
+        
         const { data, error } = await supabase
           .from("masterclass_lessons")
           .select("*")
@@ -55,6 +58,31 @@ export default function BookLessonContent() {
           .single();
 
         if (error) throw error;
+        
+        // Load saved highlights
+        if (user) {
+          const { data: savedHighlights } = await supabase
+            .from("user_highlights")
+            .select("highlight_text")
+            .eq("user_id", user.id)
+            .eq("lesson_id", lessonId);
+          
+          if (savedHighlights) {
+            setHighlights(savedHighlights.map(h => h.highlight_text));
+          }
+          
+          // Load saved reflection
+          const { data: savedReflection } = await supabase
+            .from("user_reflections")
+            .select("reflection_text")
+            .eq("user_id", user.id)
+            .eq("lesson_id", lessonId)
+            .single();
+          
+          if (savedReflection) {
+            setReflectionText(savedReflection.reflection_text);
+          }
+        }
 
         if (data) {
           // Map database lesson to UI format with mock content for now
@@ -283,14 +311,46 @@ Which one will you choose?
     }
   };
 
-  const handleHighlight = (text: string) => {
+  const handleHighlight = async (text: string) => {
     if (!highlights.includes(text)) {
-      setHighlights([...highlights, text]);
+      const newHighlights = [...highlights, text];
+      setHighlights(newHighlights);
+      
+      // Save to database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && lessonId) {
+        await supabase.from("user_highlights").insert({
+          user_id: user.id,
+          lesson_id: lessonId,
+          highlight_text: text,
+        });
+      }
+      
       toast({
         title: "Highlighted!",
         description: "Saved to your highlights",
       });
     }
+  };
+
+  const handleRemoveHighlight = async (text: string) => {
+    setHighlights(highlights.filter(h => h !== text));
+    
+    // Remove from database
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user && lessonId) {
+      await supabase
+        .from("user_highlights")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("lesson_id", lessonId)
+        .eq("highlight_text", text);
+    }
+    
+    toast({
+      title: "Highlight Removed",
+      description: "Removed from your highlights",
+    });
   };
 
   const handleActionComplete = () => {
@@ -301,8 +361,20 @@ Which one will you choose?
     });
   };
 
-  const handleReflectionSave = () => {
+  const handleReflectionSave = async () => {
     if (reflectionText.trim()) {
+      // Save to database
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && lessonId) {
+        await supabase.from("user_reflections").upsert({
+          user_id: user.id,
+          lesson_id: lessonId,
+          reflection_text: reflectionText,
+        }, {
+          onConflict: 'user_id,lesson_id'
+        });
+      }
+      
       toast({
         title: "Reflection Saved!",
         description: "Your insights have been saved to your journal",
@@ -466,8 +538,16 @@ Which one will you choose?
             </div>
             <div className="space-y-3">
               {highlights.map((highlight, idx) => (
-                <div key={idx} className="p-3 bg-yellow-50 border-l-2 border-yellow-500 rounded-r text-foreground">
-                  {highlight}
+                <div key={idx} className="p-3 bg-yellow-50 border-l-2 border-yellow-500 rounded-r text-foreground flex justify-between items-start group">
+                  <span className="flex-1">{highlight}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleRemoveHighlight(highlight)}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity ml-2"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
                 </div>
               ))}
             </div>
