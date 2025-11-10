@@ -388,6 +388,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_streaks: {
+        Row: {
+          created_at: string | null
+          id: string
+          lessons_completed: number | null
+          streak_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          lessons_completed?: number | null
+          streak_date: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          lessons_completed?: number | null
+          streak_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

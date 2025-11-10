@@ -234,6 +234,32 @@ Which one will you choose?
           });
           return;
         }
+
+        // Update streak tracking
+        const today = new Date().toISOString().split('T')[0];
+        const { data: existingStreak } = await supabase
+          .from('user_streaks')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('streak_date', today)
+          .single();
+
+        if (existingStreak) {
+          // Increment lessons completed for today
+          await supabase
+            .from('user_streaks')
+            .update({ lessons_completed: existingStreak.lessons_completed + 1 })
+            .eq('id', existingStreak.id);
+        } else {
+          // Create new streak entry for today
+          await supabase
+            .from('user_streaks')
+            .insert({
+              user_id: user.id,
+              streak_date: today,
+              lessons_completed: 1,
+            });
+        }
       }
 
       setIsCompleted(true);

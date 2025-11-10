@@ -7,6 +7,8 @@ import { BookLessonCard } from "@/components/BookLessonCard";
 import { useBookProgress } from "@/hooks/useBookProgress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
+import { StreakDialog } from "@/components/StreakDialog";
+import { XPDetailsDialog } from "@/components/XPDetailsDialog";
 
 interface BookLesson {
   id: string;
@@ -25,6 +27,8 @@ export default function BookLessons() {
   const { bookId } = useParams();
   const { progress, isLoading, getLessonStatus, getCompletedCount } = useBookProgress("Book: Reset by Discipline");
   const [dbLessons, setDbLessons] = useState<any[]>([]);
+  const [showStreakDialog, setShowStreakDialog] = useState(false);
+  const [showXPDialog, setShowXPDialog] = useState(false);
 
   useEffect(() => {
     fetchLessonsFromDB();
@@ -121,14 +125,22 @@ export default function BookLessons() {
 
             {/* Stats */}
             <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-red-100 border-2 border-orange-500">
+              <Button
+                variant="ghost"
+                onClick={() => setShowStreakDialog(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-100 to-red-100 border-2 border-orange-500 hover:from-orange-200 hover:to-red-200 transition-all"
+              >
                 <Flame className="w-5 h-5 text-orange-600" />
                 <span className="font-black text-orange-700">Track your streak</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-500">
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => setShowXPDialog(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-500 hover:from-amber-200 hover:to-yellow-200 transition-all"
+              >
                 <Star className="w-5 h-5 text-amber-600" />
                 <span className="font-black text-amber-700">{completedLessons * 25} XP</span>
-              </div>
+              </Button>
             </div>
           </div>
         </div>
@@ -208,6 +220,10 @@ export default function BookLessons() {
           </div>
         )}
       </div>
+
+      {/* Dialogs */}
+      <StreakDialog open={showStreakDialog} onOpenChange={setShowStreakDialog} />
+      <XPDetailsDialog open={showXPDialog} onOpenChange={setShowXPDialog} />
     </div>
   );
 }
