@@ -48,10 +48,10 @@ export function LessonCompletionDialog({ open, onContinue, pillarType, lessonTit
             </span>
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-base space-y-2">
-            <p className="font-semibold text-foreground">
+            <p className="font-semibold text-white">
               Great work completing "{lessonTitle}"!
             </p>
-            <p className="text-muted-foreground">
+            <p className="text-white/80">
               You're one step closer to mastering your {pillarType} pillar.
             </p>
           </AlertDialogDescription>
