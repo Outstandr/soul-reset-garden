@@ -85,111 +85,23 @@ export default function BookLessonContent() {
         }
 
         if (data) {
-          // Map database lesson to UI format with mock content for now
+          // Calculate reading time from word count (average reading speed: 200 words/min)
+          const lessonData = data as any; // Type cast until Supabase types are regenerated
+          const readingTime = lessonData.word_count 
+            ? `${Math.ceil(lessonData.word_count / 200)} min`
+            : "8 min";
+          
           setLesson({
-            id: data.id,
-            lessonNumber: data.lesson_number,
-            title: data.title,
+            id: lessonData.id,
+            lessonNumber: lessonData.lesson_number,
+            title: lessonData.title,
             category: "concept",
-            readingTime: "8 min",
+            readingTime,
             xp: 25,
-            content: `
-# The Truth About Discipline
-
-**Motivation is a liar.**
-
-It shows up when you don't need it and disappears the moment things get hard. It's the fair-weather friend of personal development—exciting, inspiring, but utterly unreliable.
-
-Discipline, on the other hand, is your ride-or-die.
-
-## The Motivation Trap
-
-Most people wait for motivation to strike before they take action. They scroll Instagram looking for that perfect quote, watch a few YouTube videos of people shouting at them to "just do it," and feel a temporary surge of energy.
-
-Then what?
-
-By Tuesday, the motivation is gone. The gym membership goes unused. The business plan sits untouched. The dream fades back into "someday."
-
-**Here's the secret nobody tells you:** Disciplined people don't feel like doing it either.
-
-They just do it anyway.
-
-## What Discipline Really Is
-
-Discipline is the bridge between goals and accomplishment. It's the ability to do what needs to be done, when it needs to be done, whether you feel like it or not.
-
-Think of it like this:
-- **Motivation** = Emotion-driven action
-- **Discipline** = Identity-driven action
-
-When you're motivated, you act because you *feel* like it.
-When you're disciplined, you act because it's *who you are*.
-
-## The Discipline Equation
-
-Here's the formula that changes everything:
-
-**Small Action × Consistency × Time = Transformation**
-
-Not:
-- Massive action when you feel like it
-- Perfect execution when inspired
-- Heroic effort on good days
-
-Just small, consistent action. Every. Single. Day.
-
-## Building Your Discipline Muscle
-
-Discipline isn't something you're born with—it's something you build. Like a muscle, it gets stronger with use.
-
-Start here:
-
-**1. Choose ONE Thing**
-Don't try to transform your entire life overnight. Pick one area where you'll practice discipline relentlessly.
-
-**2. Make It Stupid Simple**
-Your disciplined action should be so easy that you can't talk yourself out of it.
-- Not "work out for an hour"—do 2 push-ups
-- Not "write a chapter"—write 50 words
-- Not "meditate for 30 minutes"—sit for 60 seconds
-
-**3. Never Miss Twice**
-Life happens. You'll miss a day. That's fine.
-But never miss twice in a row. Missing once is an accident. Missing twice is the beginning of a new (bad) habit.
-
-**4. Track Everything**
-What gets measured gets improved. Use a simple tracker—a calendar, an app, a notebook. Mark every day you show up.
-
-## The 48-Hour Rule
-
-Here's a secret weapon: **You're always less than 48 hours away from momentum.**
-
-Feeling stuck? Lost? Unmotivated?
-
-Execute your discipline practice for just 2 days in a row, and watch what happens. The resistance starts to crack. The momentum builds. The identity shifts.
-
-## Your New Identity
-
-From this moment forward, you're no longer someone who "tries to be disciplined."
-
-You ARE disciplined.
-
-Every action you take is a vote for the type of person you want to become. Start voting for the disciplined version of you—one rep, one page, one day at a time.
-
----
-
-**Remember:** Motivation gets you started. Discipline keeps you going.
-
-Which one will you choose?
-            `,
-            keyTakeaways: [
-              "Motivation is fleeting, discipline is forever",
-              "Disciplined people don't always feel like it—they do it anyway",
-              "Small action × Consistency × Time = Transformation",
-              "Never miss twice in a row"
-            ],
-            actionStep: "Choose ONE area of your life where you'll practice discipline today. Make it stupidly simple—something you can do in 2 minutes or less. Then do it.",
-            reflectionPrompt: "What's one area of your life where you've been waiting for motivation instead of building discipline? What would change if you committed to just 2 minutes a day?"
+            content: lessonData.content || "Content not yet available. Please check back soon.",
+            keyTakeaways: lessonData.key_takeaways || [],
+            actionStep: lessonData.action_step || "",
+            reflectionPrompt: lessonData.reflection_prompt || ""
           });
         }
         setIsLoading(false);
