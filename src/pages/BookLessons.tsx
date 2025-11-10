@@ -45,7 +45,7 @@ export default function BookLessons() {
     setDbLessons(data || []);
   };
 
-  // Map database lessons or use fallback
+  // Map database lessons to display format
   const lessons: BookLesson[] = useMemo(() => {
     if (dbLessons.length > 0) {
       return dbLessons.map((dbLesson, index) => ({
@@ -54,222 +54,14 @@ export default function BookLessons() {
         title: dbLesson.title,
         description: dbLesson.description || "",
         readingTime: `${Math.ceil((Number(dbLesson.video_end_time?.split(':')[0]) * 60 + Number(dbLesson.video_end_time?.split(':')[1])) / 60)} min`,
-        xp: 25 + (index * 5), // Progressive XP
+        xp: 25 + (index * 5),
         status: getLessonStatus(index),
         category: (dbLesson.interactive_type === "none" ? "concept" : dbLesson.interactive_type) as any,
         keyTakeaway: dbLesson.description || "Key lesson insights",
       }));
     }
-    
-    // Fallback static lessons if no DB data
-    return fallbackLessons.map((lesson, index) => ({
-      ...lesson,
-      status: getLessonStatus(index),
-    }));
+    return [];
   }, [dbLessons, getLessonStatus]);
-
-  const fallbackLessons: Omit<BookLesson, "status">[] = [
-    {
-      id: "lesson-1",
-      lessonNumber: 1,
-      title: "Understanding Discipline vs. Motivation",
-      description: "Discover why discipline beats motivation every time and how to build it from scratch.",
-      readingTime: "8 min",
-      xp: 25,
-      category: "concept",
-      keyTakeaway: "Motivation is fleeting, discipline is forever"
-    },
-    {
-      id: "lesson-2",
-      lessonNumber: 2,
-      title: "The Science of Habit Formation",
-      description: "Learn the neuroscience behind building unbreakable habits and routines.",
-      readingTime: "10 min",
-      xp: 30,
-      category: "concept",
-      keyTakeaway: "Habits form neural pathways that become automatic"
-    },
-    {
-      id: "lesson-3",
-      lessonNumber: 3,
-      title: "Your Discipline Identity",
-      description: "Define who you want to become and align your actions with that identity.",
-      readingTime: "12 min",
-      xp: 35,
-      category: "reflection",
-      keyTakeaway: "You become what you consistently do"
-    },
-    {
-      id: "lesson-4",
-      lessonNumber: 4,
-      title: "The 5 AM Advantage",
-      description: "Why the world's most disciplined people start their day before sunrise.",
-      readingTime: "9 min",
-      xp: 30,
-      category: "practice",
-      keyTakeaway: "Win the morning, win the day"
-    },
-    {
-      id: "lesson-5",
-      lessonNumber: 5,
-      title: "Creating Your Non-Negotiables",
-      description: "Establish the core daily actions that are absolutely non-negotiable.",
-      readingTime: "11 min",
-      xp: 35,
-      category: "exercise",
-      keyTakeaway: "Non-negotiables create unshakeable structure"
-    },
-    {
-      id: "lesson-6",
-      lessonNumber: 6,
-      title: "The Power of Micro-Commitments",
-      description: "Start impossibly small and build momentum through tiny wins.",
-      readingTime: "8 min",
-      xp: 25,
-      category: "concept",
-      keyTakeaway: "2 minutes is better than 0 minutes"
-    },
-    {
-      id: "lesson-7",
-      lessonNumber: 7,
-      title: "Tracking Your Transformation",
-      description: "Measure what matters and watch your discipline compound over time.",
-      readingTime: "10 min",
-      xp: 30,
-      category: "practice",
-      keyTakeaway: "What gets measured gets improved"
-    },
-    {
-      id: "lesson-8",
-      lessonNumber: 8,
-      title: "The Accountability System",
-      description: "Build an external system that keeps you honest when willpower fails.",
-      readingTime: "12 min",
-      xp: 35,
-      category: "exercise",
-      keyTakeaway: "Accountability turns intentions into actions"
-    },
-    {
-      id: "lesson-9",
-      lessonNumber: 9,
-      title: "Overcoming Resistance",
-      description: "Recognize and defeat the internal voice that stops you from showing up.",
-      readingTime: "13 min",
-      xp: 40,
-      category: "concept",
-      keyTakeaway: "Resistance is strongest before breakthroughs"
-    },
-    {
-      id: "lesson-10",
-      lessonNumber: 10,
-      title: "The 21-Day Reset Challenge",
-      description: "Commit to 21 days of perfect execution to rewire your brain.",
-      readingTime: "15 min",
-      xp: 50,
-      category: "practice",
-      keyTakeaway: "21 days creates the foundation, 90 days makes it permanent"
-    },
-    {
-      id: "lesson-11",
-      lessonNumber: 11,
-      title: "Energy Management 101",
-      description: "Protect your energy like it's your most valuable resource—because it is.",
-      readingTime: "11 min",
-      xp: 35,
-      category: "concept",
-      keyTakeaway: "Discipline requires energy, manage it wisely"
-    },
-    {
-      id: "lesson-12",
-      lessonNumber: 12,
-      title: "The Environment Advantage",
-      description: "Design your physical space to make discipline effortless.",
-      readingTime: "9 min",
-      xp: 30,
-      category: "exercise",
-      keyTakeaway: "Your environment shapes your behavior"
-    },
-    {
-      id: "lesson-13",
-      lessonNumber: 13,
-      title: "Saying No With Power",
-      description: "Master the art of selective focus by eliminating distractions.",
-      readingTime: "10 min",
-      xp: 30,
-      category: "practice",
-      keyTakeaway: "Every yes to something is a no to something else"
-    },
-    {
-      id: "lesson-14",
-      lessonNumber: 14,
-      title: "The Discipline Stack",
-      description: "Layer multiple habits together to create unstoppable momentum.",
-      readingTime: "12 min",
-      xp: 35,
-      category: "concept",
-      keyTakeaway: "Stacked habits create compounding results"
-    },
-    {
-      id: "lesson-15",
-      lessonNumber: 15,
-      title: "Recovery & Sustainability",
-      description: "Build discipline that lasts decades, not just days.",
-      readingTime: "14 min",
-      xp: 40,
-      category: "reflection",
-      keyTakeaway: "Rest is part of the discipline process"
-    },
-    {
-      id: "lesson-16",
-      lessonNumber: 16,
-      title: "The Identity Shift Protocol",
-      description: "Permanently transform how you see yourself and what you believe is possible.",
-      readingTime: "13 min",
-      xp: 40,
-      category: "exercise",
-      keyTakeaway: "Change your identity, change your life"
-    },
-    {
-      id: "lesson-17",
-      lessonNumber: 17,
-      title: "Discipline in Chaos",
-      description: "Maintain your standards when life throws curveballs.",
-      readingTime: "11 min",
-      xp: 35,
-      category: "practice",
-      keyTakeaway: "True discipline shows up in adversity"
-    },
-    {
-      id: "lesson-18",
-      lessonNumber: 18,
-      title: "The Performance Review",
-      description: "Weekly self-assessment to course-correct and stay aligned.",
-      readingTime: "10 min",
-      xp: 30,
-      category: "reflection",
-      keyTakeaway: "Reflection prevents regression"
-    },
-    {
-      id: "lesson-19",
-      lessonNumber: 19,
-      title: "Leveling Up Your Standards",
-      description: "Raise the bar on what you consider acceptable behavior.",
-      readingTime: "12 min",
-      xp: 35,
-      category: "concept",
-      keyTakeaway: "Your standards determine your reality"
-    },
-    {
-      id: "lesson-20",
-      lessonNumber: 20,
-      title: "The Discipline Mindset Forever",
-      description: "Integrate everything and commit to lifelong mastery.",
-      readingTime: "16 min",
-      xp: 50,
-      category: "reflection",
-      keyTakeaway: "Discipline is not a destination, it's a way of life"
-    }
-  ];
 
   const completedLessons = getCompletedCount();
   const progressPercent = lessons.length > 0 ? (completedLessons / lessons.length) * 100 : 0;
@@ -354,6 +146,10 @@ export default function BookLessons() {
             Array.from({ length: 6 }).map((_, index) => (
               <Skeleton key={index} className="h-64 w-full" />
             ))
+          ) : lessons.length === 0 ? (
+            <div className="col-span-2 text-center py-12">
+              <p className="text-muted-foreground text-lg">No lessons found. Please check back later.</p>
+            </div>
           ) : (
             lessons.map((lesson) => (
               <BookLessonCard
@@ -366,7 +162,7 @@ export default function BookLessons() {
         </div>
 
         {/* Completion Badge (if all done) */}
-        {completedLessons === lessons.length && (
+        {completedLessons === lessons.length && lessons.length > 0 && (
           <div className="mt-16 text-center animate-scale-in">
             <div className="inline-flex flex-col items-center gap-4 px-12 py-8 rounded-3xl bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-accent">
               <Trophy className="w-16 h-16 text-accent" />
