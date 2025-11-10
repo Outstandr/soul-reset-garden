@@ -43,13 +43,15 @@ export default function BookLessonContent() {
   useEffect(() => {
     const fetchLesson = async () => {
       try {
-        const lessonNumber = parseInt(lessonId || "1");
+        if (!lessonId) {
+          setIsLoading(false);
+          return;
+        }
         
         const { data, error } = await supabase
           .from("masterclass_lessons")
           .select("*")
-          .eq("module_name", "Book: Reset by Discipline")
-          .eq("lesson_number", lessonNumber)
+          .eq("id", lessonId)
           .single();
 
         if (error) throw error;
