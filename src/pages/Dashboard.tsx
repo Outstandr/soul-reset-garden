@@ -58,6 +58,15 @@ const journeySteps = [
 
 const modules = [
   {
+    title: "Reset by Discipline",
+    subtitle: "Execution & Action",
+    description: "Put leadership and consistency into practice with focused discipline.",
+    icon: <Mountain className="w-6 h-6" style={{ color: "hsl(var(--reset-execution))" }} />,
+    color: "reset-execution",
+    status: "active" as const,
+    progress: 0,
+  },
+  {
     title: "The Reset in You",
     subtitle: "Rhythm & Structure",
     description: "Build a strong foundation for growth through daily rhythms and intentional structure.",
@@ -82,15 +91,6 @@ const modules = [
     icon: <Heart className="w-6 h-6" style={{ color: "hsl(var(--reset-systems))" }} />,
     color: "reset-systems",
     status: "locked" as const,
-    progress: 0,
-  },
-  {
-    title: "Reset by Discipline",
-    subtitle: "Execution & Action",
-    description: "Put leadership and consistency into practice with focused discipline.",
-    icon: <Mountain className="w-6 h-6" style={{ color: "hsl(var(--reset-execution))" }} />,
-    color: "reset-execution",
-    status: "active" as const,
     progress: 0,
   },
   {
@@ -143,26 +143,6 @@ const Dashboard = () => {
               Continue your transformational journey
             </p>
           </div>
-
-          {/* Daily Focus Card */}
-          <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 shadow-soft">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-reset-rhythm animate-pulse" />
-                Today's Focus
-              </CardTitle>
-              <CardDescription>Your daily rhythm builder</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg mb-4">
-                "What rhythm did you build today? Reflect on one structure that supported your growth."
-              </p>
-              <Button variant="zen" onClick={() => navigate("/journal")}>
-                <PenLine className="w-4 h-4 mr-2" />
-                Write in Journal
-              </Button>
-            </CardContent>
-          </Card>
         </section>
 
         {/* Journey Circle */}
@@ -209,17 +189,8 @@ const Dashboard = () => {
           </div>
         </section>
 
-        {/* Lionel Coach */}
-        <section className="animate-fade-in-up animation-delay-500">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
-            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
-          </div>
-          <LionelCoach />
-        </section>
-
         {/* Quick Access */}
-        <section className="animate-fade-in-up animation-delay-600">
+        <section className="animate-fade-in-up animation-delay-300">
           <div className="mb-8">
             <h3 className="text-3xl font-bold mb-2">Quick Access</h3>
             <p className="text-muted-foreground">Jump to your favorite resources</p>
@@ -272,6 +243,41 @@ const Dashboard = () => {
               </CardHeader>
             </Card>
           </div>
+        </section>
+
+        {/* Daily Focus */}
+        <section className="animate-fade-in-up animation-delay-400">
+          <div className="mb-8">
+            <h3 className="text-3xl font-bold mb-2">Today's Focus</h3>
+            <p className="text-muted-foreground">Your daily rhythm builder</p>
+          </div>
+          <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 shadow-soft">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-reset-rhythm animate-pulse" />
+                Today's Focus
+              </CardTitle>
+              <CardDescription>Reflect on one structure that supported your growth</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-lg mb-4">
+                "What rhythm did you build today? Reflect on one structure that supported your growth."
+              </p>
+              <Button variant="zen" onClick={() => navigate("/journal")}>
+                <PenLine className="w-4 h-4 mr-2" />
+                Write in Journal
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Lionel Coach */}
+        <section className="animate-fade-in-up animation-delay-500">
+          <div className="mb-8">
+            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
+            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
+          </div>
+          <LionelCoach />
         </section>
       </main>
     </div>
