@@ -40,6 +40,7 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [activeSubtitle, setActiveSubtitle] = useState<string>("off");
+  const [isSeeking, setIsSeeking] = useState(false);
 
   const startSeconds = timeToSeconds(startTime);
   const endSeconds = timeToSeconds(endTime);
@@ -57,6 +58,9 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
     };
 
     const handleTimeUpdate = () => {
+      // Don't update progress while user is seeking
+      if (isSeeking) return;
+      
       const current = video.currentTime;
       const videoDuration = video.duration;
       // Use actual video duration if it's shorter than configured end time
@@ -120,12 +124,26 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
     setIsMuted(!isMuted);
   };
 
+  const handleSeekStart = () => {
+    setIsSeeking(true);
+  };
+
   const handleSeek = (value: number[]) => {
     const video = videoRef.current;
     if (!video) return;
-    const newTime = startSeconds + (value[0] / 100) * (endSeconds - startSeconds);
+    const videoDuration = video.duration;
+    const effectiveEndTime = Math.min(endSeconds, videoDuration);
+    const segmentDuration = effectiveEndTime - startSeconds;
+    const newTime = startSeconds + (value[0] / 100) * segmentDuration;
     video.currentTime = newTime;
     setProgress(value[0]);
+    const elapsed = newTime - startSeconds;
+    setCurrentTime(elapsed);
+  };
+
+  const handleSeekEnd = (value: number[]) => {
+    handleSeek(value);
+    setIsSeeking(false);
   };
 
   const toggleFullscreen = () => {
@@ -180,6 +198,8 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
         <Slider
           value={[progress]}
           onValueChange={handleSeek}
+          onValueCommit={handleSeekEnd}
+          onPointerDown={handleSeekStart}
           max={100}
           step={0.1}
           className="mb-4"
