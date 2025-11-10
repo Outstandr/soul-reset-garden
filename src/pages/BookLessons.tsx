@@ -76,17 +76,26 @@ export default function BookLessons() {
   // Map database lessons to display format
   const lessons: BookLesson[] = useMemo(() => {
     if (dbLessons.length > 0) {
-      return dbLessons.map((dbLesson, index) => ({
-        id: dbLesson.id,
-        lessonNumber: dbLesson.lesson_number,
-        title: dbLesson.title,
-        description: dbLesson.description || "",
-        readingTime: `${Math.ceil((Number(dbLesson.video_end_time?.split(':')[0]) * 60 + Number(dbLesson.video_end_time?.split(':')[1])) / 60)} min`,
-        xp: 25 + (index * 5),
-        status: getLessonStatus(index),
-        category: (dbLesson.interactive_type === "none" ? "concept" : dbLesson.interactive_type) as any,
-        keyTakeaway: dbLesson.description || "Key lesson insights",
-      }));
+      return dbLessons.map((dbLesson, index) => {
+        // Parse video time (HH:MM:SS) to minutes
+        const timeParts = dbLesson.video_end_time?.split(':') || ['0', '0', '0'];
+        const hours = Number(timeParts[0]) || 0;
+        const minutes = Number(timeParts[1]) || 0;
+        const seconds = Number(timeParts[2]) || 0;
+        const totalMinutes = Math.ceil((hours * 60) + minutes + (seconds / 60));
+        
+        return {
+          id: dbLesson.id,
+          lessonNumber: dbLesson.lesson_number,
+          title: dbLesson.title,
+          description: dbLesson.description || "",
+          readingTime: `${totalMinutes} min`,
+          xp: 25 + (index * 5),
+          status: getLessonStatus(index),
+          category: (dbLesson.interactive_type === "none" ? "concept" : dbLesson.interactive_type) as any,
+          keyTakeaway: fallbackLessons[index]?.keyTakeaway || "Master this lesson to progress",
+        };
+      });
     }
     
     // Use fallback lessons with dynamic status based on user progress
