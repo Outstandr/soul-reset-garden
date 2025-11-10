@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { JourneyCircle } from "@/components/JourneyCircle";
 import { ModuleCard } from "@/components/ModuleCard";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,8 @@ import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library } from "
 import { useNavigate } from "react-router-dom";
 import { LionelCoach } from "@/components/LionelCoach";
 import { UserMenu } from "@/components/UserMenu";
+import { useModuleProgress } from "@/hooks/useModuleProgress";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const journeySteps = [
   {
@@ -56,7 +58,16 @@ const journeySteps = [
   },
 ];
 
-const modules = [
+// Module name mapping to database module_name field
+const MODULE_NAME_MAP: Record<string, string> = {
+  "Reset by Discipline": "Module 1: Getting Fit",
+  "The Reset in You": "Module 2: Rhythm & Structure",
+  "Reset Your Addiction": "Module 3: Energy & Vitality",
+  "Reset the Love in You": "Module 4: Systems & Relationships",
+  "Reset the Trust in You": "Module 5: Transformation & Integration",
+};
+
+const baseModules = [
   {
     title: "Reset by Discipline",
     subtitle: "Execution & Action",
@@ -64,7 +75,6 @@ const modules = [
     icon: <Mountain className="w-6 h-6" style={{ color: "hsl(var(--reset-execution))" }} />,
     color: "reset-execution",
     status: "active" as const,
-    progress: 0,
   },
   {
     title: "The Reset in You",
@@ -73,7 +83,6 @@ const modules = [
     icon: <Leaf className="w-6 h-6" style={{ color: "hsl(var(--reset-rhythm))" }} />,
     color: "reset-rhythm",
     status: "locked" as const,
-    progress: 0,
   },
   {
     title: "Reset Your Addiction",
@@ -82,7 +91,6 @@ const modules = [
     icon: <Zap className="w-6 h-6" style={{ color: "hsl(var(--reset-energy))" }} />,
     color: "reset-energy",
     status: "locked" as const,
-    progress: 0,
   },
   {
     title: "Reset the Love in You",
@@ -91,7 +99,6 @@ const modules = [
     icon: <Heart className="w-6 h-6" style={{ color: "hsl(var(--reset-systems))" }} />,
     color: "reset-systems",
     status: "locked" as const,
-    progress: 0,
   },
   {
     title: "Reset the Trust in You",
@@ -100,16 +107,28 @@ const modules = [
     icon: <Flower className="w-6 h-6" style={{ color: "hsl(var(--reset-transformation))" }} />,
     color: "reset-transformation",
     status: "locked" as const,
-    progress: 0,
   },
 ];
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { getModuleProgress, isLoading: progressLoading } = useModuleProgress();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Combine base modules with real progress data
+  const modules = useMemo(() => {
+    return baseModules.map((module) => {
+      const dbModuleName = MODULE_NAME_MAP[module.title];
+      const progress = getModuleProgress(dbModuleName);
+      return {
+        ...module,
+        progress,
+      };
+    });
+  }, [getModuleProgress]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
@@ -166,26 +185,35 @@ const Dashboard = () => {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {modules.map((module, index) => (
-              <div
-                key={module.title}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${(index + 3) * 100}ms` }}
-              >
-                <ModuleCard
-                  {...module}
-                  onStart={() => {
-                    if (module.status !== "locked") {
-                      if (module.title === "Reset by Discipline") {
-                        navigate("/reset-by-discipline");
-                      } else {
-                        navigate("/journey/reset-in-you");
+            {progressLoading ? (
+              // Loading skeletons
+              Array.from({ length: 5 }).map((_, index) => (
+                <div key={index} className="animate-fade-in-up">
+                  <Skeleton className="h-64 w-full rounded-xl" />
+                </div>
+              ))
+            ) : (
+              modules.map((module, index) => (
+                <div
+                  key={module.title}
+                  className="animate-fade-in-up"
+                  style={{ animationDelay: `${(index + 3) * 100}ms` }}
+                >
+                  <ModuleCard
+                    {...module}
+                    onStart={() => {
+                      if (module.status !== "locked") {
+                        if (module.title === "Reset by Discipline") {
+                          navigate("/reset-by-discipline");
+                        } else {
+                          navigate("/journey/reset-in-you");
+                        }
                       }
-                    }
-                  }}
-                />
-              </div>
-            ))}
+                    }}
+                  />
+                </div>
+              ))
+            )}
           </div>
         </section>
 
