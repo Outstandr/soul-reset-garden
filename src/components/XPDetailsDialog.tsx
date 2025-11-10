@@ -17,6 +17,7 @@ interface LessonProgress {
   lesson_title: string;
   lesson_number: number;
   completed_at: string | null;
+  xp: number;
 }
 
 export function XPDetailsDialog({ open, onOpenChange }: XPDetailsDialogProps) {
@@ -55,16 +56,26 @@ export function XPDetailsDialog({ open, onOpenChange }: XPDetailsDialogProps) {
 
       if (error) throw error;
 
-      const lessonsData = (progress || []).map((p: any) => ({
-        lesson_id: p.lesson_id,
-        completed: p.completed,
-        lesson_title: p.masterclass_lessons?.title || "Unknown Lesson",
-        lesson_number: p.masterclass_lessons?.lesson_number || 0,
-        completed_at: p.completed_at,
-      }));
+      const lessonsData = (progress || []).map((p: any, index: number) => {
+        // Calculate XP based on lesson number (25 + (lesson_number - 1) * 5)
+        const lessonNumber = p.masterclass_lessons?.lesson_number || 0;
+        const xpValue = 25 + ((lessonNumber - 1) * 5);
+        
+        return {
+          lesson_id: p.lesson_id,
+          completed: p.completed,
+          lesson_title: p.masterclass_lessons?.title || "Unknown Lesson",
+          lesson_number: lessonNumber,
+          completed_at: p.completed_at,
+          xp: xpValue,
+        };
+      });
 
       setCompletedLessons(lessonsData);
-      setTotalXP(lessonsData.length * 25);
+      
+      // Calculate total XP from actual lesson XP values
+      const total = lessonsData.reduce((sum, lesson) => sum + lesson.xp, 0);
+      setTotalXP(total);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching XP data:", error);
@@ -159,7 +170,7 @@ export function XPDetailsDialog({ open, onOpenChange }: XPDetailsDialogProps) {
                       </div>
                       <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 border border-amber-400">
                         <Star className="w-4 h-4 text-amber-600" />
-                        <span className="font-black text-amber-700">+25</span>
+                        <span className="font-black text-amber-700">+{lesson.xp}</span>
                       </div>
                     </div>
                   ))}
@@ -170,7 +181,7 @@ export function XPDetailsDialog({ open, onOpenChange }: XPDetailsDialogProps) {
             {/* XP Per Lesson Info */}
             <Card className="p-6 bg-gradient-to-r from-blue-100 to-cyan-100 border-2 border-primary">
               <p className="text-center font-bold text-foreground">
-                💡 Each completed lesson earns you 25 XP!
+                💡 XP increases with each lesson: 25, 30, 35, 40...
               </p>
             </Card>
           </div>

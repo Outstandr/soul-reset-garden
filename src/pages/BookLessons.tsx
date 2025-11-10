@@ -98,6 +98,13 @@ export default function BookLessons() {
 
   const completedLessons = getCompletedCount();
   const progressPercent = lessons.length > 0 ? (completedLessons / lessons.length) * 100 : 0;
+  
+  // Calculate actual total XP from completed lessons
+  const totalXP = useMemo(() => {
+    return lessons
+      .filter(lesson => lesson.status === "completed")
+      .reduce((sum, lesson) => sum + lesson.xp, 0);
+  }, [lessons]);
 
   const handleStartLesson = (lessonId: string) => {
     navigate(`/book-lesson/${lessonId}`);
@@ -139,7 +146,7 @@ export default function BookLessons() {
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-500 hover:from-amber-200 hover:to-yellow-200 transition-all"
               >
                 <Star className="w-5 h-5 text-amber-600" />
-                <span className="font-black text-amber-700">{completedLessons * 25} XP</span>
+                <span className="font-black text-amber-700">{totalXP} XP</span>
               </Button>
             </div>
           </div>
