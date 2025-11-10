@@ -65,8 +65,7 @@ export default function ResetByDiscipline() {
       status: "available",
       modules: [
         { name: "Module 1: Getting Fit", route: "/reset-discipline-course/1/1", lessons: 6 },
-        { name: "Module 2: Knowing Who You Are", route: "/reset-discipline-course/2/1", lessons: 6 },
-        { name: "Module 3: Become Your Own Boss", route: "/reset-discipline-course/3/1", lessons: 6 }
+        { name: "Module 2: Knowing Who You Are", route: "/reset-discipline-course/2/1", lessons: 6 }
       ],
       finalExam: { name: "Final Certification Exam", route: "/final-certification-exam" }
     }
