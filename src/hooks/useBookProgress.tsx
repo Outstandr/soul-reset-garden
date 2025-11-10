@@ -70,15 +70,9 @@ export const useBookProgress = (bookModule: string = "Book: Reset by Discipline"
   };
 
   const getLessonStatus = (index: number): "locked" | "available" | "in-progress" | "completed" => {
-    if (index >= progress.length) return "locked";
+    if (index >= progress.length) return "available"; // All lessons available by default
     
     const lessonProgress = progress[index];
-    
-    // Check if previous lesson is completed (for sequential unlocking)
-    if (index > 0) {
-      const previousCompleted = progress[index - 1]?.completed;
-      if (!previousCompleted) return "locked";
-    }
     
     if (lessonProgress.completed) return "completed";
     if (lessonProgress.videoProgress > 0) return "in-progress";
