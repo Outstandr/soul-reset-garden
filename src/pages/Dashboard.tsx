@@ -138,10 +138,6 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold gradient-text">RESET Blueprint®️</h1>
             <nav className="flex items-center gap-4">
-              <Button variant="ghost" size="sm">
-                <BookOpen className="w-4 h-4 mr-2" />
-                Library
-              </Button>
               <Button variant="ghost" size="sm" onClick={() => navigate("/journal")}>
                 <PenLine className="w-4 h-4 mr-2" />
                 Journal
