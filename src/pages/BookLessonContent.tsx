@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { LionelReflectionDialog } from "@/components/LionelReflectionDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { MarkdownRenderer } from "@/components/MarkdownRenderer";
+import { AssignmentInput } from "@/components/interactive/AssignmentInput";
 
 interface Lesson {
   id: string;
@@ -36,6 +37,7 @@ export default function BookLessonContent() {
   const [reflectionText, setReflectionText] = useState("");
   const [showReflection, setShowReflection] = useState(false);
   const [showLionelDialog, setShowLionelDialog] = useState(false);
+  const [assignmentResponses, setAssignmentResponses] = useState<Record<string, string>>({});
   const [hasShownLionelDialog, setHasShownLionelDialog] = useState(false);
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,6 +83,18 @@ export default function BookLessonContent() {
           
           if (savedReflection) {
             setReflectionText(savedReflection.reflection_text);
+          }
+          
+          // Load saved progress and assignment responses
+          const { data: progressData } = await supabase
+            .from("user_lesson_progress")
+            .select("assignment_responses")
+            .eq("user_id", user.id)
+            .eq("lesson_id", lessonId)
+            .single();
+          
+          if (progressData && progressData.assignment_responses) {
+            setAssignmentResponses(progressData.assignment_responses as Record<string, string>);
           }
         }
 
@@ -273,6 +287,40 @@ export default function BookLessonContent() {
     });
   };
 
+  const handleAssignmentSave = async (responses: Record<string, string>) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !lessonId) return;
+
+      // Upsert the assignment responses
+      const { error } = await supabase
+        .from('user_lesson_progress')
+        .upsert({
+          user_id: user.id,
+          lesson_id: lessonId,
+          assignment_responses: responses,
+          video_progress: readingProgress,
+        }, {
+          onConflict: 'user_id,lesson_id'
+        });
+
+      if (error) throw error;
+
+      setAssignmentResponses(responses);
+      
+      toast({
+        title: "Assignments saved! ✅",
+        description: "Your work has been recorded.",
+      });
+    } catch (error) {
+      console.error('Error saving assignments:', error);
+      toast({
+        title: "Error saving assignments",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleReflectionSave = async () => {
     if (reflectionText.trim()) {
       // Save to database
@@ -414,33 +462,22 @@ export default function BookLessonContent() {
           </ul>
         </Card>
 
-        {/* Interactive Action Step */}
-        <Card className={`mb-8 p-6 transition-all duration-300 ${
-          actionCompleted 
-            ? 'bg-gradient-to-br from-green-100 to-emerald-100 border-2 border-accent' 
-            : 'bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-accent/50'
-        }`}>
-          <div className="flex items-center gap-3 mb-4">
-            <Target className="w-6 h-6 text-accent" />
-            <h3 className="text-2xl font-black text-accent">Your Action Step</h3>
+        {/* Interactive Action Step - Now with fillable assignments */}
+        {lesson.actionStep && (
+          <div className="mb-8">
+            <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-accent/50">
+              <div className="flex items-center gap-3 mb-6">
+                <Target className="w-6 h-6 text-accent" />
+                <h3 className="text-2xl font-black text-accent">Your Action Steps</h3>
+              </div>
+              <AssignmentInput
+                actionStep={lesson.actionStep}
+                savedResponses={assignmentResponses}
+                onSave={handleAssignmentSave}
+              />
+            </Card>
           </div>
-          <p className="text-foreground font-semibold leading-relaxed mb-4">{lesson.actionStep}</p>
-          {!actionCompleted ? (
-            <Button
-              variant="hero"
-              onClick={handleActionComplete}
-              className="gap-2"
-            >
-              <CheckCircle className="w-4 h-4" />
-              Mark Action Complete
-            </Button>
-          ) : (
-            <div className="flex items-center gap-2 text-accent font-bold animate-scale-in">
-              <CheckCircle className="w-5 h-5" />
-              <span>Action Completed! +10 XP</span>
-            </div>
-          )}
-        </Card>
+        )}
 
         {/* Interactive Reflection Prompt */}
         <Card className="mb-8 p-6 bg-gradient-to-br from-purple-100 to-pink-100 border-2 border-secondary">

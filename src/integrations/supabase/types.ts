@@ -314,6 +314,7 @@ export type Database = {
       }
       user_lesson_progress: {
         Row: {
+          assignment_responses: Json | null
           completed: boolean | null
           completed_at: string | null
           created_at: string
@@ -325,6 +326,7 @@ export type Database = {
           video_progress: number | null
         }
         Insert: {
+          assignment_responses?: Json | null
           completed?: boolean | null
           completed_at?: string | null
           created_at?: string
@@ -336,6 +338,7 @@ export type Database = {
           video_progress?: number | null
         }
         Update: {
+          assignment_responses?: Json | null
           completed?: boolean | null
           completed_at?: string | null
           created_at?: string
