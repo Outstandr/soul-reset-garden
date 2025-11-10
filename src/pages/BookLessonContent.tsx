@@ -9,6 +9,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { LionelReflectionDialog } from "@/components/LionelReflectionDialog";
 import { supabase } from "@/integrations/supabase/client";
 
+interface Lesson {
+  id: string;
+  lessonNumber: number;
+  title: string;
+  category: string;
+  readingTime: string;
+  xp: number;
+  content: string;
+  keyTakeaways: string[];
+  actionStep: string;
+  reflectionPrompt: string;
+}
+
 export default function BookLessonContent() {
   const navigate = useNavigate();
   const { lessonId } = useParams();
@@ -23,15 +36,34 @@ export default function BookLessonContent() {
   const [showReflection, setShowReflection] = useState(false);
   const [showLionelDialog, setShowLionelDialog] = useState(false);
   const [hasShownLionelDialog, setHasShownLionelDialog] = useState(false);
+  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock lesson data (in real app, fetch based on lessonId)
-  const lesson = {
-    lessonNumber: 1,
-    title: "Understanding Discipline vs. Motivation",
-    category: "concept",
-    readingTime: "8 min",
-    xp: 25,
-    content: `
+  // Fetch lesson data from database
+  useEffect(() => {
+    const fetchLesson = async () => {
+      try {
+        const lessonNumber = parseInt(lessonId || "1");
+        
+        const { data, error } = await supabase
+          .from("masterclass_lessons")
+          .select("*")
+          .eq("module_name", "Book: Reset by Discipline")
+          .eq("lesson_number", lessonNumber)
+          .single();
+
+        if (error) throw error;
+
+        if (data) {
+          // Map database lesson to UI format with mock content for now
+          setLesson({
+            id: data.id,
+            lessonNumber: data.lesson_number,
+            title: data.title,
+            category: "concept",
+            readingTime: "8 min",
+            xp: 25,
+            content: `
 # The Truth About Discipline
 
 **Motivation is a liar.**
@@ -119,16 +151,31 @@ Every action you take is a vote for the type of person you want to become. Start
 **Remember:** Motivation gets you started. Discipline keeps you going.
 
 Which one will you choose?
-    `,
-    keyTakeaways: [
-      "Motivation is fleeting, discipline is forever",
-      "Disciplined people don't always feel like it—they do it anyway",
-      "Small action × Consistency × Time = Transformation",
-      "Never miss twice in a row"
-    ],
-    actionStep: "Choose ONE area of your life where you'll practice discipline today. Make it stupidly simple—something you can do in 2 minutes or less. Then do it.",
-    reflectionPrompt: "What's one area of your life where you've been waiting for motivation instead of building discipline? What would change if you committed to just 2 minutes a day?"
-  };
+            `,
+            keyTakeaways: [
+              "Motivation is fleeting, discipline is forever",
+              "Disciplined people don't always feel like it—they do it anyway",
+              "Small action × Consistency × Time = Transformation",
+              "Never miss twice in a row"
+            ],
+            actionStep: "Choose ONE area of your life where you'll practice discipline today. Make it stupidly simple—something you can do in 2 minutes or less. Then do it.",
+            reflectionPrompt: "What's one area of your life where you've been waiting for motivation instead of building discipline? What would change if you committed to just 2 minutes a day?"
+          });
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching lesson:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load lesson. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+      }
+    };
+
+    fetchLesson();
+  }, [lessonId, toast]);
 
   // Unlock checkpoints as user reads
   useEffect(() => {
@@ -164,13 +211,13 @@ Which one will you choose?
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      if (user && lessonId) {
+      if (user && lesson?.id) {
         // Save completion to database
         const { error } = await supabase
           .from('user_lesson_progress')
           .upsert({
             user_id: user.id,
-            lesson_id: lessonId,
+            lesson_id: lesson.id,
             completed: true,
             video_progress: 100,
             completed_at: new Date().toISOString(),
@@ -256,6 +303,17 @@ Which one will you choose?
     const scrollPercentage = (element.scrollTop / (element.scrollHeight - element.clientHeight)) * 100;
     setReadingProgress(Math.min(Math.round(scrollPercentage), 100));
   };
+
+  if (isLoading || !lesson) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading lesson...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
