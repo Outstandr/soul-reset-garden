@@ -100,7 +100,8 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const { error } = await supabase.from('user_quiz_attempts').insert({
+      // Save quiz attempt
+      const { error: quizError } = await supabase.from('user_quiz_attempts').insert({
         user_id: user.id,
         lesson_id: lessonId,
         score: totalScore,
@@ -110,9 +111,22 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
         answers
       });
 
-      if (error) throw error;
+      if (quizError) throw quizError;
 
+      // If passed, mark lesson as completed in progress table
       if (passed) {
+        const { error: progressError } = await supabase
+          .from('user_lesson_progress')
+          .upsert({
+            user_id: user.id,
+            lesson_id: lessonId,
+            completed: true,
+            completed_at: new Date().toISOString(),
+            video_progress: 100
+          });
+
+        if (progressError) throw progressError;
+
         toast({
           title: "Congratulations!",
           description: `You passed with ${percentage}%`,

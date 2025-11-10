@@ -112,28 +112,26 @@ export default function ResetByDisciplineCourse() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Load completed lessons (passed quizzes)
-      const { data: quizData, error: quizError } = await supabase
-        .from('user_quiz_attempts')
-        .select('lesson_id')
-        .eq('user_id', user.id)
-        .eq('passed', true);
-
-      if (quizError) throw quizError;
-      setCompletedLessons(new Set(quizData?.map(d => d.lesson_id) || []));
-
-      // Load video progress for all lessons
+      // Load completed lessons and video progress from user_lesson_progress
       const { data: progressData, error: progressError } = await supabase
         .from('user_lesson_progress')
-        .select('lesson_id, video_progress')
+        .select('lesson_id, video_progress, completed')
         .eq('user_id', user.id);
 
       if (progressError) throw progressError;
       
-      const progressMap = new Map();
+      // Build completed lessons set and progress map
+      const completedSet = new Set<string>();
+      const progressMap = new Map<string, number>();
+      
       progressData?.forEach(p => {
+        if (p.completed) {
+          completedSet.add(p.lesson_id);
+        }
         progressMap.set(p.lesson_id, p.video_progress || 0);
       });
+      
+      setCompletedLessons(completedSet);
       setVideoProgress(progressMap);
     } catch (error) {
       console.error('Error loading progress:', error);
@@ -207,16 +205,15 @@ export default function ResetByDisciplineCourse() {
   const handleQuizPass = async () => {
     if (!currentLesson) return;
     
-    // Update local state immediately for UI feedback
-    setCompletedLessons(prev => new Set([...prev, currentLesson.id]));
-    
-    // Reload progress from database to ensure consistency
+    // Reload progress from database to get updated completion status
     await loadProgress();
     
+    // Add current lesson to completed set
+    const updatedCompleted = new Set([...completedLessons, currentLesson.id]);
+    setCompletedLessons(updatedCompleted);
+    
     // Check if module is complete
-    const allPassed = lessons.every(l => 
-      completedLessons.has(l.id) || l.id === currentLesson.id
-    );
+    const allPassed = lessons.every(l => updatedCompleted.has(l.id));
 
     if (allPassed) {
       await generateCertificate();
