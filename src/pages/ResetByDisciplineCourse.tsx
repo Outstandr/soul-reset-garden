@@ -9,7 +9,6 @@ import { QuizComponent } from "@/components/quiz/QuizComponent";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { InteractiveWrapper } from "@/components/interactive/InteractiveWrapper";
-import { LessonCompletionDialog } from "@/components/LessonCompletionDialog";
 
 interface Lesson {
   id: string;
@@ -37,7 +36,7 @@ export default function ResetByDisciplineCourse() {
   const [interactiveResponse, setInteractiveResponse] = useState<any>(null);
   const [showInteractive, setShowInteractive] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [showCompletionDialog, setShowCompletionDialog] = useState(false);
+  const [videoCompleted, setVideoCompleted] = useState(false);
   const [newlyUnlockedLesson, setNewlyUnlockedLesson] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -82,6 +81,7 @@ export default function ResetByDisciplineCourse() {
       setShowQuiz(false);
       setShowInteractive(false);
       setInteractiveResponse(null);
+      setVideoCompleted(false);
       loadInteractiveProgress(lesson || lessons[0]);
     } else if (lessons.length > 0) {
       setCurrentLesson(lessons[0]);
@@ -162,11 +162,11 @@ export default function ResetByDisciplineCourse() {
   };
 
   const handleLessonComplete = () => {
-    setShowCompletionDialog(true);
+    setVideoCompleted(true);
   };
 
-  const handleCompletionContinue = () => {
-    setShowCompletionDialog(false);
+  const handleMarkComplete = () => {
+    setVideoCompleted(false);
     // Show interactive element only if it exists and is not "none"
     if (currentLesson?.interactive_type && currentLesson.interactive_type !== "none" && !interactiveResponse) {
       setShowInteractive(true);
@@ -384,7 +384,7 @@ export default function ResetByDisciplineCourse() {
                       <CardTitle>{currentLesson.title}</CardTitle>
                       <CardDescription>{currentLesson.description}</CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-4">
                       <VideoPlayer
                         videoUrl={getVideoUrl(parseInt(moduleNumber || "1"), currentLesson.lesson_number)}
                         startTime={currentLesson.video_start_time}
@@ -412,6 +412,17 @@ export default function ResetByDisciplineCourse() {
                         }}
                         onComplete={handleLessonComplete}
                       />
+                      
+                      {videoCompleted && !showInteractive && !showQuiz && (
+                        <Button 
+                          onClick={handleMarkComplete}
+                          size="lg"
+                          className="w-full"
+                        >
+                          <CheckCircle2 className="w-5 h-5 mr-2" />
+                          Mark as Complete & Continue to Quiz
+                        </Button>
+                      )}
                     </CardContent>
                   </Card>
 
@@ -431,13 +442,6 @@ export default function ResetByDisciplineCourse() {
                       onPass={handleQuizPass}
                     />
                   )}
-
-                  <LessonCompletionDialog
-                    open={showCompletionDialog}
-                    onContinue={handleCompletionContinue}
-                    pillarType={getPillarType()}
-                    lessonTitle={currentLesson.title}
-                  />
                 </>
               )}
             </div>
