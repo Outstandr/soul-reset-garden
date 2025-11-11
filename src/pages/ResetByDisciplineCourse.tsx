@@ -190,6 +190,8 @@ export default function ResetByDisciplineCourse() {
           lesson_id: currentLesson.id,
           interactive_responses: response,
           video_progress: 100
+        }, {
+          onConflict: 'user_id,lesson_id'
         });
 
       if (error) throw error;
