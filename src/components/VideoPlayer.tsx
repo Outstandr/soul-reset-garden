@@ -71,15 +71,13 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
       const segmentDuration = effectiveEndTime - startSeconds;
       const progressPercent = (elapsed / segmentDuration) * 100;
       
-      // Check if we've reached 90% completion (last 10% is end cards)
-      const isComplete = progressPercent >= 90 && current > startSeconds;
-      
-      if (isComplete) {
-        video.pause();
-        setIsPlaying(false);
-        setProgress(100);
+      // Check if we've reached 90% completion (trigger button but keep playing)
+      if (progressPercent >= 90 && current > startSeconds && progressPercent < 90.5) {
+        // Trigger completion callback once at 90% but don't pause
         onComplete?.();
-      } else if (current >= startSeconds) {
+      }
+      
+      if (current >= startSeconds) {
         setProgress(Math.min(progressPercent, 100));
         setCurrentTime(elapsed);
         onProgress?.(Math.min(progressPercent, 100));
