@@ -66,18 +66,20 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
       // Use actual video duration if it's shorter than configured end time
       const effectiveEndTime = Math.min(endSeconds, videoDuration);
       
-      // Check if we've reached the end (within 1 second buffer)
-      const isAtEnd = current >= effectiveEndTime - 1 || (effectiveEndTime - current < 1 && current > startSeconds);
+      // Calculate progress percentage
+      const elapsed = current - startSeconds;
+      const segmentDuration = effectiveEndTime - startSeconds;
+      const progressPercent = (elapsed / segmentDuration) * 100;
       
-      if (isAtEnd) {
+      // Check if we've reached near the end (98% completion or within 2 seconds)
+      const isNearEnd = progressPercent >= 98 || current >= effectiveEndTime - 2;
+      
+      if (isNearEnd && current > startSeconds) {
         video.pause();
         setIsPlaying(false);
         setProgress(100);
         onComplete?.();
       } else if (current >= startSeconds) {
-        const elapsed = current - startSeconds;
-        const segmentDuration = effectiveEndTime - startSeconds;
-        const progressPercent = (elapsed / segmentDuration) * 100;
         setProgress(Math.min(progressPercent, 100));
         setCurrentTime(elapsed);
         onProgress?.(Math.min(progressPercent, 100));
