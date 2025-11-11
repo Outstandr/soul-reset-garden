@@ -117,20 +117,31 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
       if (passed) {
         const { error: progressError } = await supabase
           .from('user_lesson_progress')
-          .upsert({
-            user_id: user.id,
-            lesson_id: lessonId,
-            completed: true,
-            completed_at: new Date().toISOString(),
-            video_progress: 100
-          });
+          .upsert(
+            {
+              user_id: user.id,
+              lesson_id: lessonId,
+              completed: true,
+              completed_at: new Date().toISOString(),
+              video_progress: 100
+            },
+            {
+              onConflict: 'user_id,lesson_id'
+            }
+          );
 
-        if (progressError) throw progressError;
+        if (progressError) {
+          console.error('Error updating lesson progress:', progressError);
+          throw progressError;
+        }
 
         toast({
           title: "Congratulations!",
           description: `You passed with ${percentage}%`,
         });
+        
+        // Small delay to ensure database write is complete
+        await new Promise(resolve => setTimeout(resolve, 500));
         onPass();
       } else {
         toast({
