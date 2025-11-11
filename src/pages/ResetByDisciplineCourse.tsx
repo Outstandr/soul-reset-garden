@@ -205,17 +205,20 @@ export default function ResetByDisciplineCourse() {
   const handleQuizPass = async () => {
     if (!currentLesson) return;
     
+    console.log('🎯 handleQuizPass called for lesson:', currentLesson.lesson_number);
+    
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       // Wait a bit to ensure database write from quiz completion has finished
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       // Fetch fresh progress data directly from database with retry
+      console.log('🔄 Fetching fresh progress data...');
       let progressData = null;
       let attempts = 0;
-      const maxAttempts = 3;
+      const maxAttempts = 5;
       
       while (attempts < maxAttempts) {
         const { data, error } = await supabase
@@ -225,23 +228,33 @@ export default function ResetByDisciplineCourse() {
 
         if (error) throw error;
         
-        // Check if current lesson is marked as completed
-        const currentLessonComplete = data?.find(p => p.lesson_id === currentLesson.id && p.completed);
+        console.log(`📊 Attempt ${attempts + 1}: Found ${data?.length} progress records`);
         
-        if (currentLessonComplete) {
+        // Check if current lesson is marked as completed
+        const currentLessonProgress = data?.find(p => p.lesson_id === currentLesson.id);
+        console.log('🎓 Current lesson progress:', currentLessonProgress);
+        
+        if (currentLessonProgress?.completed) {
           progressData = data;
+          console.log('✅ Lesson confirmed as completed in database');
           break;
         }
         
         // If not found, wait and retry
         attempts++;
         if (attempts < maxAttempts) {
-          await new Promise(resolve => setTimeout(resolve, 500));
+          console.log(`⏳ Waiting 1s before retry ${attempts + 1}...`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
       }
 
       if (!progressData) {
-        console.error('Failed to verify lesson completion after multiple attempts');
+        console.error('❌ Failed to verify lesson completion after', maxAttempts, 'attempts');
+        toast({
+          title: "Error",
+          description: "Failed to verify lesson completion. Please refresh the page.",
+          variant: "destructive"
+        });
         return;
       }
 
@@ -256,8 +269,8 @@ export default function ResetByDisciplineCourse() {
         progressMap.set(p.lesson_id, p.video_progress || 0);
       });
       
-      console.log('Updated completed lessons:', Array.from(freshCompletedSet));
-      console.log('Current lesson ID:', currentLesson.id);
+      console.log('📋 Completed lessons:', Array.from(freshCompletedSet).length);
+      console.log('🔓 Current lesson completed:', freshCompletedSet.has(currentLesson.id));
       
       // Update state with fresh data
       setCompletedLessons(freshCompletedSet);
@@ -267,6 +280,7 @@ export default function ResetByDisciplineCourse() {
       const allPassed = lessons.every(l => freshCompletedSet.has(l.id));
 
       if (allPassed) {
+        console.log('🎉 All lessons complete! Generating certificate...');
         await generateCertificate();
         return;
       }
@@ -274,7 +288,7 @@ export default function ResetByDisciplineCourse() {
       // Find and navigate to next lesson
       const nextLesson = lessons.find(l => l.lesson_number === currentLesson.lesson_number + 1);
       if (nextLesson) {
-        console.log('Unlocking next lesson:', nextLesson.lesson_number);
+        console.log('➡️ Unlocking next lesson:', nextLesson.lesson_number);
         setNewlyUnlockedLesson(nextLesson.id);
         
         toast({
@@ -291,9 +305,11 @@ export default function ResetByDisciplineCourse() {
         setTimeout(() => {
           navigate(`/reset-discipline-course/${moduleNumber}/${nextLesson.lesson_number}`);
         }, 500);
+      } else {
+        console.log('🏁 This was the last lesson');
       }
     } catch (error) {
-      console.error('Error updating progress after quiz pass:', error);
+      console.error('❌ Error in handleQuizPass:', error);
       toast({
         title: "Error",
         description: "Failed to unlock next lesson. Please refresh the page.",

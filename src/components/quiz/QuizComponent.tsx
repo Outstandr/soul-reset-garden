@@ -115,6 +115,8 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
 
       // If passed, mark lesson as completed in progress table
       if (passed) {
+        console.log('📝 Quiz passed! Marking lesson as complete:', lessonId);
+        
         const { error: progressError } = await supabase
           .from('user_lesson_progress')
           .upsert({
@@ -128,11 +130,21 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
           });
 
         if (progressError) {
-          console.error('Error updating lesson progress:', progressError);
+          console.error('❌ Error updating lesson progress:', progressError);
           throw progressError;
         }
 
-        console.log('✅ Lesson marked as complete:', lessonId);
+        console.log('✅ Lesson marked as complete in database:', lessonId);
+        
+        // Verify it was saved
+        const { data: verifyData } = await supabase
+          .from('user_lesson_progress')
+          .select('completed, video_progress')
+          .eq('user_id', user.id)
+          .eq('lesson_id', lessonId)
+          .single();
+        
+        console.log('🔍 Verified database state:', verifyData);
 
         toast({
           title: "Congratulations!",
@@ -140,7 +152,7 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
         });
         
         // Ensure database write is complete
-        await new Promise(resolve => setTimeout(resolve, 800));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         onPass();
       } else {
         toast({
