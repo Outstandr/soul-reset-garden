@@ -104,6 +104,8 @@ export default function PhysicalPillar() {
         user_id: user.id,
         lesson_id: lessonId,
         ...updates,
+      }, {
+        onConflict: 'user_id,lesson_id'
       });
 
     if (!error) {
