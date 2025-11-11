@@ -115,55 +115,32 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
 
       // If passed, mark lesson as completed in progress table
       if (passed) {
-        // First check if record exists
-        const { data: existingProgress } = await supabase
+        const { error: progressError } = await supabase
           .from('user_lesson_progress')
-          .select('id')
-          .eq('user_id', user.id)
-          .eq('lesson_id', lessonId)
-          .maybeSingle();
-
-        let progressError;
-        if (existingProgress) {
-          // Update existing record
-          const { error } = await supabase
-            .from('user_lesson_progress')
-            .update({
-              completed: true,
-              completed_at: new Date().toISOString(),
-              video_progress: 100
-            })
-            .eq('user_id', user.id)
-            .eq('lesson_id', lessonId);
-          progressError = error;
-        } else {
-          // Insert new record
-          const { error } = await supabase
-            .from('user_lesson_progress')
-            .insert({
-              user_id: user.id,
-              lesson_id: lessonId,
-              completed: true,
-              completed_at: new Date().toISOString(),
-              video_progress: 100
-            });
-          progressError = error;
-        }
+          .upsert({
+            user_id: user.id,
+            lesson_id: lessonId,
+            completed: true,
+            completed_at: new Date().toISOString(),
+            video_progress: 100
+          }, {
+            onConflict: 'user_id,lesson_id'
+          });
 
         if (progressError) {
           console.error('Error updating lesson progress:', progressError);
           throw progressError;
         }
 
-        console.log('Lesson marked as complete:', lessonId);
+        console.log('✅ Lesson marked as complete:', lessonId);
 
         toast({
           title: "Congratulations!",
           description: `You passed with ${percentage}%`,
         });
         
-        // Small delay to ensure database write is complete
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Ensure database write is complete
+        await new Promise(resolve => setTimeout(resolve, 800));
         onPass();
       } else {
         toast({
