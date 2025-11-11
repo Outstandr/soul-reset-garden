@@ -413,18 +413,28 @@ export default function ResetByDisciplineCourse() {
                         onProgress={async (progress) => {
                           // Update video progress in real-time
                           const { data: { user } } = await supabase.auth.getUser();
-                          if (!user) return;
+                          if (!user || !currentLesson) return;
                           
-                          await supabase
-                            .from('user_lesson_progress')
-                            .upsert({
-                              user_id: user.id,
-                              lesson_id: currentLesson.id,
-                              video_progress: progress
-                            });
-                          
-                          // Update local state
-                          setVideoProgress(prev => new Map(prev).set(currentLesson.id, progress));
+                          try {
+                            const { error } = await supabase
+                              .from('user_lesson_progress')
+                              .upsert({
+                                user_id: user.id,
+                                lesson_id: currentLesson.id,
+                                video_progress: progress
+                              }, {
+                                onConflict: 'user_id,lesson_id'
+                              });
+                            
+                            if (error) {
+                              console.error('Error saving video progress:', error);
+                            }
+                            
+                            // Update local state
+                            setVideoProgress(prev => new Map(prev).set(currentLesson.id, progress));
+                          } catch (err) {
+                            console.error('Failed to save video progress:', err);
+                          }
                         }}
                         onComplete={handleLessonComplete}
                       />

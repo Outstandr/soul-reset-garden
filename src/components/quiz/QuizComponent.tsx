@@ -117,34 +117,76 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
       if (passed) {
         console.log('📝 Quiz passed! Marking lesson as complete:', lessonId);
         
-        const { error: progressError } = await supabase
+        // Use a more reliable update approach
+        const { data: existingRecord, error: fetchError } = await supabase
           .from('user_lesson_progress')
-          .upsert({
-            user_id: user.id,
-            lesson_id: lessonId,
-            completed: true,
-            completed_at: new Date().toISOString(),
-            video_progress: 100
-          }, {
-            onConflict: 'user_id,lesson_id'
-          });
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('lesson_id', lessonId)
+          .maybeSingle();
+
+        if (fetchError) {
+          console.error('❌ Error fetching existing record:', fetchError);
+          throw fetchError;
+        }
+
+        let progressError;
+        if (existingRecord) {
+          // Update existing record
+          const { error } = await supabase
+            .from('user_lesson_progress')
+            .update({
+              completed: true,
+              completed_at: new Date().toISOString(),
+              video_progress: 100
+            })
+            .eq('user_id', user.id)
+            .eq('lesson_id', lessonId);
+          progressError = error;
+        } else {
+          // Insert new record
+          const { error } = await supabase
+            .from('user_lesson_progress')
+            .insert({
+              user_id: user.id,
+              lesson_id: lessonId,
+              completed: true,
+              completed_at: new Date().toISOString(),
+              video_progress: 100
+            });
+          progressError = error;
+        }
 
         if (progressError) {
           console.error('❌ Error updating lesson progress:', progressError);
           throw progressError;
         }
 
-        console.log('✅ Lesson marked as complete in database:', lessonId);
+        console.log('✅ Lesson marked as complete in database');
         
-        // Verify it was saved
-        const { data: verifyData } = await supabase
-          .from('user_lesson_progress')
-          .select('completed, video_progress')
-          .eq('user_id', user.id)
-          .eq('lesson_id', lessonId)
-          .single();
-        
-        console.log('🔍 Verified database state:', verifyData);
+        // Verify it was saved with retry
+        let verified = false;
+        for (let i = 0; i < 3; i++) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          const { data: verifyData, error: verifyError } = await supabase
+            .from('user_lesson_progress')
+            .select('completed, video_progress')
+            .eq('user_id', user.id)
+            .eq('lesson_id', lessonId)
+            .single();
+          
+          if (!verifyError && verifyData?.completed) {
+            console.log('🔍 Verified database state:', verifyData);
+            verified = true;
+            break;
+          }
+          console.log(`⏳ Verification attempt ${i + 1} failed, retrying...`);
+        }
+
+        if (!verified) {
+          throw new Error('Failed to verify lesson completion after 3 attempts');
+        }
 
         toast({
           title: "Congratulations!",
@@ -152,7 +194,7 @@ export const QuizComponent = ({ lessonId, passingScore = 70, onPass }: QuizCompo
         });
         
         // Ensure database write is complete
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 500));
         onPass();
       } else {
         toast({
