@@ -209,24 +209,55 @@ export default function ResetByDisciplineCourse() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Fetch fresh progress data directly from database
-      const { data: progressData, error } = await supabase
-        .from('user_lesson_progress')
-        .select('lesson_id, video_progress, completed')
-        .eq('user_id', user.id);
+      // Wait a bit to ensure database write from quiz completion has finished
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      if (error) throw error;
+      // Fetch fresh progress data directly from database with retry
+      let progressData = null;
+      let attempts = 0;
+      const maxAttempts = 3;
+      
+      while (attempts < maxAttempts) {
+        const { data, error } = await supabase
+          .from('user_lesson_progress')
+          .select('lesson_id, video_progress, completed')
+          .eq('user_id', user.id);
+
+        if (error) throw error;
+        
+        // Check if current lesson is marked as completed
+        const currentLessonComplete = data?.find(p => p.lesson_id === currentLesson.id && p.completed);
+        
+        if (currentLessonComplete) {
+          progressData = data;
+          break;
+        }
+        
+        // If not found, wait and retry
+        attempts++;
+        if (attempts < maxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+      }
+
+      if (!progressData) {
+        console.error('Failed to verify lesson completion after multiple attempts');
+        return;
+      }
 
       // Build fresh completed lessons set
       const freshCompletedSet = new Set<string>();
       const progressMap = new Map<string, number>();
       
-      progressData?.forEach(p => {
+      progressData.forEach(p => {
         if (p.completed) {
           freshCompletedSet.add(p.lesson_id);
         }
         progressMap.set(p.lesson_id, p.video_progress || 0);
       });
+      
+      console.log('Updated completed lessons:', Array.from(freshCompletedSet));
+      console.log('Current lesson ID:', currentLesson.id);
       
       // Update state with fresh data
       setCompletedLessons(freshCompletedSet);
@@ -237,22 +268,37 @@ export default function ResetByDisciplineCourse() {
 
       if (allPassed) {
         await generateCertificate();
+        return;
       }
 
-      // Find and highlight the next lesson
+      // Find and navigate to next lesson
       const nextLesson = lessons.find(l => l.lesson_number === currentLesson.lesson_number + 1);
       if (nextLesson) {
+        console.log('Unlocking next lesson:', nextLesson.lesson_number);
         setNewlyUnlockedLesson(nextLesson.id);
+        
+        toast({
+          title: "Lesson Unlocked!",
+          description: `Lesson ${nextLesson.lesson_number} is now available`,
+        });
         
         // Remove highlight after 3 seconds
         setTimeout(() => {
           setNewlyUnlockedLesson(null);
         }, 3000);
         
-        navigate(`/reset-discipline-course/${moduleNumber}/${nextLesson.lesson_number}`);
+        // Navigate to next lesson
+        setTimeout(() => {
+          navigate(`/reset-discipline-course/${moduleNumber}/${nextLesson.lesson_number}`);
+        }, 500);
       }
     } catch (error) {
       console.error('Error updating progress after quiz pass:', error);
+      toast({
+        title: "Error",
+        description: "Failed to unlock next lesson. Please refresh the page.",
+        variant: "destructive"
+      });
     }
   };
 
