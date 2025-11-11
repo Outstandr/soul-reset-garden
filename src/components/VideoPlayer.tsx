@@ -71,10 +71,10 @@ export const VideoPlayer = ({ videoUrl, startTime, endTime, subtitles, onProgres
       const segmentDuration = effectiveEndTime - startSeconds;
       const progressPercent = (elapsed / segmentDuration) * 100;
       
-      // Check if we've reached near the end (98% completion or within 2 seconds)
-      const isNearEnd = progressPercent >= 98 || current >= effectiveEndTime - 2;
+      // Check if we've reached 90% completion (last 10% is end cards)
+      const isComplete = progressPercent >= 90 && current > startSeconds;
       
-      if (isNearEnd && current > startSeconds) {
+      if (isComplete) {
         video.pause();
         setIsPlaying(false);
         setProgress(100);
