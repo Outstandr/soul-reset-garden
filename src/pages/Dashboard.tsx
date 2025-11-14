@@ -7,6 +7,7 @@ import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library } from "
 import { useNavigate } from "react-router-dom";
 import { LionelCoach } from "@/components/LionelCoach";
 import { UserMenu } from "@/components/UserMenu";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -142,6 +143,7 @@ const Dashboard = () => {
                 <PenLine className="w-4 h-4 mr-2" />
                 Journal
               </Button>
+              <LanguageSwitcher />
               <UserMenu />
             </nav>
           </div>
