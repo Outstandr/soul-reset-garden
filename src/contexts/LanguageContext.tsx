@@ -5,6 +5,7 @@ type Language = 'en' | 'nl' | 'ru';
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
+  isTransitioning: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -14,15 +15,30 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const saved = localStorage.getItem('language');
     return (saved as Language) || 'en';
   });
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
-    localStorage.setItem('language', lang);
+    if (lang === language) return;
+    
+    setIsTransitioning(true);
+    
+    // Fade out
+    setTimeout(() => {
+      setLanguageState(lang);
+      localStorage.setItem('language', lang);
+      
+      // Fade in
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 50);
+    }, 150);
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage }}>
-      {children}
+    <LanguageContext.Provider value={{ language, setLanguage, isTransitioning }}>
+      <div className={`transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+        {children}
+      </div>
     </LanguageContext.Provider>
   );
 };
