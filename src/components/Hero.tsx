@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Star, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslations } from "@/hooks/useTranslations";
 
 export const Hero = () => {
+  const t = useTranslations();
+  
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-muted to-background">
       {/* Animated background blobs with neon glow - optimized for mobile */}
@@ -27,29 +30,29 @@ export const Hero = () => {
           <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 border-2 animate-glow-border shadow-glow animate-bounce-in">
             <Sparkles className="w-5 h-5 text-primary animate-scale-pulse" />
             <span className="text-base font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              The RESET Blueprint®️
+              {t.landing.hero.badge}
             </span>
           </div>
 
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black leading-tight animate-bounce-in animation-delay-100">
-            Transform Your Life with{" "}
+            {t.landing.hero.title}{" "}
             <span className="gradient-text neon-text text-shadow-soft">
-              RESET
+              {t.landing.hero.titleHighlight}
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/80 font-semibold max-w-2xl mx-auto animate-fade-in-up animation-delay-200">
-            A full-circle journey from foundation to transformation<br className="hidden sm:block"/>
-            <span className="sm:hidden"> </span>Master the R.E.S.E.T. system and unlock your true potential
+            {t.landing.hero.subtitle}<br className="hidden sm:block"/>
+            <span className="sm:hidden"> </span>{t.landing.hero.subtitleMobile}
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center animate-fade-in-up animation-delay-300 w-full sm:w-auto">
             <Link to="/dashboard" className="w-full sm:w-auto">
               <Button size="lg" variant="hero" className="group text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 shadow-neon hover-lift w-full sm:w-auto">
-                Begin Your Journey
+                {t.landing.hero.ctaPrimary}
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-2" />
               </Button>
             </Link>
@@ -61,7 +64,7 @@ export const Hero = () => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              Learn More
+              {t.landing.hero.ctaSecondary}
             </Button>
           </div>
 

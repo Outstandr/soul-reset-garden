@@ -1,54 +1,57 @@
 import { Leaf, Zap, Heart, Mountain, Flower } from "lucide-react";
-
-const resetSteps = [
-  {
-    letter: "R",
-    title: "Rhythm",
-    subtitle: "The Reset in You",
-    description: "Build a strong foundation through structure and rhythm.",
-    icon: Leaf,
-    color: "reset-rhythm",
-    symbolism: "Bamboo - Structure, Flexibility, Growth",
-  },
-  {
-    letter: "E",
-    title: "Energy",
-    subtitle: "Reset Your Addiction",
-    description: "Break through blockages and reclaim your vital power.",
-    icon: Zap,
-    color: "reset-energy",
-    symbolism: "Flowing Water - Life Force, Vitality",
-  },
-  {
-    letter: "S",
-    title: "Systems",
-    subtitle: "Reset the Love in You",
-    description: "Emotional growth and conscious connection.",
-    icon: Heart,
-    color: "reset-systems",
-    symbolism: "Interconnected Roots - Relationships, Unity",
-  },
-  {
-    letter: "E",
-    title: "Execution",
-    subtitle: "Reset by Discipline",
-    description: "Put leadership and consistency into practice.",
-    icon: Mountain,
-    color: "reset-execution",
-    symbolism: "Mountain Peak - Achievement, Focus",
-  },
-  {
-    letter: "T",
-    title: "Transformation",
-    subtitle: "Reset the Trust in You",
-    description: "Identity, mastery, and the embodiment of trust.",
-    icon: Flower,
-    color: "reset-transformation",
-    symbolism: "Lotus Flower - Emerging from darkness into light",
-  },
-];
+import { useTranslations } from "@/hooks/useTranslations";
 
 export const ResetOverview = () => {
+  const t = useTranslations();
+  
+  const resetSteps = [
+    {
+      letter: "R",
+      title: t.landing.resetOverview.rhythm.title,
+      subtitle: t.landing.resetOverview.rhythm.subtitle,
+      description: t.landing.resetOverview.rhythm.description,
+      icon: Leaf,
+      color: "reset-rhythm",
+      symbolism: t.landing.resetOverview.rhythm.symbolism,
+    },
+    {
+      letter: "E",
+      title: t.landing.resetOverview.energy.title,
+      subtitle: t.landing.resetOverview.energy.subtitle,
+      description: t.landing.resetOverview.energy.description,
+      icon: Zap,
+      color: "reset-energy",
+      symbolism: t.landing.resetOverview.energy.symbolism,
+    },
+    {
+      letter: "S",
+      title: t.landing.resetOverview.systems.title,
+      subtitle: t.landing.resetOverview.systems.subtitle,
+      description: t.landing.resetOverview.systems.description,
+      icon: Heart,
+      color: "reset-systems",
+      symbolism: t.landing.resetOverview.systems.symbolism,
+    },
+    {
+      letter: "E",
+      title: t.landing.resetOverview.execution.title,
+      subtitle: t.landing.resetOverview.execution.subtitle,
+      description: t.landing.resetOverview.execution.description,
+      icon: Mountain,
+      color: "reset-execution",
+      symbolism: t.landing.resetOverview.execution.symbolism,
+    },
+    {
+      letter: "T",
+      title: t.landing.resetOverview.transformation.title,
+      subtitle: t.landing.resetOverview.transformation.subtitle,
+      description: t.landing.resetOverview.transformation.description,
+      icon: Flower,
+      color: "reset-transformation",
+      symbolism: t.landing.resetOverview.transformation.symbolism,
+    },
+  ];
+  
   return (
     <section className="py-24 bg-gradient-to-b from-muted via-background to-muted relative overflow-hidden">
       {/* Animated background elements with neon glow */}
@@ -63,11 +66,11 @@ export const ResetOverview = () => {
       <div className="zen-container relative z-10">
         <div className="text-center mb-20 space-y-6 animate-fade-in-up">
           <h2 className="text-5xl md:text-7xl font-black">
-            The <span className="gradient-text neon-text">RESET</span> Blueprint®️
+            {t.landing.resetOverview.title.split('RESET')[0]}<span className="gradient-text neon-text">RESET</span>{t.landing.resetOverview.title.split('RESET')[1]}
           </h2>
           <p className="text-2xl text-foreground/80 font-bold max-w-2xl mx-auto">
-            A full-circle journey from doing to becoming<br/>
-            Each step builds upon the last, creating holistic transformation
+            {t.landing.resetOverview.subtitle}<br/>
+            {t.landing.resetOverview.subtitleDesc}
           </p>
         </div>
 
