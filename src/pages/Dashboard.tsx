@@ -12,54 +12,6 @@ import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "@/hooks/useTranslations";
 
-const journeySteps = [
-  {
-    id: "rhythm",
-    letter: "R",
-    title: "Rhythm",
-    color: "reset-rhythm",
-    icon: "bamboo",
-    completed: false,
-    active: true,
-  },
-  {
-    id: "energy",
-    letter: "E",
-    title: "Energy",
-    color: "reset-energy",
-    icon: "water",
-    completed: false,
-    active: false,
-  },
-  {
-    id: "systems",
-    letter: "S",
-    title: "Systems",
-    color: "reset-systems",
-    icon: "roots",
-    completed: false,
-    active: false,
-  },
-  {
-    id: "execution",
-    letter: "E",
-    title: "Execution",
-    color: "reset-execution",
-    icon: "mountain",
-    completed: false,
-    active: false,
-  },
-  {
-    id: "transformation",
-    letter: "T",
-    title: "Transformation",
-    color: "reset-transformation",
-    icon: "lotus",
-    completed: false,
-    active: false,
-  },
-];
-
 // Module name mapping to database module_name field
 const MODULE_NAME_MAP: Record<string, string> = {
   "Reset by Discipline": "Module 1: Getting Fit",
@@ -69,49 +21,6 @@ const MODULE_NAME_MAP: Record<string, string> = {
   "Reset the Trust in You": "Module 5: Transformation & Integration",
 };
 
-const baseModules = [
-  {
-    title: "Reset by Discipline",
-    subtitle: "Execution & Action",
-    description: "Put leadership and consistency into practice with focused discipline.",
-    icon: <Mountain className="w-6 h-6" style={{ color: "hsl(var(--reset-execution))" }} />,
-    color: "reset-execution",
-    status: "active" as const,
-  },
-  {
-    title: "The Reset in You",
-    subtitle: "Rhythm & Structure",
-    description: "Build a strong foundation for growth through daily rhythms and intentional structure.",
-    icon: <Leaf className="w-6 h-6" style={{ color: "hsl(var(--reset-rhythm))" }} />,
-    color: "reset-rhythm",
-    status: "locked" as const,
-  },
-  {
-    title: "Reset Your Addiction",
-    subtitle: "Energy & Vitality",
-    description: "Break through blockages and reclaim your vital power and life force.",
-    icon: <Zap className="w-6 h-6" style={{ color: "hsl(var(--reset-energy))" }} />,
-    color: "reset-energy",
-    status: "locked" as const,
-  },
-  {
-    title: "Reset the Love in You",
-    subtitle: "Systems & Relationships",
-    description: "Cultivate emotional growth and conscious connection with yourself and others.",
-    icon: <Heart className="w-6 h-6" style={{ color: "hsl(var(--reset-systems))" }} />,
-    color: "reset-systems",
-    status: "locked" as const,
-  },
-  {
-    title: "Reset the Trust in You",
-    subtitle: "Transformation & Integration",
-    description: "Embody mastery, trust, and complete transformation of your identity.",
-    icon: <Flower className="w-6 h-6" style={{ color: "hsl(var(--reset-transformation))" }} />,
-    color: "reset-transformation",
-    status: "locked" as const,
-  },
-];
-
 const Dashboard = () => {
   const navigate = useNavigate();
   const t = useTranslations();
@@ -120,6 +29,97 @@ const Dashboard = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const journeySteps = useMemo(() => [
+    {
+      id: "rhythm",
+      letter: "R",
+      title: t.journey.rhythm,
+      color: "reset-rhythm",
+      icon: "bamboo",
+      completed: false,
+      active: true,
+    },
+    {
+      id: "energy",
+      letter: "E",
+      title: t.journey.energy,
+      color: "reset-energy",
+      icon: "water",
+      completed: false,
+      active: false,
+    },
+    {
+      id: "systems",
+      letter: "S",
+      title: t.journey.systems,
+      color: "reset-systems",
+      icon: "roots",
+      completed: false,
+      active: false,
+    },
+    {
+      id: "execution",
+      letter: "E",
+      title: t.journey.execution,
+      color: "reset-execution",
+      icon: "mountain",
+      completed: false,
+      active: false,
+    },
+    {
+      id: "transformation",
+      letter: "T",
+      title: t.journey.transformation,
+      color: "reset-transformation",
+      icon: "lotus",
+      completed: false,
+      active: false,
+    },
+  ], [t]);
+
+  const baseModules = useMemo(() => [
+    {
+      title: t.modules.resetByDiscipline,
+      subtitle: t.modules.resetByDisciplineSubtitle,
+      description: t.modules.resetByDisciplineDesc,
+      icon: <Mountain className="w-6 h-6" style={{ color: "hsl(var(--reset-execution))" }} />,
+      color: "reset-execution",
+      status: "active" as const,
+    },
+    {
+      title: t.modules.theResetInYou,
+      subtitle: t.modules.theResetInYouSubtitle,
+      description: t.modules.theResetInYouDesc,
+      icon: <Leaf className="w-6 h-6" style={{ color: "hsl(var(--reset-rhythm))" }} />,
+      color: "reset-rhythm",
+      status: "locked" as const,
+    },
+    {
+      title: t.modules.resetYourAddiction,
+      subtitle: t.modules.resetYourAddictionSubtitle,
+      description: t.modules.resetYourAddictionDesc,
+      icon: <Zap className="w-6 h-6" style={{ color: "hsl(var(--reset-energy))" }} />,
+      color: "reset-energy",
+      status: "locked" as const,
+    },
+    {
+      title: t.modules.resetTheLoveInYou,
+      subtitle: t.modules.resetTheLoveInYouSubtitle,
+      description: t.modules.resetTheLoveInYouDesc,
+      icon: <Heart className="w-6 h-6" style={{ color: "hsl(var(--reset-systems))" }} />,
+      color: "reset-systems",
+      status: "locked" as const,
+    },
+    {
+      title: t.modules.resetTheTrustInYou,
+      subtitle: t.modules.resetTheTrustInYouSubtitle,
+      description: t.modules.resetTheTrustInYouDesc,
+      icon: <Flower className="w-6 h-6" style={{ color: "hsl(var(--reset-transformation))" }} />,
+      color: "reset-transformation",
+      status: "locked" as const,
+    },
+  ], [t]);
 
   // Combine base modules with real progress data
   const modules = useMemo(() => {
@@ -131,7 +131,7 @@ const Dashboard = () => {
         progress,
       };
     });
-  }, [getModuleProgress]);
+  }, [getModuleProgress, baseModules]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
