@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type Language = 'en' | 'nl' | 'ru' | 'ar' | 'he';
+type Language = 'en' | 'nl' | 'ru';
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   isTransitioning: boolean;
-  direction: 'ltr' | 'rtl';
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -17,15 +16,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return (saved as Language) || 'en';
   });
   const [isTransitioning, setIsTransitioning] = useState(false);
-  
-  // Determine text direction based on language
-  const direction: 'ltr' | 'rtl' = language === 'ar' || language === 'he' ? 'rtl' : 'ltr';
-
-  // Apply direction to HTML element
-  useEffect(() => {
-    document.documentElement.dir = direction;
-    document.documentElement.lang = language;
-  }, [direction, language]);
 
   const setLanguage = (lang: Language) => {
     if (lang === language) return;
@@ -45,7 +35,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, isTransitioning, direction }}>
+    <LanguageContext.Provider value={{ language, setLanguage, isTransitioning }}>
       <div className={`transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         {children}
       </div>
