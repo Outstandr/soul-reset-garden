@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, BookOpen, Users, Video, Menu, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Index = () => {
               <Button variant="ghost" size="sm" onClick={() => {
                 document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
               }}>Testimonials</Button>
+              <LanguageSwitcher />
               <Button variant="zen" size="sm" onClick={() => navigate('/dashboard')}>
                 Sign In
               </Button>
@@ -69,6 +71,9 @@ const Index = () => {
               >
                 Testimonials
               </Button>
+              <div className="px-2 py-2">
+                <LanguageSwitcher />
+              </div>
               <Button 
                 variant="zen" 
                 className="w-full"
