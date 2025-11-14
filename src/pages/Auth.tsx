@@ -6,9 +6,11 @@ import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { useTranslations } from "@/hooks/useTranslations";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const t = useTranslations();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,7 +44,7 @@ const Auth = () => {
           password,
         });
         if (error) throw error;
-        toast.success("Welcome back!");
+        toast.success(t.auth.signInSuccess);
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -52,10 +54,10 @@ const Auth = () => {
           },
         });
         if (error) throw error;
-        toast.success("Account created! Please check your email.");
+        toast.success(t.auth.signUpSuccess);
       }
     } catch (error: any) {
-      toast.error(error.message || "An error occurred");
+      toast.error(error.message || t.errors.generic);
     } finally {
       setLoading(false);
     }
@@ -70,40 +72,40 @@ const Auth = () => {
           className="mb-4 -ml-2"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Home
+          {t.common.back}
         </Button>
         <Card className="w-full p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">
-            {isLogin ? "Welcome Back" : "Create Account"}
+            {isLogin ? t.auth.welcomeBack : t.auth.createAccount}
           </h1>
           <p className="text-muted-foreground">
             {isLogin
-              ? "Sign in to continue your learning journey"
-              : "Create your account to get started"}
+              ? t.auth.getStarted
+              : t.auth.getStarted}
           </p>
         </div>
 
         <form onSubmit={handleAuth} className="space-y-4">
           <div>
-            <label className="text-sm font-medium mb-2 block">Email</label>
+            <label className="text-sm font-medium mb-2 block">{t.auth.email}</label>
             <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
+              placeholder={t.auth.emailPlaceholder}
               required
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium mb-2 block">Password</label>
+            <label className="text-sm font-medium mb-2 block">{t.auth.password}</label>
             <div className="relative">
               <Input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t.auth.passwordPlaceholder}
                 required
                 className="pr-10"
               />
@@ -124,7 +126,7 @@ const Auth = () => {
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Please wait..." : isLogin ? "Sign In" : "Sign Up"}
+            {loading ? t.common.loading : isLogin ? t.auth.signIn : t.auth.signUp}
           </Button>
         </form>
 
@@ -134,9 +136,7 @@ const Auth = () => {
             onClick={() => setIsLogin(!isLogin)}
             className="text-sm text-primary hover:underline"
           >
-            {isLogin
-              ? "Don't have an account? Sign up"
-              : "Already have an account? Sign in"}
+            {isLogin ? t.auth.noAccount : t.auth.hasAccount}
           </button>
         </div>
       </Card>

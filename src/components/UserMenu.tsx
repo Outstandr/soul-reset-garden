@@ -12,9 +12,11 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LogOut, User, Shield } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "@/hooks/useTranslations";
 
 export const UserMenu = () => {
   const navigate = useNavigate();
+  const t = useTranslations();
   const [userEmail, setUserEmail] = useState<string>("");
   const [userRole, setUserRole] = useState<string | null>(null);
   const [initials, setInitials] = useState<string>("U");
@@ -74,9 +76,9 @@ export const UserMenu = () => {
     const { error } = await supabase.auth.signOut();
     
     if (error) {
-      toast.error("Failed to log out");
+      toast.error(t.userMenu.signOutError);
     } else {
-      toast.success("Logged out successfully");
+      toast.success(t.userMenu.signOutSuccess);
       navigate("/auth");
     }
   };
@@ -96,7 +98,7 @@ export const UserMenu = () => {
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Account</p>
+            <p className="text-sm font-medium leading-none">{t.common.profile}</p>
             <p className="text-xs leading-none text-muted-foreground truncate">
               {userEmail}
             </p>
@@ -114,12 +116,12 @@ export const UserMenu = () => {
         )}
         <DropdownMenuItem onClick={() => navigate("/profile")} className="cursor-pointer">
           <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
+          <span>{t.userMenu.viewProfile}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <span>{t.userMenu.signOut}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

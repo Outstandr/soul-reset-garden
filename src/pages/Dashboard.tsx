@@ -10,6 +10,7 @@ import { UserMenu } from "@/components/UserMenu";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslations } from "@/hooks/useTranslations";
 
 const journeySteps = [
   {
@@ -113,6 +114,7 @@ const baseModules = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const t = useTranslations();
   const { getModuleProgress, isLoading: progressLoading } = useModuleProgress();
 
   useEffect(() => {
@@ -137,11 +139,11 @@ const Dashboard = () => {
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="zen-container py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold gradient-text">RESET Blueprint®️</h1>
+            <h1 className="text-2xl font-bold gradient-text">{t.dashboard.title}</h1>
             <nav className="flex items-center gap-4">
               <Button variant="ghost" size="sm" onClick={() => navigate("/journal")}>
                 <PenLine className="w-4 h-4 mr-2" />
-                Journal
+                {t.nav.journal}
               </Button>
               <LanguageSwitcher />
               <UserMenu />
@@ -155,9 +157,9 @@ const Dashboard = () => {
         {/* Welcome Section */}
         <section className="animate-fade-in-up">
           <div className="mb-8">
-            <h2 className="text-4xl font-bold mb-3">Welcome back, Explorer</h2>
+            <h2 className="text-4xl font-bold mb-3">{t.dashboard.welcome}</h2>
             <p className="text-xl text-muted-foreground">
-              Continue your transformational journey
+              {t.dashboard.continueJourney}
             </p>
           </div>
         </section>
@@ -165,9 +167,9 @@ const Dashboard = () => {
         {/* Journey Circle */}
         <section className="animate-fade-in-up animation-delay-100">
           <div className="text-center mb-8">
-            <h3 className="text-3xl font-bold mb-2">Your Journey Map</h3>
+            <h3 className="text-3xl font-bold mb-2">{t.dashboard.journeyProgress}</h3>
             <p className="text-muted-foreground">
-              From structure to surrender, from doing to becoming
+              {t.dashboard.subtitle}
             </p>
           </div>
           <JourneyCircle steps={journeySteps} currentStep={0} />
@@ -176,9 +178,9 @@ const Dashboard = () => {
         {/* Module Grid */}
         <section className="animate-fade-in-up animation-delay-200">
           <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Your Modules</h3>
+            <h3 className="text-3xl font-bold mb-2">{t.dashboard.availableModules}</h3>
             <p className="text-muted-foreground">
-              Each module builds upon the last, creating holistic transformation
+              {t.dashboard.nextSteps}
             </p>
           </div>
 
@@ -218,8 +220,8 @@ const Dashboard = () => {
         {/* Quick Access */}
         <section className="animate-fade-in-up animation-delay-300">
           <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Quick Access</h3>
-            <p className="text-muted-foreground">Jump to your favorite resources</p>
+            <h3 className="text-3xl font-bold mb-2">{t.dashboard.masterclassLibrary}</h3>
+            <p className="text-muted-foreground">{t.dashboard.masterclassDescription}</p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
@@ -231,8 +233,8 @@ const Dashboard = () => {
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
                   <Library className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle>Masterclass Library</CardTitle>
-                <CardDescription>Full masterclass videos for each pillar</CardDescription>
+                <CardTitle>{t.dashboard.masterclassLibrary}</CardTitle>
+                <CardDescription>{t.dashboard.masterclassDescription}</CardDescription>
               </CardHeader>
             </Card>
 
@@ -264,7 +266,7 @@ const Dashboard = () => {
                 <div className="w-12 h-12 rounded-xl bg-reset-systems/10 flex items-center justify-center mb-4">
                   <PenLine className="w-6 h-6 text-reset-systems" />
                 </div>
-                <CardTitle>Digital Journal</CardTitle>
+                <CardTitle>{t.nav.journal}</CardTitle>
                 <CardDescription>RESET series journals</CardDescription>
               </CardHeader>
             </Card>
@@ -274,14 +276,14 @@ const Dashboard = () => {
         {/* Daily Focus */}
         <section className="animate-fade-in-up animation-delay-400">
           <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Today's Focus</h3>
+            <h3 className="text-3xl font-bold mb-2">{t.dashboard.nextSteps}</h3>
             <p className="text-muted-foreground">Your daily rhythm builder</p>
           </div>
           <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 shadow-soft">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-reset-rhythm animate-pulse" />
-                Today's Focus
+                {t.dashboard.nextSteps}
               </CardTitle>
               <CardDescription>Reflect on one structure that supported your growth</CardDescription>
             </CardHeader>
@@ -291,7 +293,7 @@ const Dashboard = () => {
               </p>
               <Button variant="zen" onClick={() => navigate("/journal")}>
                 <PenLine className="w-4 h-4 mr-2" />
-                Write in Journal
+                {t.dashboard.viewJournal}
               </Button>
             </CardContent>
           </Card>
