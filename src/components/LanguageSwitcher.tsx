@@ -12,8 +12,6 @@ const languages = [
   { code: 'en' as const, label: 'English', flag: '🇬🇧' },
   { code: 'nl' as const, label: 'Nederlands', flag: '🇳🇱' },
   { code: 'ru' as const, label: 'Русский', flag: '🇷🇺' },
-  { code: 'ar' as const, label: 'العربية', flag: '🇸🇦' },
-  { code: 'he' as const, label: 'עברית', flag: '🇮🇱' },
 ];
 
 export const LanguageSwitcher = () => {
