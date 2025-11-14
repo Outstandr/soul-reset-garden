@@ -115,10 +115,10 @@ const Index = () => {
         <div className="zen-container">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              Everything You Need for <span className="gradient-text">Transformation</span>
+              {t.landing.features.title}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              A complete ecosystem designed for your holistic journey
+              {t.landing.features.subtitle}
             </p>
           </div>
 
@@ -128,9 +128,9 @@ const Index = () => {
                 <div className="w-16 h-16 mx-auto rounded-xl bg-reset-rhythm/10 flex items-center justify-center">
                   <Video className="w-8 h-8 text-reset-rhythm" />
                 </div>
-                <h3 className="text-xl font-bold">Masterclass Courses</h3>
+                <h3 className="text-xl font-bold">{t.landing.features.masterclasses.title}</h3>
                 <p className="text-muted-foreground">
-                  In-depth video courses for each RESET module with guided exercises
+                  {t.landing.features.masterclasses.description}
                 </p>
               </CardContent>
             </Card>
@@ -140,9 +140,9 @@ const Index = () => {
                 <div className="w-16 h-16 mx-auto rounded-xl bg-reset-energy/10 flex items-center justify-center">
                   <BookOpen className="w-8 h-8 text-reset-energy" />
                 </div>
-                <h3 className="text-xl font-bold">Digital E-Reader</h3>
+                <h3 className="text-xl font-bold">{t.landing.features.ereader.title}</h3>
                 <p className="text-muted-foreground">
-                  Access all five RESET books with highlighting and note-taking
+                  {t.landing.features.ereader.description}
                 </p>
               </CardContent>
             </Card>
@@ -152,9 +152,9 @@ const Index = () => {
                 <div className="w-16 h-16 mx-auto rounded-xl bg-reset-systems/10 flex items-center justify-center">
                   <Users className="w-8 h-8 text-reset-systems" />
                 </div>
-                <h3 className="text-xl font-bold">Community Circles</h3>
+                <h3 className="text-xl font-bold">{t.landing.features.community.title}</h3>
                 <p className="text-muted-foreground">
-                  Connect with fellow travelers on the RESET journey
+                  {t.landing.features.community.description}
                 </p>
               </CardContent>
             </Card>
@@ -167,35 +167,35 @@ const Index = () => {
         <div className="zen-container">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              What Our <span className="gradient-text">Community</span> Says
+              {t.landing.testimonials.title}
             </h2>
             <p className="text-xl text-muted-foreground">
-              Real transformations from real people
+              {t.landing.testimonials.subtitle}
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
             <Card className="border-0 shadow-medium">
               <CardContent className="pt-8 space-y-4">
                 <p className="text-muted-foreground italic">
-                  "The RESET Blueprint transformed how I approach every day. I've built rhythms that actually stick."
+                  "{t.landing.testimonials.quote1}"
                 </p>
-                <p className="font-semibold">- Sarah M.</p>
+                <p className="font-semibold">- {t.landing.testimonials.author1}</p>
               </CardContent>
             </Card>
             <Card className="border-0 shadow-medium">
               <CardContent className="pt-8 space-y-4">
                 <p className="text-muted-foreground italic">
-                  "Finally, a program that goes beyond surface-level changes. This is about becoming, not just doing."
+                  "{t.landing.testimonials.quote2}"
                 </p>
-                <p className="font-semibold">- James K.</p>
+                <p className="font-semibold">- {t.landing.testimonials.author2}</p>
               </CardContent>
             </Card>
             <Card className="border-0 shadow-medium">
               <CardContent className="pt-8 space-y-4">
                 <p className="text-muted-foreground italic">
-                  "The five pillars gave me a complete framework. I'm not just productive, I'm fulfilled."
+                  "{t.landing.testimonials.quote3}"
                 </p>
-                <p className="font-semibold">- Maria L.</p>
+                <p className="font-semibold">- {t.landing.testimonials.author3}</p>
               </CardContent>
             </Card>
           </div>
@@ -207,19 +207,18 @@ const Index = () => {
         <div className="zen-container text-center">
           <div className="max-w-3xl mx-auto space-y-8">
             <h2 className="text-4xl md:text-5xl font-bold">
-              Ready to Begin Your <span className="gradient-text">RESET</span> Journey?
+              {t.landing.cta.title}
             </h2>
             <p className="text-xl text-muted-foreground">
-              Join 10,000+ students transforming from structure to surrender, 
-              from doing to becoming.
+              {t.landing.cta.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="journey" size="lg" className="text-lg px-8" onClick={() => navigate('/dashboard')}>
-                Start Your Journey
+                {t.landing.cta.button}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8">
-                Download Free Guide
+                {t.landing.cta.downloadGuide}
               </Button>
             </div>
           </div>
@@ -230,8 +229,8 @@ const Index = () => {
       <footer className="border-t border-border bg-card py-12">
         <div className="zen-container">
           <div className="text-center text-muted-foreground">
-            <p className="mb-2">© 2025 RESET Blueprint®️. All rights reserved.</p>
-            <p className="text-sm">From foundation to transformation, one step at a time.</p>
+            <p className="mb-2">© 2025 {t.landing.footer.title}. {t.landing.footer.copyright}</p>
+            <p className="text-sm">{t.landing.footer.description}</p>
           </div>
         </div>
       </footer>
