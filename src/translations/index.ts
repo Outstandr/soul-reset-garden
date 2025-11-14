@@ -93,7 +93,8 @@ export const translations = {
         },
       },
       features: {
-        title: "What You'll Experience",
+        title: "Everything You Need for Transformation",
+        subtitle: "A complete ecosystem designed for your holistic journey",
         structured: {
           title: "Structured Learning",
           description: "Progressive modules that build upon each other",
@@ -103,13 +104,17 @@ export const translations = {
           description: "Connect with like-minded individuals on the same journey",
         },
         masterclasses: {
-          title: "Expert Masterclasses",
-          description: "Deep-dive sessions with industry-leading instructors",
+          title: "Masterclass Courses",
+          description: "In-depth video courses for each RESET module with guided exercises",
+        },
+        ereader: {
+          title: "Digital E-Reader",
+          description: "Access all five RESET books with highlighting and note-taking",
         },
       },
       testimonials: {
-        title: "Success Stories",
-        subtitle: "Join thousands who have transformed their lives",
+        title: "What Our Community Says",
+        subtitle: "Real transformations from real people",
         quote1: "RESET gave me the structure and tools I needed to completely transform my life. The journey was challenging but incredibly rewarding.",
         author1: "Michael R.",
         quote2: "The most comprehensive personal development program I've ever experienced. It goes deep and creates lasting change.",
@@ -118,9 +123,10 @@ export const translations = {
         author3: "David L.",
       },
       cta: {
-        title: "Ready to Begin?",
-        subtitle: "Your transformation starts here",
+        title: "Ready to Begin Your RESET Journey?",
+        subtitle: "Join 10,000+ students transforming from structure to surrender, from doing to becoming.",
         button: "Start Your Journey",
+        downloadGuide: "Download Free Guide",
       },
       footer: {
         title: "RESET Blueprint®️",
@@ -414,7 +420,8 @@ export const translations = {
         },
       },
       features: {
-        title: "Wat Je Zult Ervaren",
+        title: "Alles wat je nodig hebt voor transformatie",
+        subtitle: "Een compleet ecosysteem ontworpen voor jouw holistische reis",
         structured: {
           title: "Gestructureerd Leren",
           description: "Progressieve modules die op elkaar voortbouwen",
@@ -424,13 +431,17 @@ export const translations = {
           description: "Verbind met gelijkgestemde individuen op dezelfde reis",
         },
         masterclasses: {
-          title: "Expert Masterclasses",
-          description: "Diepgaande sessies met toonaangevende instructeurs",
+          title: "Masterclass Cursussen",
+          description: "Diepgaande videocursussen voor elke RESET module met begeleide oefeningen",
+        },
+        ereader: {
+          title: "Digitale E-Reader",
+          description: "Toegang tot alle vijf RESET boeken met markeren en notities maken",
         },
       },
       testimonials: {
-        title: "Succesverhalen",
-        subtitle: "Sluit je aan bij duizenden die hun leven hebben getransformeerd",
+        title: "Wat onze gemeenschap zegt",
+        subtitle: "Echte transformaties van echte mensen",
         quote1: "RESET gaf me de structuur en tools die ik nodig had om mijn leven compleet te transformeren. De reis was uitdagend maar ongelooflijk lonend.",
         author1: "Michael R.",
         quote2: "Het meest uitgebreide persoonlijke ontwikkelingsprogramma dat ik ooit heb meegemaakt. Het gaat diep en creëert blijvende verandering.",
@@ -439,9 +450,10 @@ export const translations = {
         author3: "David L.",
       },
       cta: {
-        title: "Klaar om te Beginnen?",
-        subtitle: "Je transformatie begint hier",
+        title: "Klaar om je RESET reis te beginnen?",
+        subtitle: "Sluit je aan bij 10.000+ studenten die transformeren van structuur naar overgave, van doen naar worden.",
         button: "Start Je Reis",
+        downloadGuide: "Download Gratis Gids",
       },
       footer: {
         title: "RESET Blueprint®️",
@@ -735,7 +747,8 @@ export const translations = {
         },
       },
       features: {
-        title: "Что вы испытаете",
+        title: "Все, что вам нужно для трансформации",
+        subtitle: "Полная экосистема, разработанная для вашего целостного путешествия",
         structured: {
           title: "Структурированное обучение",
           description: "Прогрессивные модули, которые строятся друг на друге",
@@ -745,13 +758,17 @@ export const translations = {
           description: "Общайтесь с единомышленниками на том же пути",
         },
         masterclasses: {
-          title: "Экспертные мастер-классы",
-          description: "Углубленные сессии с ведущими инструкторами",
+          title: "Мастер-класс курсы",
+          description: "Углубленные видеокурсы для каждого модуля RESET с управляемыми упражнениями",
+        },
+        ereader: {
+          title: "Цифровая электронная книга",
+          description: "Доступ ко всем пяти книгам RESET с выделением и заметками",
         },
       },
       testimonials: {
-        title: "Истории успеха",
-        subtitle: "Присоединяйтесь к тысячам, кто изменил свою жизнь",
+        title: "Что говорит наше сообщество",
+        subtitle: "Реальные трансформации реальных людей",
         quote1: "RESET дал мне структуру и инструменты, необходимые для полной трансформации моей жизни. Путешествие было сложным, но невероятно полезным.",
         author1: "Михаил Р.",
         quote2: "Самая всеобъемлющая программа личностного развития, которую я когда-либо испытывал. Она идет глубоко и создает длительные изменения.",
@@ -760,9 +777,10 @@ export const translations = {
         author3: "Давид Л.",
       },
       cta: {
-        title: "Готовы начать?",
-        subtitle: "Ваша трансформация начинается здесь",
+        title: "Готовы начать свое путешествие RESET?",
+        subtitle: "Присоединяйтесь к 10 000+ студентов, трансформирующихся от структуры к доверию, от действия к становлению.",
         button: "Начать путешествие",
+        downloadGuide: "Скачать бесплатное руководство",
       },
       footer: {
         title: "RESET Blueprint®️",
