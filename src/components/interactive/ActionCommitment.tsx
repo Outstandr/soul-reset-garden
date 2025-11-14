@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Target } from "lucide-react";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface ActionCommitmentProps {
   config: {
@@ -17,6 +18,7 @@ interface ActionCommitmentProps {
 }
 
 export const ActionCommitment = ({ config, onComplete, savedResponse }: ActionCommitmentProps) => {
+  const t = useTranslations();
   const [action, setAction] = useState(savedResponse?.action || "");
   const [deadline, setDeadline] = useState(savedResponse?.deadline || "");
   const [accountability, setAccountability] = useState(savedResponse?.accountability || "");
@@ -38,9 +40,9 @@ export const ActionCommitment = ({ config, onComplete, savedResponse }: ActionCo
             <Target className="w-6 h-6 text-reset-execution" />
           </div>
           <div>
-            <CardTitle>{config.title || "Action Commitment"}</CardTitle>
+            <CardTitle>{config.title || t.interactiveComponents.actionCommitment.title}</CardTitle>
             <CardDescription>
-              {config.description || "Commit to your next action"}
+              {config.description || t.interactiveComponents.actionCommitment.instruction}
             </CardDescription>
           </div>
         </div>
@@ -48,13 +50,13 @@ export const ActionCommitment = ({ config, onComplete, savedResponse }: ActionCo
       <CardContent className="space-y-6">
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="action">What specific action will you take?</Label>
+            <Label htmlFor="action">{t.interactiveComponents.actionCommitment.instruction}</Label>
             <Textarea
               id="action"
               value={action}
               onChange={(e) => setAction(e.target.value)}
               disabled={submitted}
-              placeholder="Be specific and measurable..."
+              placeholder={t.interactiveComponents.actionCommitment.placeholder}
               className="min-h-[100px]"
             />
           </div>
@@ -84,13 +86,13 @@ export const ActionCommitment = ({ config, onComplete, savedResponse }: ActionCo
 
         {!submitted && isValid && (
           <Button onClick={handleSubmit} className="w-full">
-            Lock In Commitment
+            {t.interactiveComponents.actionCommitment.submit}
           </Button>
         )}
 
         {submitted && (
           <div className="p-4 bg-reset-execution/10 border border-reset-execution/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">Commitment locked in</p>
+            <p className="text-sm text-muted-foreground">{t.interactiveComponents.actionCommitment.success}</p>
           </div>
         )}
       </CardContent>

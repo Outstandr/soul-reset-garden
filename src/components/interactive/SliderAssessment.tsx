@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface SliderAssessmentProps {
   config: {
@@ -16,6 +17,7 @@ interface SliderAssessmentProps {
 }
 
 export const SliderAssessment = ({ config, onComplete, savedResponse }: SliderAssessmentProps) => {
+  const t = useTranslations();
   const [value, setValue] = useState(savedResponse?.value || 5);
   const [submitted, setSubmitted] = useState(!!savedResponse);
 
@@ -27,7 +29,7 @@ export const SliderAssessment = ({ config, onComplete, savedResponse }: SliderAs
   return (
     <Card className="glass-effect">
       <CardHeader>
-        <CardTitle>Self-Assessment</CardTitle>
+        <CardTitle>{t.interactiveComponents.sliderAssessment.title}</CardTitle>
         <CardDescription>{config.question}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -50,13 +52,13 @@ export const SliderAssessment = ({ config, onComplete, savedResponse }: SliderAs
 
         {!submitted && (
           <Button onClick={handleSubmit} className="w-full">
-            Submit Assessment
+            {t.interactiveComponents.sliderAssessment.submit}
           </Button>
         )}
 
         {submitted && (
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-            <p className="text-sm text-muted-foreground">Assessment completed</p>
+            <p className="text-sm text-muted-foreground">{t.interactiveComponents.selfDiagnostic.submitted}</p>
           </div>
         )}
       </CardContent>
