@@ -6,10 +6,12 @@ import { ArrowRight, BookOpen, Users, Video, Menu, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useTranslations } from "@/hooks/useTranslations";
 
 const Index = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const t = useTranslations();
 
   return (
     <div className="min-h-screen">
@@ -23,16 +25,16 @@ const Index = () => {
             <div className="hidden md:flex items-center gap-4">
               <Button variant="ghost" size="sm" onClick={() => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-              }}>About</Button>
+              }}>{t.landing.about}</Button>
               <Button variant="ghost" size="sm" onClick={() => {
                 document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
-              }}>Testimonials</Button>
+              }}>{t.landing.testimonialsLink}</Button>
               <LanguageSwitcher />
               <Button variant="zen" size="sm" onClick={() => navigate('/dashboard')}>
-                Sign In
+                {t.auth.signIn}
               </Button>
               <Button variant="hero" size="sm" onClick={() => navigate('/dashboard')}>
-                Get Started
+                {t.auth.getStarted}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -59,7 +61,7 @@ const Index = () => {
                   setMobileMenuOpen(false);
                 }}
               >
-                About
+                {t.landing.about}
               </Button>
               <Button 
                 variant="ghost" 
@@ -69,7 +71,7 @@ const Index = () => {
                   setMobileMenuOpen(false);
                 }}
               >
-                Testimonials
+                {t.landing.testimonialsLink}
               </Button>
               <div className="px-2 py-2">
                 <LanguageSwitcher />
@@ -82,7 +84,7 @@ const Index = () => {
                   setMobileMenuOpen(false);
                 }}
               >
-                Sign In
+                {t.auth.signIn}
               </Button>
               <Button 
                 variant="hero" 
@@ -92,7 +94,7 @@ const Index = () => {
                   setMobileMenuOpen(false);
                 }}
               >
-                Get Started
+                {t.auth.getStarted}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
