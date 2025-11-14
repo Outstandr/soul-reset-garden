@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface SelfDiagnosticProps {
   config: {
@@ -13,6 +14,7 @@ interface SelfDiagnosticProps {
 }
 
 export const SelfDiagnostic = ({ config, onComplete, savedResponse }: SelfDiagnosticProps) => {
+  const t = useTranslations();
   const [selectedFocus, setSelectedFocus] = useState<string | null>(savedResponse?.focus || null);
   const [selectedNeglect, setSelectedNeglect] = useState<string | null>(savedResponse?.neglect || null);
   const [showResult, setShowResult] = useState(!!savedResponse);
@@ -27,7 +29,7 @@ export const SelfDiagnostic = ({ config, onComplete, savedResponse }: SelfDiagno
   return (
     <Card className="glass-effect">
       <CardHeader>
-        <CardTitle className="text-2xl gradient-text">Self-Diagnostic Quiz</CardTitle>
+        <CardTitle className="text-2xl gradient-text">{t.interactiveComponents.selfDiagnostic.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
@@ -71,7 +73,7 @@ export const SelfDiagnostic = ({ config, onComplete, savedResponse }: SelfDiagno
 
           {selectedFocus && selectedNeglect && !showResult && (
             <Button onClick={handleSubmit} className="w-full mt-6" size="lg">
-              See Your Result
+              {t.interactiveComponents.selfDiagnostic.submit}
             </Button>
           )}
         </div>

@@ -4,9 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft, BookOpen, Mountain, Play, CheckCircle2, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useTranslations } from "@/hooks/useTranslations";
 
 export default function ResetByDiscipline() {
   const navigate = useNavigate();
+  const t = useTranslations();
   const [module1Completed, setModule1Completed] = useState(false);
 
   useEffect(() => {
@@ -36,31 +38,31 @@ export default function ResetByDiscipline() {
   const stages = [
     {
       id: "book",
-      title: "The Book",
-      subtitle: "Foundation",
-      description: "Start with the Reset by Discipline book to build your foundation of elite self-discipline.",
+      title: t.resetByDiscipline.bookStage,
+      subtitle: t.resetByDiscipline.bookSubtitle,
+      description: t.resetByDiscipline.bookDescription,
       icon: <BookOpen className="w-8 h-8" />,
       status: "active",
       action: () => navigate("/book/reset-by-discipline")
     },
     {
       id: "masterclass",
-      title: "Elite Self Discipline Masterclass",
-      subtitle: "3 Pillars Deep Dive",
-      description: "Master the Mental, Physical, and Spiritual pillars through interactive lessons.",
+      title: t.resetByDiscipline.masterclassStage,
+      subtitle: t.resetByDiscipline.masterclassSubtitle,
+      description: t.resetByDiscipline.masterclassDescription,
       icon: <Mountain className="w-8 h-8" />,
       status: "available",
       pillars: [
-        { name: "Mental Pillar", route: "/mental-pillar", completed: false },
-        { name: "Physical Pillar", route: "/physical-pillar", completed: false },
-        { name: "Spiritual Pillar", route: "/spiritual-pillar", completed: false }
+        { name: t.resetByDiscipline.mentalPillar, route: "/mental-pillar", completed: false },
+        { name: t.resetByDiscipline.physicalPillar, route: "/physical-pillar", completed: false },
+        { name: t.resetByDiscipline.spiritualPillar, route: "/spiritual-pillar", completed: false }
       ]
     },
     {
       id: "integration",
-      title: "Elite Self Discipline Course",
-      subtitle: "18-Lesson Certification Program + Final Exam",
-      description: "Deep dive into 3 modules with quizzes and certification. Must pass each lesson to progress.",
+      title: t.resetByDiscipline.integrationStage,
+      subtitle: t.resetByDiscipline.integrationSubtitle,
+      description: t.resetByDiscipline.integrationDescription,
       icon: <CheckCircle2 className="w-8 h-8" />,
       status: "available",
       modules: [
@@ -84,7 +86,7 @@ export default function ResetByDiscipline() {
                 onClick={() => navigate("/dashboard")}
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
-                Back to Dashboard
+                {t.resetByDiscipline.backToDashboard}
               </Button>
             </div>
           </div>
@@ -94,11 +96,11 @@ export default function ResetByDiscipline() {
           <section className="text-center animate-fade-in-up">
             <div className="inline-flex items-center gap-3 mb-4 px-6 py-3 bg-gradient-to-r from-reset-execution/20 to-reset-execution/10 rounded-full border border-reset-execution/30">
               <Mountain className="w-6 h-6 text-reset-execution" />
-              <span className="text-lg font-bold text-reset-execution">Execution & Action</span>
+              <span className="text-lg font-bold text-reset-execution">{t.resetByDiscipline.subtitle}</span>
             </div>
-            <h1 className="text-5xl font-black gradient-text mb-4">Reset by Discipline</h1>
+            <h1 className="text-5xl font-black gradient-text mb-4">{t.resetByDiscipline.title}</h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Master elite self-discipline through three progressive stages: Foundation, Mastery, and Integration
+              {t.resetByDiscipline.description}
             </p>
           </section>
 
