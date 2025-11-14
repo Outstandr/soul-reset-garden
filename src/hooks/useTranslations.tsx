@@ -1,7 +1,8 @@
+import { useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations } from "@/translations";
 
 export const useTranslations = () => {
   const { language } = useLanguage();
-  return translations[language];
+  return useMemo(() => translations[language], [language]);
 };
