@@ -25,9 +25,13 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         description: "You're now talking with Lionel X",
       });
     },
-    onDisconnect: () => {
-      console.log("Disconnected from voice agent");
+    onDisconnect: (details) => {
+      console.log("Disconnected from voice agent", details);
       setIsConnecting(false);
+      toast({
+        title: "Disconnected",
+        description: "Voice session ended.",
+      });
     },
     onMessage: (message) => {
       console.log("Voice message:", message);
@@ -51,9 +55,16 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
     },
     onError: (error) => {
       console.error("Voice conversation error:", error);
+      const description =
+        typeof error === "string"
+          ? error
+          : error && typeof error === "object"
+            ? JSON.stringify(error)
+            : "Failed to connect to voice agent. Please try again.";
+
       toast({
         title: "Connection Error",
-        description: typeof error === 'string' ? error : "Failed to connect to voice agent. Please try again.",
+        description,
         variant: "destructive",
       });
       setIsConnecting(false);
@@ -97,13 +108,27 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         throw new Error("No conversation token received");
       }
 
-      console.log("Starting voice session with WebRTC token and overrides:", overrides);
+      // ElevenLabs React SDK expects camelCase keys (firstMessage, voiceId, etc.)
+      const sdkOverrides = (() => {
+        if (!overrides || typeof overrides !== "object") return undefined;
+        const o: any = overrides;
+        const agent = o.agent;
+        if (agent?.first_message && !agent.firstMessage) {
+          agent.firstMessage = agent.first_message;
+          delete agent.first_message;
+        }
+        if (agent?.prompt?.prompt && agent.prompt.prompt.prompt) {
+          // no-op safety; keep shape as { agent: { prompt: { prompt: string }}}
+        }
+        return o;
+      })();
+
+      console.log("Starting voice session with WebRTC token and overrides:", sdkOverrides);
 
       // Start the conversation with WebRTC using conversation token
-      // Note: overrides must be passed here, not in the hook initialization
       await conversation.startSession({
         conversationToken: token,
-        overrides: overrides,
+        overrides: sdkOverrides,
         connectionType: "webrtc",
       });
 
