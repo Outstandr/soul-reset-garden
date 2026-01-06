@@ -137,7 +137,7 @@ export const translations = {
     },
     dashboard: {
       title: "RESET Blueprint®️",
-      welcome: "Welcome to Your Journey",
+      welcome: "Welcome to the Reset Blueprint",
       subtitle: "Your path from structure to surrender",
       journeyProgress: "Your Journey Progress",
       nextSteps: "Your Next Steps",
@@ -464,7 +464,7 @@ export const translations = {
     },
     dashboard: {
       title: "RESET Blueprint®️",
-      welcome: "Welkom bij Je Reis",
+      welcome: "Welkom bij de Reset Blueprint",
       subtitle: "Je pad van structuur naar overgave",
       journeyProgress: "Je Reis Voortgang",
       nextSteps: "Je Volgende Stappen",
