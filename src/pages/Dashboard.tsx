@@ -10,6 +10,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "@/hooks/useTranslations";
+import lpaLogoWhite from "@/assets/lpa-logo-white.png";
 
 // Module name mapping to database module_name field
 const MODULE_NAME_MAP: Record<string, string> = {
@@ -88,12 +89,12 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-slate-600 bg-slate-700 backdrop-blur-sm sticky top-0 z-50">
         <div className="zen-container py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold gradient-text">{t.dashboard.title}</h1>
+            <img src={lpaLogoWhite} alt="Leaders Performance Academy" className="h-10" />
             <nav className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => navigate("/journal")}>
+              <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-slate-600" onClick={() => navigate("/journal")}>
                 <PenLine className="w-4 h-4 mr-2" />
                 {t.nav.journal}
               </Button>
