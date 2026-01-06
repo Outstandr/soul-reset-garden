@@ -119,12 +119,6 @@ const Dashboard = () => {
 
         {/* Section 1: Module Grid + Next Steps */}
         <section className="animate-fade-in-up animation-delay-100">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">{t.dashboard.availableModules}</h3>
-            <p className="text-muted-foreground">
-              {t.dashboard.nextSteps}
-            </p>
-          </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {progressLoading ? (
