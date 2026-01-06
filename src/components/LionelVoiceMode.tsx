@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Volume2, VolumeX, Loader2, Phone, PhoneOff } from "lucide-react";
@@ -10,20 +10,10 @@ interface LionelVoiceModeProps {
   onTranscript?: (text: string, isUser: boolean) => void;
 }
 
-interface SessionOverrides {
-  agent?: {
-    prompt?: {
-      prompt?: string;
-    };
-    first_message?: string;
-  };
-}
-
 export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [transcript, setTranscript] = useState<{ role: "user" | "assistant"; text: string }[]>([]);
-  const overridesRef = useRef<SessionOverrides | null>(null);
   const { toast } = useToast();
 
   const conversation = useConversation({
@@ -68,8 +58,6 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
       });
       setIsConnecting(false);
     },
-    // Pass dynamic overrides from ref
-    overrides: overridesRef.current || undefined,
   });
 
   const startConversation = useCallback(async () => {
@@ -109,15 +97,14 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         throw new Error("No conversation token received");
       }
 
-      console.log("Starting voice session with WebRTC token");
-      
-      // Store overrides for the hook
-      overridesRef.current = overrides;
+      console.log("Starting voice session with WebRTC token and overrides:", overrides);
 
       // Start the conversation with WebRTC using conversation token
+      // Note: overrides must be passed here, not in the hook initialization
       await conversation.startSession({
         conversationToken: token,
         overrides: overrides,
+        connectionType: "webrtc",
       });
 
     } catch (error) {
