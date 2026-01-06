@@ -273,6 +273,10 @@ DISCOVERY QUESTIONNAIRE RESPONSES:
 - What holds them back: ${data.what_holds_you_back || 'Not specified'}
 - Where they want to be: ${data.where_you_want_to_be || 'Not specified'}
 
+=== CAREER ===
+- Job title/role: ${data.job_title || 'Not specified'}
+- Industry: ${data.job_industry || 'Not specified'}
+
 === LIFESTYLE ===
 - Occupation type: ${data.occupation_type || 'Not specified'}
 - Family situation: ${data.family_situation || 'Not specified'}

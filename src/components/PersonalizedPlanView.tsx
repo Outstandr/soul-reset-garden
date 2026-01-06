@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { jsPDF } from "jspdf";
 import { 
   Target, Utensils, Dumbbell, BookOpen, Sparkles, ArrowRight, 
   CheckCircle2, AlertTriangle, Clock, Calendar, Droplets, X,
-  ChevronRight, Loader2
+  ChevronRight, Loader2, Download, TrendingUp
 } from "lucide-react";
+import { ProgressTracker } from "./ProgressTracker";
 
 interface PersonalizedPlan {
   summary: {
@@ -105,6 +108,222 @@ export const PersonalizedPlanView = ({ onClose, embedded = false }: Personalized
     }
   };
 
+  const exportToPDF = async () => {
+    if (!plan) return;
+    
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      let yPos = 20;
+      const lineHeight = 7;
+      const margin = 20;
+      const maxWidth = pageWidth - margin * 2;
+
+      // Helper function to add text with word wrap
+      const addWrappedText = (text: string, y: number, fontSize: number = 10): number => {
+        doc.setFontSize(fontSize);
+        const lines = doc.splitTextToSize(text, maxWidth);
+        lines.forEach((line: string) => {
+          if (y > 270) {
+            doc.addPage();
+            y = 20;
+          }
+          doc.text(line, margin, y);
+          y += lineHeight;
+        });
+        return y;
+      };
+
+      // Title
+      doc.setFontSize(24);
+      doc.setFont("helvetica", "bold");
+      doc.text("Your Personalized Plan", margin, yPos);
+      yPos += 15;
+
+      // Subtitle
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(100);
+      doc.text("Created by AI Coach Lionel | LPA Academy", margin, yPos);
+      doc.setTextColor(0);
+      yPos += 15;
+
+      // Summary Section
+      if (plan.summary) {
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text("Overview", margin, yPos);
+        yPos += 10;
+
+        doc.setFont("helvetica", "normal");
+        if (plan.summary.overview) {
+          yPos = addWrappedText(plan.summary.overview, yPos);
+          yPos += 5;
+        }
+
+        if (plan.summary.personality_insight) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Personality Insight:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          yPos = addWrappedText(plan.summary.personality_insight, yPos);
+          yPos += 5;
+        }
+
+        if (plan.summary.strength_areas?.length) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Your Strengths:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          plan.summary.strength_areas.forEach((strength) => {
+            yPos = addWrappedText(`• ${strength}`, yPos);
+          });
+          yPos += 5;
+        }
+
+        if (plan.summary.growth_areas?.length) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Growth Areas:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          plan.summary.growth_areas.forEach((area) => {
+            yPos = addWrappedText(`• ${area}`, yPos);
+          });
+        }
+      }
+
+      // Diet Plan Section
+      if (plan.diet_plan) {
+        doc.addPage();
+        yPos = 20;
+        
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text("Diet Plan", margin, yPos);
+        yPos += 10;
+
+        if (plan.diet_plan.approach) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Approach:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          yPos = addWrappedText(plan.diet_plan.approach, yPos);
+          yPos += 5;
+        }
+
+        if (plan.diet_plan.meal_timing) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Meal Timing:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          yPos = addWrappedText(plan.diet_plan.meal_timing, yPos);
+          yPos += 5;
+        }
+
+        if (plan.diet_plan.daily_structure) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Daily Structure:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          if (plan.diet_plan.daily_structure.morning) yPos = addWrappedText(`Morning: ${plan.diet_plan.daily_structure.morning}`, yPos);
+          if (plan.diet_plan.daily_structure.midday) yPos = addWrappedText(`Midday: ${plan.diet_plan.daily_structure.midday}`, yPos);
+          if (plan.diet_plan.daily_structure.evening) yPos = addWrappedText(`Evening: ${plan.diet_plan.daily_structure.evening}`, yPos);
+          if (plan.diet_plan.daily_structure.snacks) yPos = addWrappedText(`Snacks: ${plan.diet_plan.daily_structure.snacks}`, yPos);
+          yPos += 5;
+        }
+
+        if (plan.diet_plan.prioritize?.length) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Foods to Prioritize:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          plan.diet_plan.prioritize.forEach((food) => {
+            yPos = addWrappedText(`✓ ${food}`, yPos);
+          });
+          yPos += 5;
+        }
+
+        if (plan.diet_plan.avoid?.length) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Foods to Avoid:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          plan.diet_plan.avoid.forEach((food) => {
+            yPos = addWrappedText(`✗ ${food}`, yPos);
+          });
+        }
+      }
+
+      // Training Plan Section
+      if (plan.training_plan) {
+        doc.addPage();
+        yPos = 20;
+        
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text("Training Plan", margin, yPos);
+        yPos += 10;
+
+        if (plan.training_plan.approach) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Approach:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          yPos = addWrappedText(plan.training_plan.approach, yPos);
+          yPos += 5;
+        }
+
+        if (plan.training_plan.weekly_structure?.schedule?.length) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText(`Weekly Schedule (${plan.training_plan.weekly_structure.days_per_week} days, ${plan.training_plan.weekly_structure.session_duration}):`, yPos, 11);
+          doc.setFont("helvetica", "normal");
+          plan.training_plan.weekly_structure.schedule.forEach((day) => {
+            yPos = addWrappedText(`${day.day}: ${day.focus} - ${day.details}`, yPos);
+          });
+          yPos += 5;
+        }
+
+        if (plan.training_plan.progression) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Progression:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          yPos = addWrappedText(plan.training_plan.progression, yPos);
+          yPos += 5;
+        }
+
+        if (plan.training_plan.recovery) {
+          doc.setFont("helvetica", "bold");
+          yPos = addWrappedText("Recovery:", yPos, 11);
+          doc.setFont("helvetica", "normal");
+          yPos = addWrappedText(plan.training_plan.recovery, yPos);
+        }
+      }
+
+      // First Week Actions
+      if (plan.first_week_actions?.length) {
+        doc.addPage();
+        yPos = 20;
+        
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text("First Week Actions", margin, yPos);
+        yPos += 10;
+
+        doc.setFont("helvetica", "normal");
+        plan.first_week_actions.forEach((action, i) => {
+          yPos = addWrappedText(`${i + 1}. ${action}`, yPos);
+        });
+      }
+
+      // Motivational Message
+      if (plan.motivational_message) {
+        yPos += 15;
+        doc.setFont("helvetica", "italic");
+        yPos = addWrappedText(`"${plan.motivational_message}"`, yPos, 11);
+        doc.setFont("helvetica", "normal");
+        yPos = addWrappedText("— Coach Lionel", yPos, 10);
+      }
+
+      // Save the PDF
+      doc.save("LPA-Personalized-Plan.pdf");
+      toast.success("Plan exported successfully!");
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+      toast.error("Failed to export plan");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -130,31 +349,55 @@ export const PersonalizedPlanView = ({ onClose, embedded = false }: Personalized
   return (
     <Wrapper className={embedded ? "" : "glass-effect"}>
       {!embedded && onClose && (
-        <div className="flex justify-end p-4 pb-0">
+        <div className="flex justify-between items-center p-4 pb-0">
+          <Button variant="outline" size="sm" onClick={exportToPDF} className="flex items-center gap-2">
+            <Download className="w-4 h-4" />
+            Export PDF
+          </Button>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="w-4 h-4" />
           </Button>
         </div>
       )}
+      {!embedded && !onClose && (
+        <div className="flex justify-end p-4 pb-0">
+          <Button variant="outline" size="sm" onClick={exportToPDF} className="flex items-center gap-2">
+            <Download className="w-4 h-4" />
+            Export PDF
+          </Button>
+        </div>
+      )}
       
       <CardHeader className={embedded ? "px-0 pt-0" : ""}>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-primary" />
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-xl">{plan.summary?.title || "Your Personalized Plan"}</CardTitle>
+              <CardDescription>Created just for you by AI Coach Lionel</CardDescription>
+            </div>
           </div>
-          <div>
-            <CardTitle className="text-xl">{plan.summary?.title || "Your Personalized Plan"}</CardTitle>
-            <CardDescription>Created just for you by AI Coach Lionel</CardDescription>
-          </div>
+          {embedded && (
+            <Button variant="outline" size="sm" onClick={exportToPDF} className="flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">Export PDF</span>
+            </Button>
+          )}
         </div>
       </CardHeader>
 
       <CardContent className={embedded ? "px-0" : ""}>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+          <TabsList className="grid w-full grid-cols-5 mb-6">
             <TabsTrigger value="overview" className="text-xs sm:text-sm">
               <Target className="w-4 h-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="progress" className="text-xs sm:text-sm">
+              <TrendingUp className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Progress</span>
             </TabsTrigger>
             <TabsTrigger value="diet" className="text-xs sm:text-sm">
               <Utensils className="w-4 h-4 mr-1 sm:mr-2" />
@@ -241,6 +484,10 @@ export const PersonalizedPlanView = ({ onClose, embedded = false }: Personalized
                 </div>
               )}
             </div>
+          </TabsContent>
+
+          <TabsContent value="progress" className="space-y-6">
+            <ProgressTracker embedded />
           </TabsContent>
 
           <TabsContent value="diet" className="space-y-6">
