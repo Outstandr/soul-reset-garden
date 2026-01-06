@@ -97,27 +97,7 @@ ${userContext}
 
 Remember: Short, conversational, one thought at a time. Like you're having a real conversation.`;
 
-    // Build personalized first message
-    let firstMessage = "Hey! Good to hear from you. What's on your mind today?";
-    
-    if (progressData.data && progressData.data.length > 0) {
-      const completedCount = progressData.data.filter((p: any) => p.completed).length;
-      if (completedCount > 0) {
-        firstMessage = `Hey! I see you've been putting in the work - ${completedCount} lessons completed. Nice! What can I help you with today?`;
-      }
-    } else if (journalData.data && journalData.data.length === 0 && quizData.data && quizData.data.length === 0) {
-      firstMessage = "Hey! Looks like you're just starting your journey. Welcome! What's on your mind - any questions about the program or something specific you want to work on?";
-    }
-
-    // Build overrides object for the conversation
-    const overrides = {
-      agent: {
-        prompt: {
-          prompt: systemPrompt
-        },
-        first_message: firstMessage
-      }
-    };
+    console.log('System prompt built, fetching ElevenLabs tokens...');
 
     // Request conversation token for WebRTC
     const tokenResponse = await fetch(
@@ -159,12 +139,12 @@ Remember: Short, conversational, one thought at a time. Like you're having a rea
 
     console.log('Got conversation token and signed URL successfully');
 
-    // Return token + signed_url + overrides
+    // Return token + signed_url + user_context (for sendContextualUpdate after connection)
     return new Response(
       JSON.stringify({
         token: tokenData.token,
         signed_url: signedUrlData.signed_url,
-        overrides: overrides,
+        user_context: userContext,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

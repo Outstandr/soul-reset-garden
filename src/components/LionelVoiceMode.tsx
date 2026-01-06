@@ -102,19 +102,25 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         throw new Error(error.error || 'Failed to get conversation token');
       }
 
-      const { signed_url } = await response.json();
+      const { signed_url, user_context } = await response.json();
 
       if (!signed_url) {
         throw new Error("No signed_url received for voice session");
       }
 
-      console.log("Starting voice session with WebSocket signed_url (no overrides for testing)");
+      console.log("Starting voice session with WebSocket signed_url");
 
-      // Start WITHOUT overrides first to test basic connectivity
+      // Start session without overrides (they were causing disconnects)
       await conversation.startSession({
         signedUrl: signed_url,
         connectionType: "websocket",
       });
+
+      // Send user context after connection is established
+      if (user_context) {
+        console.log("Sending user context to agent");
+        conversation.sendContextualUpdate(user_context);
+      }
 
     } catch (error) {
       console.error("Failed to start voice conversation:", error);
