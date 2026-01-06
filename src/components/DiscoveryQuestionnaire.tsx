@@ -24,6 +24,7 @@ const STEPS = [
   { id: "discipline", title: "Your Discipline", description: "How disciplined are you currently?", icon: Target },
   { id: "personality", title: "Your Personality", description: "Which best describes your personality?", icon: Users },
   { id: "motivation", title: "What Motivates You", description: "What drives you to take action?", icon: Star },
+  { id: "career", title: "Your Career", description: "Tell us about your current job", icon: Briefcase },
   { id: "sleep", title: "Your Sleep", description: "Tell us about your sleep patterns", icon: Moon },
   { id: "eating", title: "Your Eating Patterns", description: "How do you currently eat?", icon: Utensils },
   { id: "nutrition_challenge", title: "Nutrition Challenges", description: "What's your biggest nutrition struggle?", icon: Utensils },
@@ -145,6 +146,22 @@ const TIME_OPTIONS = [
   { value: "flexible", label: "Flexible", description: "I can make time" },
 ];
 
+const INDUSTRY_OPTIONS = [
+  { value: "technology", label: "Technology / IT" },
+  { value: "healthcare", label: "Healthcare / Medical" },
+  { value: "finance", label: "Finance / Banking" },
+  { value: "education", label: "Education" },
+  { value: "retail", label: "Retail / E-commerce" },
+  { value: "manufacturing", label: "Manufacturing" },
+  { value: "construction", label: "Construction" },
+  { value: "hospitality", label: "Hospitality / Food Service" },
+  { value: "creative", label: "Creative / Media" },
+  { value: "consulting", label: "Consulting / Professional Services" },
+  { value: "government", label: "Government / Public Sector" },
+  { value: "sports_fitness", label: "Sports / Fitness" },
+  { value: "other", label: "Other" },
+];
+
 interface DiscoveryQuestionnaireProps {
   onComplete: () => void;
 }
@@ -165,6 +182,8 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
     personality_type: "",
     motivation_style: "",
     decision_making: "",
+    job_title: "",
+    job_industry: "",
     sleep_hours: 7,
     sleep_quality: 5,
     wake_up_time: "",
@@ -207,18 +226,19 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
 
   const canProceed = () => {
     switch (currentStep) {
-      case 0: case 1: case 2: case 3: case 15: return true; // Sliders
+      case 0: case 1: case 2: case 3: case 16: return true; // Sliders
       case 4: return formData.personality_type !== "";
       case 5: return formData.motivation_style !== "" && formData.decision_making !== "";
-      case 6: return formData.wake_up_time !== "";
-      case 7: return formData.eating_style !== "";
-      case 8: return formData.biggest_nutrition_challenge.trim().length >= 5;
-      case 9: return formData.workout_frequency !== "" && formData.preferred_workout !== "" && formData.fitness_goal !== "";
-      case 10: return formData.primary_goal !== "";
-      case 11: return formData.occupation_type !== "" && formData.family_situation !== "" && formData.biggest_life_priority !== "";
-      case 12: return formData.time_available !== "";
-      case 13: return formData.describe_yourself.trim().length >= 20;
-      case 14: return formData.where_you_want_to_be.trim().length >= 20 && formData.what_holds_you_back.trim().length >= 10;
+      case 6: return formData.job_title.trim().length >= 2 && formData.job_industry !== "";
+      case 7: return formData.wake_up_time !== "";
+      case 8: return formData.eating_style !== "";
+      case 9: return formData.biggest_nutrition_challenge.trim().length >= 5;
+      case 10: return formData.workout_frequency !== "" && formData.preferred_workout !== "" && formData.fitness_goal !== "";
+      case 11: return formData.primary_goal !== "";
+      case 12: return formData.occupation_type !== "" && formData.family_situation !== "" && formData.biggest_life_priority !== "";
+      case 13: return formData.time_available !== "";
+      case 14: return formData.describe_yourself.trim().length >= 20;
+      case 15: return formData.where_you_want_to_be.trim().length >= 20 && formData.what_holds_you_back.trim().length >= 10;
       default: return false;
     }
   };
@@ -389,7 +409,37 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 6: // Sleep
+      case 6: // Career
+        return (
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-medium mb-3">What is your current job title/role?</h4>
+              <input
+                type="text"
+                value={formData.job_title}
+                onChange={(e) => updateField('job_title', e.target.value)}
+                placeholder="e.g., Software Engineer, Sales Manager, Teacher..."
+                className="w-full p-3 rounded-lg border bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+              />
+              <p className="text-sm text-muted-foreground text-right mt-1">
+                {formData.job_title.trim().length < 2 ? `${2 - formData.job_title.trim().length} more characters` : "✓"}
+              </p>
+            </div>
+            <div>
+              <h4 className="font-medium mb-3">What industry do you work in?</h4>
+              <RadioGroup value={formData.job_industry} onValueChange={(v) => updateField('job_industry', v)} className="grid grid-cols-2 gap-2">
+                {INDUSTRY_OPTIONS.map((opt) => (
+                  <div key={opt.value} className={`p-2 rounded-lg border transition-all cursor-pointer hover:border-primary/50 text-center ${formData.job_industry === opt.value ? "border-primary bg-primary/5" : "border-border"}`} onClick={() => updateField('job_industry', opt.value)}>
+                    <RadioGroupItem value={opt.value} id={`ind-${opt.value}`} className="sr-only" />
+                    <Label htmlFor={`ind-${opt.value}`} className="cursor-pointer text-sm">{opt.label}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          </div>
+        );
+
+      case 7: // Sleep
         return (
           <div className="space-y-6">
             <div>
@@ -425,7 +475,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 7: // Eating patterns
+      case 8: // Eating patterns
         return (
           <div className="space-y-6">
             <div>
@@ -473,7 +523,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 8: // Nutrition challenge
+      case 9: // Nutrition challenge
         return (
           <div className="space-y-4 py-4">
             <Textarea
@@ -488,7 +538,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 9: // Fitness
+      case 10: // Fitness
         return (
           <div className="space-y-6">
             <div>
@@ -535,7 +585,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 10: // Goals
+      case 11: // Goals
         return (
           <div className="space-y-6">
             <div>
@@ -566,7 +616,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 11: // Lifestyle
+      case 12: // Lifestyle
         return (
           <div className="space-y-6">
             <div>
@@ -609,7 +659,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 12: // Time
+      case 13: // Time
         return (
           <RadioGroup value={formData.time_available} onValueChange={(v) => updateField('time_available', v)} className="space-y-3">
             {TIME_OPTIONS.map((opt) => (
@@ -624,7 +674,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </RadioGroup>
         );
 
-      case 13: // About you
+      case 14: // About you
         return (
           <div className="space-y-4 py-4">
             <p className="text-sm text-muted-foreground">Describe yourself - your strengths, weaknesses, what makes you who you are...</p>
@@ -640,7 +690,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 14: // Vision
+      case 15: // Vision
         return (
           <div className="space-y-6 py-4">
             <div>
@@ -679,7 +729,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
           </div>
         );
 
-      case 15: // Commitment
+      case 16: // Commitment
         return (
           <div className="space-y-6 py-4">
             <p className="text-center text-muted-foreground">On a scale of 1-10, how committed are you to transforming your life?</p>

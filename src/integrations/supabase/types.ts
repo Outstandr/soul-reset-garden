@@ -310,6 +310,8 @@ export type Database = {
           health_level: number | null
           hydration_level: number | null
           id: string
+          job_industry: string | null
+          job_title: string | null
           meals_per_day: number | null
           motivation_style: string | null
           occupation_type: string | null
@@ -350,6 +352,8 @@ export type Database = {
           health_level?: number | null
           hydration_level?: number | null
           id?: string
+          job_industry?: string | null
+          job_title?: string | null
           meals_per_day?: number | null
           motivation_style?: string | null
           occupation_type?: string | null
@@ -390,6 +394,8 @@ export type Database = {
           health_level?: number | null
           hydration_level?: number | null
           id?: string
+          job_industry?: string | null
+          job_title?: string | null
           meals_per_day?: number | null
           motivation_style?: string | null
           occupation_type?: string | null
