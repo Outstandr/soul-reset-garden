@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from "react";
-import { JourneyCircle } from "@/components/JourneyCircle";
 import { ModuleCard } from "@/components/ModuleCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,53 +29,6 @@ const Dashboard = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const journeySteps = useMemo(() => [
-    {
-      id: "rhythm",
-      letter: "R",
-      title: t.journey.rhythm,
-      color: "reset-rhythm",
-      icon: "bamboo",
-      completed: false,
-      active: true,
-    },
-    {
-      id: "energy",
-      letter: "E",
-      title: t.journey.energy,
-      color: "reset-energy",
-      icon: "water",
-      completed: false,
-      active: false,
-    },
-    {
-      id: "systems",
-      letter: "S",
-      title: t.journey.systems,
-      color: "reset-systems",
-      icon: "roots",
-      completed: false,
-      active: false,
-    },
-    {
-      id: "execution",
-      letter: "E",
-      title: t.journey.execution,
-      color: "reset-execution",
-      icon: "mountain",
-      completed: false,
-      active: false,
-    },
-    {
-      id: "transformation",
-      letter: "T",
-      title: t.journey.transformation,
-      color: "reset-transformation",
-      icon: "lotus",
-      completed: false,
-      active: false,
-    },
-  ], [t]);
 
   const baseModules = useMemo(() => [
     {
@@ -164,15 +116,13 @@ const Dashboard = () => {
           </div>
         </section>
 
-        {/* Journey Circle */}
+        {/* Lionel Coach */}
         <section className="animate-fade-in-up animation-delay-100">
-          <div className="text-center mb-8">
-            <h3 className="text-3xl font-bold mb-2">{t.dashboard.journeyProgress}</h3>
-            <p className="text-muted-foreground">
-              {t.dashboard.subtitle}
-            </p>
+          <div className="mb-8">
+            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
+            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
           </div>
-          <JourneyCircle steps={journeySteps} currentStep={0} />
+          <LionelCoach />
         </section>
 
         {/* Module Grid */}
@@ -299,14 +249,6 @@ const Dashboard = () => {
           </Card>
         </section>
 
-        {/* Lionel Coach */}
-        <section className="animate-fade-in-up animation-delay-500">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
-            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
-          </div>
-          <LionelCoach />
-        </section>
       </main>
     </div>
   );
