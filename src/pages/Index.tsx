@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useTranslations } from "@/hooks/useTranslations";
+import lpaLogo from "@/assets/lpa-logo.png";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -14,12 +15,14 @@ const Index = () => {
   const t = useTranslations();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-sm border-b border-border">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="zen-container py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl md:text-2xl font-bold gradient-text">RESET Blueprint®️</h1>
+            <div className="flex items-center gap-3">
+              <img src={lpaLogo} alt="Leaders Performance Academy" className="h-10 md:h-12 w-auto" />
+            </div>
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-4">
@@ -30,10 +33,10 @@ const Index = () => {
                 document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
               }}>{t.landing.testimonialsLink}</Button>
               <LanguageSwitcher />
-              <Button variant="zen" size="sm" onClick={() => navigate('/dashboard')}>
+              <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
                 {t.auth.signIn}
               </Button>
-              <Button variant="hero" size="sm" onClick={() => navigate('/dashboard')}>
+              <Button size="sm" onClick={() => navigate('/dashboard')}>
                 {t.auth.getStarted}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -77,7 +80,7 @@ const Index = () => {
                 <LanguageSwitcher />
               </div>
               <Button 
-                variant="zen" 
+                variant="outline" 
                 className="w-full"
                 onClick={() => {
                   navigate('/dashboard');
@@ -87,7 +90,6 @@ const Index = () => {
                 {t.auth.signIn}
               </Button>
               <Button 
-                variant="hero" 
                 className="w-full"
                 onClick={() => {
                   navigate('/dashboard');
@@ -111,7 +113,7 @@ const Index = () => {
       </div>
 
       {/* Features Section */}
-      <section className="py-24 bg-muted/30">
+      <section className="py-24 bg-muted/50">
         <div className="zen-container">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
@@ -123,10 +125,10 @@ const Index = () => {
           </div>
 
           <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-            <Card className="border-0 shadow-medium hover:shadow-strong transition-shadow">
+            <Card className="border border-border shadow-soft hover:shadow-medium transition-shadow">
               <CardContent className="pt-8 text-center space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-xl bg-reset-rhythm/10 flex items-center justify-center">
-                  <Video className="w-8 h-8 text-reset-rhythm" />
+                <div className="w-16 h-16 mx-auto rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Video className="w-8 h-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">{t.landing.features.masterclasses.title}</h3>
                 <p className="text-muted-foreground">
@@ -135,10 +137,10 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-medium hover:shadow-strong transition-shadow">
+            <Card className="border border-border shadow-soft hover:shadow-medium transition-shadow">
               <CardContent className="pt-8 text-center space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-xl bg-reset-energy/10 flex items-center justify-center">
-                  <BookOpen className="w-8 h-8 text-reset-energy" />
+                <div className="w-16 h-16 mx-auto rounded-xl bg-primary/10 flex items-center justify-center">
+                  <BookOpen className="w-8 h-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">{t.landing.features.ereader.title}</h3>
                 <p className="text-muted-foreground">
@@ -147,10 +149,10 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-medium hover:shadow-strong transition-shadow">
+            <Card className="border border-border shadow-soft hover:shadow-medium transition-shadow">
               <CardContent className="pt-8 text-center space-y-4">
-                <div className="w-16 h-16 mx-auto rounded-xl bg-reset-systems/10 flex items-center justify-center">
-                  <Users className="w-8 h-8 text-reset-systems" />
+                <div className="w-16 h-16 mx-auto rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Users className="w-8 h-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold">{t.landing.features.community.title}</h3>
                 <p className="text-muted-foreground">
@@ -163,7 +165,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-24 bg-gradient-to-br from-primary/5 via-reset-energy/5 to-reset-transformation/5">
+      <section id="testimonials" className="py-24 bg-background">
         <div className="zen-container">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
@@ -174,7 +176,7 @@ const Index = () => {
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-            <Card className="border-0 shadow-medium">
+            <Card className="border border-border shadow-soft">
               <CardContent className="pt-8 space-y-4">
                 <p className="text-muted-foreground italic">
                   "{t.landing.testimonials.quote1}"
@@ -182,7 +184,7 @@ const Index = () => {
                 <p className="font-semibold">- {t.landing.testimonials.author1}</p>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-medium">
+            <Card className="border border-border shadow-soft">
               <CardContent className="pt-8 space-y-4">
                 <p className="text-muted-foreground italic">
                   "{t.landing.testimonials.quote2}"
@@ -190,7 +192,7 @@ const Index = () => {
                 <p className="font-semibold">- {t.landing.testimonials.author2}</p>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-medium">
+            <Card className="border border-border shadow-soft">
               <CardContent className="pt-8 space-y-4">
                 <p className="text-muted-foreground italic">
                   "{t.landing.testimonials.quote3}"
@@ -203,21 +205,21 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-muted/30">
+      <section className="py-24 bg-primary">
         <div className="zen-container text-center">
           <div className="max-w-3xl mx-auto space-y-8">
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground">
               {t.landing.cta.title}
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-primary-foreground/90">
               {t.landing.cta.subtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="journey" size="lg" className="text-lg px-8" onClick={() => navigate('/dashboard')}>
+              <Button size="lg" variant="secondary" className="text-lg px-8 bg-background text-foreground hover:bg-background/90" onClick={() => navigate('/dashboard')}>
                 {t.landing.cta.button}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8">
+              <Button size="lg" variant="outline" className="text-lg px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
                 {t.landing.cta.downloadGuide}
               </Button>
             </div>
@@ -226,11 +228,14 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-card py-12">
+      <footer className="border-t border-border bg-background py-12">
         <div className="zen-container">
-          <div className="text-center text-muted-foreground">
-            <p className="mb-2">© 2025 {t.landing.footer.title}. {t.landing.footer.copyright}</p>
-            <p className="text-sm">{t.landing.footer.description}</p>
+          <div className="flex flex-col items-center gap-4">
+            <img src={lpaLogo} alt="Leaders Performance Academy" className="h-12 w-auto opacity-80" />
+            <div className="text-center text-muted-foreground">
+              <p className="mb-2">© 2025 {t.landing.footer.title}. {t.landing.footer.copyright}</p>
+              <p className="text-sm">{t.landing.footer.description}</p>
+            </div>
           </div>
         </div>
       </footer>

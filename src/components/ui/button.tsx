@@ -9,15 +9,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-medium hover:bg-primary/90 hover:shadow-strong transition-all",
-        destructive: "bg-destructive text-destructive-foreground shadow-medium hover:bg-destructive/90 hover:shadow-strong",
-        outline: "border-2 border-input bg-background shadow-soft hover:bg-accent hover:text-accent-foreground hover:border-accent hover:shadow-medium transition-all",
-        secondary: "bg-secondary text-secondary-foreground shadow-medium hover:bg-secondary/90 hover:shadow-strong transition-all",
-        ghost: "hover:bg-accent/20 hover:text-accent-foreground transition-all",
+        default: "bg-primary text-primary-foreground shadow-soft hover:bg-primary/90 hover:shadow-medium transition-all",
+        destructive: "bg-destructive text-destructive-foreground shadow-soft hover:bg-destructive/90 hover:shadow-medium",
+        outline: "border border-input bg-background hover:bg-muted hover:border-primary/50 transition-all",
+        secondary: "bg-secondary text-secondary-foreground shadow-soft hover:bg-secondary/90 hover:shadow-medium transition-all",
+        ghost: "hover:bg-muted hover:text-foreground transition-all",
         link: "text-primary underline-offset-4 hover:underline",
-        hero: "bg-gradient-to-r from-primary via-secondary to-accent text-white font-black shadow-neon hover:shadow-glow hover:scale-110 transition-all border-2 border-white/20 animate-gradient",
-        zen: "bg-gradient-to-br from-card to-primary/10 text-foreground font-bold border-3 border-primary/30 hover:border-primary shadow-medium hover:shadow-strong hover:scale-105 transition-all",
-        journey: "bg-gradient-to-r from-reset-rhythm via-reset-energy to-reset-transformation text-white font-black shadow-neon hover:shadow-glow hover:scale-110 transition-all animate-gradient",
+        hero: "bg-primary text-primary-foreground font-bold shadow-medium hover:bg-primary/90 hover:shadow-strong transition-all",
+        zen: "bg-muted text-foreground font-medium border border-border hover:border-primary/50 hover:bg-muted/80 transition-all",
+        journey: "bg-primary text-primary-foreground font-bold shadow-medium hover:bg-primary/90 hover:shadow-strong transition-all",
       },
       size: {
         default: "h-10 px-4 py-2",
