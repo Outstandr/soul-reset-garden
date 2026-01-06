@@ -10,13 +10,13 @@ All colors MUST be HSL.
   :root {
     /* Leaders Performance Academy - Clean White & Green Theme */
     --background: 0 0% 100%;  /* Pure white background */
-    --foreground: 210 20% 15%;  /* Dark slate for text */
+    --foreground: 215 25% 35%;  /* Slate blue for text */
 
     --card: 0 0% 100%;  /* White cards */
-    --card-foreground: 210 20% 15%;
+    --card-foreground: 215 25% 35%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 20% 15%;
+    --popover-foreground: 215 25% 35%;
 
     /* Primary: LPA Green #5bac5d = hsl(122, 31%, 52%) */
     --primary: 122 31% 52%;
@@ -28,7 +28,7 @@ All colors MUST be HSL.
 
     /* Muted: Light grey */
     --muted: 0 0% 96%;
-    --muted-foreground: 210 15% 45%;
+    --muted-foreground: 215 20% 50%;
 
     /* Accent: LPA Green */
     --accent: 122 31% 52%;
