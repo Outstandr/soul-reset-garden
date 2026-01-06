@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -15,14 +21,18 @@ interface VisionJournalProps {
   savedResponse?: any;
 }
 
-export const VisionJournal = ({ config, onComplete, savedResponse }: VisionJournalProps) => {
+export const VisionJournal = ({
+  config,
+  onComplete,
+  savedResponse,
+}: VisionJournalProps) => {
   const [responses, setResponses] = useState<Record<string, string>>(
     savedResponse?.responses || {}
   );
   const [submitted, setSubmitted] = useState(!!savedResponse);
 
   const handleResponseChange = (prompt: string, value: string) => {
-    setResponses(prev => ({ ...prev, [prompt]: value }));
+    setResponses((prev) => ({ ...prev, [prompt]: value }));
   };
 
   const handleSubmit = () => {
@@ -30,7 +40,9 @@ export const VisionJournal = ({ config, onComplete, savedResponse }: VisionJourn
     setSubmitted(true);
   };
 
-  const allFilled = (config.prompts || []).every(prompt => responses[prompt]?.trim());
+  const allFilled = (config.prompts || []).every((prompt) =>
+    responses[prompt]?.trim()
+  );
 
   return (
     <Card className="glass-effect">
@@ -64,10 +76,21 @@ export const VisionJournal = ({ config, onComplete, savedResponse }: VisionJourn
           </div>
         ))}
 
-        {!submitted && allFilled && (
-          <Button onClick={handleSubmit} className="w-full">
-            Save Vision
-          </Button>
+        {!submitted && (
+          <div className="space-y-2">
+            <Button
+              onClick={handleSubmit}
+              className="w-full"
+              disabled={!allFilled}
+            >
+              Save Vision
+            </Button>
+            {!allFilled && (
+              <p className="text-sm text-muted-foreground">
+                Answer all prompts above to continue.
+              </p>
+            )}
+          </div>
         )}
 
         {submitted && (

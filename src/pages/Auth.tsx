@@ -45,35 +45,43 @@ const Auth = () => {
   useEffect(() => {
     let cancelled = false;
 
-    const handleSession = (sessionUserId: string) => {
+    const resolveDiscovery = async (sessionUserId: string) => {
       setCheckingDiscovery(true);
-      setTimeout(async () => {
-        try {
-          const hasCompleted = await checkDiscoveryStatus(sessionUserId);
-          if (cancelled) return;
-          if (hasCompleted) {
-            navigate("/dashboard");
-          } else {
-            setShowDiscovery(true);
-          }
-        } catch {
-          if (!cancelled) setShowDiscovery(true);
-        } finally {
-          if (!cancelled) setCheckingDiscovery(false);
+      try {
+        const hasCompleted = await checkDiscoveryStatus(sessionUserId);
+        if (cancelled) return;
+        if (hasCompleted) {
+          navigate("/dashboard");
+        } else {
+          setShowDiscovery(true);
         }
-      }, 0);
+      } catch {
+        if (!cancelled) setShowDiscovery(true);
+      } finally {
+        if (!cancelled) setCheckingDiscovery(false);
+      }
     };
 
     // Listener FIRST (avoid missing events)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       const userId = session?.user?.id;
-      if (userId) handleSession(userId);
+
+      // Important: if the session temporarily becomes null (tab switch / refresh),
+      // don't reset the questionnaire; just ensure we aren't stuck on "Loading...".
+      if (!userId) {
+        setCheckingDiscovery(false);
+        return;
+      }
+
+      void resolveDiscovery(userId);
     });
 
     // THEN fetch current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       const userId = session?.user?.id;
-      if (userId) handleSession(userId);
+      if (userId) void resolveDiscovery(userId);
     });
 
     return () => {
