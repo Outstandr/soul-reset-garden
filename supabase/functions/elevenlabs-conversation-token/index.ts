@@ -119,8 +119,8 @@ Remember: Short, conversational, one thought at a time. Like you're having a rea
       }
     };
 
-    // Request conversation token for WebRTC (preferred for lower latency)
-    const response = await fetch(
+    // Request conversation token for WebRTC
+    const tokenResponse = await fetch(
       `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${ELEVENLABS_AGENT_ID}`,
       {
         method: 'GET',
@@ -130,24 +130,44 @@ Remember: Short, conversational, one thought at a time. Like you're having a rea
       }
     );
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('ElevenLabs API error:', response.status, errorText);
-      throw new Error(`ElevenLabs API error: ${response.status}`);
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      console.error('ElevenLabs token API error:', tokenResponse.status, errorText);
+      throw new Error(`ElevenLabs token API error: ${tokenResponse.status}`);
     }
 
-    const tokenData = await response.json();
-    console.log('Got conversation token successfully');
+    const tokenData = await tokenResponse.json();
 
-    // Return the token and overrides
-    // Client will use both to start the session
+    // Request signed URL for WebSocket (fallback / often more compatible than WebRTC)
+    const signedUrlResponse = await fetch(
+      `https://api.elevenlabs.io/v1/convai/conversation/get-signed-url?agent_id=${ELEVENLABS_AGENT_ID}`,
+      {
+        method: 'GET',
+        headers: {
+          'xi-api-key': ELEVENLABS_API_KEY,
+        },
+      }
+    );
+
+    if (!signedUrlResponse.ok) {
+      const errorText = await signedUrlResponse.text();
+      console.error('ElevenLabs signed URL API error:', signedUrlResponse.status, errorText);
+      throw new Error(`ElevenLabs signed URL API error: ${signedUrlResponse.status}`);
+    }
+
+    const signedUrlData = await signedUrlResponse.json();
+
+    console.log('Got conversation token and signed URL successfully');
+
+    // Return token + signed_url + overrides
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         token: tokenData.token,
-        overrides: overrides
+        signed_url: signedUrlData.signed_url,
+        overrides: overrides,
       }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
 
