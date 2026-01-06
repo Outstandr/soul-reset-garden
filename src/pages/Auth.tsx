@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "@/hooks/useTranslations";
+import { DiscoveryQuestionnaire } from "@/components/DiscoveryQuestionnaire";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -16,17 +17,42 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showDiscovery, setShowDiscovery] = useState(false);
+  const [checkingDiscovery, setCheckingDiscovery] = useState(false);
+
+  const checkDiscoveryStatus = async (userId: string) => {
+    const { data } = await supabase
+      .from("user_discovery")
+      .select("id")
+      .eq("user_id", userId)
+      .maybeSingle();
+    return !!data;
+  };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
-        navigate("/dashboard");
+        setCheckingDiscovery(true);
+        const hasCompleted = await checkDiscoveryStatus(session.user.id);
+        setCheckingDiscovery(false);
+        if (hasCompleted) {
+          navigate("/dashboard");
+        } else {
+          setShowDiscovery(true);
+        }
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        navigate("/dashboard");
+        setCheckingDiscovery(true);
+        const hasCompleted = await checkDiscoveryStatus(session.user.id);
+        setCheckingDiscovery(false);
+        if (hasCompleted) {
+          navigate("/dashboard");
+        } else {
+          setShowDiscovery(true);
+        }
       }
     });
 
@@ -62,6 +88,25 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
+  const handleDiscoveryComplete = () => {
+    setShowDiscovery(false);
+    navigate("/dashboard");
+  };
+
+  // Show loading while checking discovery status
+  if (checkingDiscovery) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  // Show discovery questionnaire for new users
+  if (showDiscovery) {
+    return <DiscoveryQuestionnaire onComplete={handleDiscoveryComplete} />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5 p-4">

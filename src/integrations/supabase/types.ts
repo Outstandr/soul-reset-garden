@@ -291,6 +291,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_discovery: {
+        Row: {
+          biggest_challenge: string
+          created_at: string
+          energy_level: number
+          health_level: number
+          id: string
+          primary_goal: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          biggest_challenge: string
+          created_at?: string
+          energy_level: number
+          health_level: number
+          id?: string
+          primary_goal: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          biggest_challenge?: string
+          created_at?: string
+          energy_level?: number
+          health_level?: number
+          id?: string
+          primary_goal?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_highlights: {
         Row: {
           created_at: string
