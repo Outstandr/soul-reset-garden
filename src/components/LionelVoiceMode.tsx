@@ -102,30 +102,17 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         throw new Error(error.error || 'Failed to get conversation token');
       }
 
-      const { token, signed_url, overrides } = await response.json();
+      const { signed_url } = await response.json();
 
-      // ElevenLabs React SDK expects camelCase keys (firstMessage, voiceId, etc.)
-      const sdkOverrides = (() => {
-        if (!overrides || typeof overrides !== "object") return undefined;
-        const o: any = overrides;
-        const agent = o.agent;
-        if (agent?.first_message && !agent.firstMessage) {
-          agent.firstMessage = agent.first_message;
-          delete agent.first_message;
-        }
-        return o;
-      })();
-
-      // WebSocket is typically more compatible across browsers/networks than WebRTC.
       if (!signed_url) {
         throw new Error("No signed_url received for voice session");
       }
 
-      console.log("Starting voice session with WebSocket signed_url and overrides:", sdkOverrides);
+      console.log("Starting voice session with WebSocket signed_url (no overrides for testing)");
 
+      // Start WITHOUT overrides first to test basic connectivity
       await conversation.startSession({
         signedUrl: signed_url,
-        overrides: sdkOverrides,
         connectionType: "websocket",
       });
 
