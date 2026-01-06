@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Volume2, VolumeX, Loader2, Phone, PhoneOff } from "lucide-react";
@@ -10,15 +10,26 @@ interface LionelVoiceModeProps {
   onTranscript?: (text: string, isUser: boolean) => void;
 }
 
+interface SessionOverrides {
+  agent?: {
+    prompt?: {
+      prompt?: string;
+    };
+    first_message?: string;
+  };
+}
+
 export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [transcript, setTranscript] = useState<{ role: "user" | "assistant"; text: string }[]>([]);
+  const overridesRef = useRef<SessionOverrides | null>(null);
   const { toast } = useToast();
 
   const conversation = useConversation({
     onConnect: () => {
       console.log("Connected to Lionel X voice agent");
+      setIsConnecting(false);
       toast({
         title: "Connected",
         description: "You're now talking with Lionel X",
@@ -26,6 +37,7 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
     },
     onDisconnect: () => {
       console.log("Disconnected from voice agent");
+      setIsConnecting(false);
     },
     onMessage: (message) => {
       console.log("Voice message:", message);
@@ -51,11 +63,13 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
       console.error("Voice conversation error:", error);
       toast({
         title: "Connection Error",
-        description: "Failed to connect to voice agent. Please try again.",
+        description: typeof error === 'string' ? error : "Failed to connect to voice agent. Please try again.",
         variant: "destructive",
       });
       setIsConnecting(false);
     },
+    // Pass dynamic overrides from ref
+    overrides: overridesRef.current || undefined,
   });
 
   const startConversation = useCallback(async () => {
@@ -72,7 +86,7 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         throw new Error("Please sign in to use voice mode");
       }
 
-      // Get signed URL and overrides from edge function
+      // Get conversation token and overrides from edge function
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-conversation-token`,
         {
@@ -89,15 +103,20 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         throw new Error(error.error || 'Failed to get conversation token');
       }
 
-      const { signed_url, overrides } = await response.json();
+      const { token, overrides } = await response.json();
 
-      if (!signed_url) {
-        throw new Error("No signed URL received");
+      if (!token) {
+        throw new Error("No conversation token received");
       }
 
-      // Start the conversation with WebSocket
+      console.log("Starting voice session with WebRTC token");
+      
+      // Store overrides for the hook
+      overridesRef.current = overrides;
+
+      // Start the conversation with WebRTC using conversation token
       await conversation.startSession({
-        signedUrl: signed_url,
+        conversationToken: token,
         overrides: overrides,
       });
 
@@ -108,7 +127,6 @@ export const LionelVoiceMode = ({ onTranscript }: LionelVoiceModeProps) => {
         description: error instanceof Error ? error.message : "Failed to start voice mode",
         variant: "destructive",
       });
-    } finally {
       setIsConnecting(false);
     }
   }, [conversation, toast]);

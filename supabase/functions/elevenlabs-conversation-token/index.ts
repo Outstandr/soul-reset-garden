@@ -101,7 +101,7 @@ Remember: Short, conversational, one thought at a time. Like you're having a rea
     let firstMessage = "Hey! Good to hear from you. What's on your mind today?";
     
     if (progressData.data && progressData.data.length > 0) {
-      const completedCount = progressData.data.filter(p => p.completed).length;
+      const completedCount = progressData.data.filter((p: any) => p.completed).length;
       if (completedCount > 0) {
         firstMessage = `Hey! I see you've been putting in the work - ${completedCount} lessons completed. Nice! What can I help you with today?`;
       }
@@ -109,9 +109,19 @@ Remember: Short, conversational, one thought at a time. Like you're having a rea
       firstMessage = "Hey! Looks like you're just starting your journey. Welcome! What's on your mind - any questions about the program or something specific you want to work on?";
     }
 
-    // Request signed URL with overrides for user context
+    // Build overrides object for the conversation
+    const overrides = {
+      agent: {
+        prompt: {
+          prompt: systemPrompt
+        },
+        first_message: firstMessage
+      }
+    };
+
+    // Request conversation token for WebRTC (preferred for lower latency)
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/convai/conversation/get-signed-url?agent_id=${ELEVENLABS_AGENT_ID}`,
+      `https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=${ELEVENLABS_AGENT_ID}`,
       {
         method: 'GET',
         headers: {
@@ -126,21 +136,15 @@ Remember: Short, conversational, one thought at a time. Like you're having a rea
       throw new Error(`ElevenLabs API error: ${response.status}`);
     }
 
-    const { signed_url } = await response.json();
+    const tokenData = await response.json();
+    console.log('Got conversation token successfully');
 
-    // Return the signed URL and overrides separately
-    // The frontend will use these when connecting
+    // Return the token and overrides
+    // Client will use both to start the session
     return new Response(
       JSON.stringify({ 
-        signed_url,
-        overrides: {
-          agent: {
-            prompt: {
-              prompt: systemPrompt
-            },
-            first_message: firstMessage
-          }
-        }
+        token: tokenData.token,
+        overrides: overrides
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
