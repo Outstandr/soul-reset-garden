@@ -235,7 +235,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
       case 9: return formData.biggest_nutrition_challenge.trim().length >= 5;
       case 10: return formData.workout_frequency !== "" && formData.preferred_workout !== "" && formData.fitness_goal !== "";
       case 11: return formData.primary_goal !== "";
-      case 12: return formData.occupation_type !== "" && formData.family_situation !== "";
+      case 12: return formData.family_situation !== "";
       case 13: return formData.time_available !== "";
       case 14: return formData.describe_yourself.trim().length >= 20;
       case 15: return formData.where_you_want_to_be.trim().length >= 20 && formData.what_holds_you_back.trim().length >= 10;
