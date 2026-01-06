@@ -233,7 +233,7 @@ export const LionelCoach = () => {
               </div>
             </ScrollArea>
 
-            <div className="p-4 border-t">
+            <div id="chat-input" className="p-4 border-t">
               <div className="flex gap-2">
                 <Input
                   value={input}

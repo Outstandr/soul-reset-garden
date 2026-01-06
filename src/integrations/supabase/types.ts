@@ -155,6 +155,7 @@ export type Database = {
           bio: string | null
           created_at: string | null
           full_name: string | null
+          has_completed_onboarding: boolean | null
           id: string
           updated_at: string | null
         }
@@ -163,6 +164,7 @@ export type Database = {
           bio?: string | null
           created_at?: string | null
           full_name?: string | null
+          has_completed_onboarding?: boolean | null
           id: string
           updated_at?: string | null
         }
@@ -171,6 +173,7 @@ export type Database = {
           bio?: string | null
           created_at?: string | null
           full_name?: string | null
+          has_completed_onboarding?: boolean | null
           id?: string
           updated_at?: string | null
         }
