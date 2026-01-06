@@ -17,7 +17,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-700 backdrop-blur-sm border-b border-slate-600">
         <div className="zen-container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -26,17 +26,17 @@ const Index = () => {
             
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-4">
-              <Button variant="ghost" size="sm" onClick={() => {
+              <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10" onClick={() => {
                 document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
               }}>{t.landing.about}</Button>
-              <Button variant="ghost" size="sm" onClick={() => {
+              <Button variant="ghost" size="sm" className="text-white hover:text-white hover:bg-white/10" onClick={() => {
                 document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
               }}>{t.landing.testimonialsLink}</Button>
               <LanguageSwitcher />
-              <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
+              <Button variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10" onClick={() => navigate('/dashboard')}>
                 {t.auth.signIn}
               </Button>
-              <Button size="sm" onClick={() => navigate('/dashboard')}>
+              <Button size="sm" className="bg-primary text-white hover:bg-primary/90" onClick={() => navigate('/dashboard')}>
                 {t.auth.getStarted}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -46,7 +46,7 @@ const Index = () => {
             <Button 
               variant="ghost" 
               size="sm"
-              className="md:hidden"
+              className="md:hidden text-white hover:text-white hover:bg-white/10"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -58,7 +58,7 @@ const Index = () => {
             <div className="md:hidden mt-4 pb-4 space-y-2 animate-fade-in-up">
               <Button 
                 variant="ghost" 
-                className="w-full justify-start"
+                className="w-full justify-start text-white hover:text-white hover:bg-white/10"
                 onClick={() => {
                   document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
                   setMobileMenuOpen(false);
@@ -68,7 +68,7 @@ const Index = () => {
               </Button>
               <Button 
                 variant="ghost" 
-                className="w-full justify-start"
+                className="w-full justify-start text-white hover:text-white hover:bg-white/10"
                 onClick={() => {
                   document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
                   setMobileMenuOpen(false);
@@ -81,7 +81,7 @@ const Index = () => {
               </div>
               <Button 
                 variant="outline" 
-                className="w-full"
+                className="w-full border-white/30 text-white hover:bg-white/10"
                 onClick={() => {
                   navigate('/dashboard');
                   setMobileMenuOpen(false);
@@ -90,7 +90,7 @@ const Index = () => {
                 {t.auth.signIn}
               </Button>
               <Button 
-                className="w-full"
+                className="w-full bg-primary text-white hover:bg-primary/90"
                 onClick={() => {
                   navigate('/dashboard');
                   setMobileMenuOpen(false);
@@ -228,12 +228,12 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-background py-12">
+      <footer className="border-t border-slate-600 bg-slate-700 py-12">
         <div className="zen-container">
           <div className="flex flex-col items-center gap-4">
-            <img src={lpaLogo} alt="Leaders Performance Academy" className="h-12 w-auto opacity-80" />
-            <div className="text-center text-muted-foreground">
-              <p className="mb-2">© 2025 {t.landing.footer.title}. {t.landing.footer.copyright}</p>
+            <img src={lpaLogo} alt="Leaders Performance Academy" className="h-12 w-auto" />
+            <div className="text-center text-white/80">
+              <p className="mb-2 text-white">© 2025 {t.landing.footer.title}. {t.landing.footer.copyright}</p>
               <p className="text-sm">{t.landing.footer.description}</p>
             </div>
           </div>
