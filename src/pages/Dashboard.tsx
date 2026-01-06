@@ -117,17 +117,8 @@ const Dashboard = () => {
           </div>
         </section>
 
-        {/* Lionel Coach */}
+        {/* Section 1: Module Grid + Next Steps */}
         <section className="animate-fade-in-up animation-delay-100">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
-            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
-          </div>
-          <LionelCoach />
-        </section>
-
-        {/* Module Grid */}
-        <section className="animate-fade-in-up animation-delay-200">
           <div className="mb-8">
             <h3 className="text-3xl font-bold mb-2">{t.dashboard.availableModules}</h3>
             <p className="text-muted-foreground">
@@ -148,7 +139,7 @@ const Dashboard = () => {
                 <div
                   key={module.title}
                   className="animate-fade-in-up"
-                  style={{ animationDelay: `${(index + 3) * 100}ms` }}
+                  style={{ animationDelay: `${(index + 2) * 100}ms` }}
                 >
                   <ModuleCard
                     {...module}
@@ -166,6 +157,37 @@ const Dashboard = () => {
               ))
             )}
           </div>
+
+          {/* Your Next Steps card */}
+          <div className="mt-8">
+            <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 shadow-soft">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-reset-rhythm animate-pulse" />
+                  {t.dashboard.nextSteps}
+                </CardTitle>
+                <CardDescription>Reflect on one structure that supported your growth</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-lg mb-4">
+                  "What rhythm did you build today? Reflect on one structure that supported your growth."
+                </p>
+                <Button variant="zen" onClick={() => navigate("/journal")}>
+                  <PenLine className="w-4 h-4 mr-2" />
+                  {t.dashboard.viewJournal}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Section 2: Lionel Coach */}
+        <section className="animate-fade-in-up animation-delay-200">
+          <div className="mb-8">
+            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
+            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
+          </div>
+          <LionelCoach />
         </section>
 
         {/* Quick Access */}
@@ -222,32 +244,6 @@ const Dashboard = () => {
               </CardHeader>
             </Card>
           </div>
-        </section>
-
-        {/* Daily Focus */}
-        <section className="animate-fade-in-up animation-delay-400">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">{t.dashboard.nextSteps}</h3>
-            <p className="text-muted-foreground">Your daily rhythm builder</p>
-          </div>
-          <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 shadow-soft">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-reset-rhythm animate-pulse" />
-                {t.dashboard.nextSteps}
-              </CardTitle>
-              <CardDescription>Reflect on one structure that supported your growth</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-lg mb-4">
-                "What rhythm did you build today? Reflect on one structure that supported your growth."
-              </p>
-              <Button variant="zen" onClick={() => navigate("/journal")}>
-                <PenLine className="w-4 h-4 mr-2" />
-                {t.dashboard.viewJournal}
-              </Button>
-            </CardContent>
-          </Card>
         </section>
 
       </main>
