@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { ModuleCard } from "@/components/ModuleCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library } from "lucide-react";
+import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library, Sparkles, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LionelCoach } from "@/components/LionelCoach";
 import { UserMenu } from "@/components/UserMenu";
@@ -87,9 +87,19 @@ const Dashboard = () => {
   }, [getModuleProgress, baseModules]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-reset-energy/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-reset-systems/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      </div>
+
+      {/* Subtle Grid Pattern */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-50 pointer-events-none" />
+
       {/* Header */}
-      <header className="border-b border-slate-600 bg-slate-700 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-slate-600 bg-slate-700/95 backdrop-blur-md sticky top-0 z-50">
         <div className="zen-container py-4">
           <div className="flex items-center justify-between">
             <img src={lpaLogoWhite} alt="Leaders Performance Academy" className="h-10" />
@@ -106,20 +116,35 @@ const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="zen-container py-12 space-y-16">
-        {/* Welcome Section */}
-        <section className="animate-fade-in-up">
-          <div className="mb-8">
-            <h2 className="text-4xl font-bold mb-3">{t.dashboard.welcome}</h2>
-            <p className="text-xl text-muted-foreground">
-              {t.dashboard.continueJourney}
-            </p>
+      <main className="zen-container py-12 space-y-20 relative z-10">
+        {/* Hero Welcome Section */}
+        <section className="animate-fade-in-up relative">
+          <div className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-hidden">
+            {/* Hero Decorative Elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-reset-energy/20 rounded-full blur-2xl" />
+            <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-reset-systems/15 rounded-full blur-xl animate-float" />
+            
+            {/* Animated Border Glow */}
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/20 via-reset-energy/20 to-reset-systems/20 animate-gradient opacity-50" style={{ padding: '1px' }} />
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="w-5 h-5 text-primary animate-scale-pulse" />
+                <span className="text-sm font-medium text-primary uppercase tracking-wider">Leaders Performance Academy</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+                {t.dashboard.welcome}
+              </h1>
+              <p className="text-xl md:text-2xl text-slate-300 max-w-2xl">
+                {t.dashboard.continueJourney}
+              </p>
+            </div>
           </div>
         </section>
 
         {/* Section 1: Module Grid + Next Steps */}
         <section className="animate-fade-in-up animation-delay-100">
-
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {progressLoading ? (
               // Loading skeletons
@@ -152,61 +177,81 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Your Next Steps card */}
-          <div className="mt-8">
-            <Card className="bg-gradient-to-br from-primary/5 to-transparent border-primary/20 shadow-soft">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-reset-rhythm animate-pulse" />
-                  {t.dashboard.nextSteps}
-                </CardTitle>
-                <CardDescription>Reflect on one structure that supported your growth</CardDescription>
+          {/* Your Next Steps card - Enhanced */}
+          <div className="mt-10">
+            <Card className="relative overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-card via-card to-primary/5 shadow-glow hover-lift">
+              {/* Decorative gradient overlay */}
+              <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-reset-rhythm/10 rounded-full blur-xl translate-y-1/2 -translate-x-1/2" />
+              
+              <CardHeader className="relative z-10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-glow">
+                    <Sparkles className="w-5 h-5 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl">{t.dashboard.nextSteps}</CardTitle>
+                    <CardDescription>Daily reflection practice</CardDescription>
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-lg mb-4">
+              <CardContent className="relative z-10">
+                <blockquote className="text-lg italic text-muted-foreground border-l-4 border-primary/40 pl-4 mb-6">
                   "What rhythm did you build today? Reflect on one structure that supported your growth."
-                </p>
-                <Button variant="zen" onClick={() => navigate("/journal")}>
+                </blockquote>
+                <Button 
+                  variant="zen" 
+                  onClick={() => navigate("/journal")}
+                  className="group"
+                >
                   <PenLine className="w-4 h-4 mr-2" />
                   {t.dashboard.viewJournal}
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </CardContent>
             </Card>
           </div>
         </section>
 
-        {/* Section 2: Lionel Coach */}
-        <section className="animate-fade-in-up animation-delay-200">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">Your Personal Coach</h3>
-            <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
+        {/* Section 2: Lionel Coach - Enhanced */}
+        <section className="animate-fade-in-up animation-delay-200 relative">
+          {/* Section Header with accent line */}
+          <div className="mb-8 flex items-center gap-4">
+            <div className="w-1.5 h-12 rounded-full bg-gradient-to-b from-primary to-secondary" />
+            <div>
+              <h3 className="text-3xl font-bold">Your Personal Coach</h3>
+              <p className="text-muted-foreground">Get personalized guidance based on your progress</p>
+            </div>
           </div>
           <LionelCoach />
         </section>
 
-        {/* Quick Access */}
+        {/* Quick Access - Enhanced */}
         <section className="animate-fade-in-up animation-delay-300">
-          <div className="mb-8">
-            <h3 className="text-3xl font-bold mb-2">{t.dashboard.masterclassLibrary}</h3>
-            <p className="text-muted-foreground">{t.dashboard.masterclassDescription}</p>
+          <div className="mb-8 flex items-center gap-4">
+            <div className="w-1.5 h-12 rounded-full bg-gradient-to-b from-reset-energy to-reset-systems" />
+            <div>
+              <h3 className="text-3xl font-bold">{t.dashboard.masterclassLibrary}</h3>
+              <p className="text-muted-foreground">{t.dashboard.masterclassDescription}</p>
+            </div>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
             <Card 
-              className="hover:shadow-medium transition-shadow cursor-pointer"
+              className="group hover-lift cursor-pointer border-2 border-transparent hover:border-primary/30 bg-gradient-to-br from-card to-primary/5 transition-all duration-300"
               onClick={() => navigate("/masterclass-library")}
             >
               <CardHeader>
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
-                  <Library className="w-6 h-6 text-primary" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Library className="w-7 h-7 text-primary" />
                 </div>
-                <CardTitle>{t.dashboard.masterclassLibrary}</CardTitle>
+                <CardTitle className="group-hover:text-primary transition-colors">{t.dashboard.masterclassLibrary}</CardTitle>
                 <CardDescription>{t.dashboard.masterclassDescription}</CardDescription>
               </CardHeader>
             </Card>
 
             <Card 
-              className="hover:shadow-medium transition-shadow cursor-pointer"
+              className="group hover-lift cursor-pointer border-2 border-transparent hover:border-reset-energy/30 bg-gradient-to-br from-card to-reset-energy/5 transition-all duration-300"
               onClick={() => {
                 const link = document.createElement('a');
                 link.href = '/RESET_BY_DISCIPLINE_FINAL_V4.pdf';
@@ -217,23 +262,23 @@ const Dashboard = () => {
               }}
             >
               <CardHeader>
-                <div className="w-12 h-12 rounded-xl bg-reset-energy/10 flex items-center justify-center mb-4">
-                  <BookOpen className="w-6 h-6 text-reset-energy" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-reset-energy/20 to-reset-energy/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="w-7 h-7 text-reset-energy" />
                 </div>
-                <CardTitle>E-Reader</CardTitle>
+                <CardTitle className="group-hover:text-reset-energy transition-colors">E-Reader</CardTitle>
                 <CardDescription>Download RESET by Discipline book</CardDescription>
               </CardHeader>
             </Card>
 
             <Card 
-              className="hover:shadow-medium transition-shadow cursor-pointer"
+              className="group hover-lift cursor-pointer border-2 border-transparent hover:border-reset-systems/30 bg-gradient-to-br from-card to-reset-systems/5 transition-all duration-300"
               onClick={() => navigate("/journal")}
             >
               <CardHeader>
-                <div className="w-12 h-12 rounded-xl bg-reset-systems/10 flex items-center justify-center mb-4">
-                  <PenLine className="w-6 h-6 text-reset-systems" />
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-reset-systems/20 to-reset-systems/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <PenLine className="w-7 h-7 text-reset-systems" />
                 </div>
-                <CardTitle>{t.nav.journal}</CardTitle>
+                <CardTitle className="group-hover:text-reset-systems transition-colors">{t.nav.journal}</CardTitle>
                 <CardDescription>RESET series journals</CardDescription>
               </CardHeader>
             </Card>
