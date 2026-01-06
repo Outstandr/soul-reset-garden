@@ -3,17 +3,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, MessageSquare, Mic } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import lionelXAvatar from "@/assets/lionel-x-avatar.png";
+import { LionelVoiceMode } from "./LionelVoiceMode";
+import { cn } from "@/lib/utils";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
 
+type ChatMode = "text" | "voice";
+
 export const LionelCoach = () => {
+  const [mode, setMode] = useState<ChatMode>("text");
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -24,6 +29,13 @@ export const LionelCoach = () => {
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  const handleVoiceTranscript = (text: string, isUser: boolean) => {
+    setMessages(prev => [...prev, { 
+      role: isUser ? "user" : "assistant", 
+      content: text 
+    }]);
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -147,74 +159,110 @@ export const LionelCoach = () => {
   return (
     <Card className="glass-effect h-[600px] flex flex-col">
       <CardHeader className="border-b">
-        <div className="flex items-center gap-3">
-          <img 
-            src={lionelXAvatar} 
-            alt="Lionel X" 
-            className="w-12 h-12 rounded-full object-cover border-2 border-primary"
-          />
-          <div>
-            <CardTitle className="gradient-text">Lionel X</CardTitle>
-            <CardDescription>Your personal AI coach for discipline & mastery</CardDescription>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img 
+              src={lionelXAvatar} 
+              alt="Lionel X" 
+              className="w-12 h-12 rounded-full object-cover border-2 border-primary"
+            />
+            <div>
+              <CardTitle className="gradient-text">Lionel X</CardTitle>
+              <CardDescription>Your personal AI coach for discipline & mastery</CardDescription>
+            </div>
+          </div>
+          
+          {/* Mode Toggle */}
+          <div className="flex bg-muted rounded-lg p-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMode("text")}
+              className={cn(
+                "rounded-md px-3",
+                mode === "text" && "bg-background shadow-sm"
+              )}
+            >
+              <MessageSquare className="w-4 h-4 mr-1" />
+              Text
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMode("voice")}
+              className={cn(
+                "rounded-md px-3",
+                mode === "voice" && "bg-background shadow-sm"
+              )}
+            >
+              <Mic className="w-4 h-4 mr-1" />
+              Voice
+            </Button>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col p-0">
-        <ScrollArea className="flex-1 p-6" ref={scrollRef}>
-          <div className="space-y-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-lg p-4 ${
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  }`}
-                >
-                  <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                </div>
+      <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+        {mode === "text" ? (
+          <>
+            <ScrollArea className="flex-1 p-6" ref={scrollRef}>
+              <div className="space-y-4">
+                {messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-lg p-4 ${
+                        message.role === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted"
+                      }`}
+                    >
+                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    </div>
+                  </div>
+                ))}
+                {isLoading && messages[messages.length - 1]?.role === "user" && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted rounded-lg p-4">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    </div>
+                  </div>
+                )}
               </div>
-            ))}
-            {isLoading && messages[messages.length - 1]?.role === "user" && (
-              <div className="flex justify-start">
-                <div className="bg-muted rounded-lg p-4">
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                </div>
-              </div>
-            )}
-          </div>
-        </ScrollArea>
+            </ScrollArea>
 
-        <div className="p-4 border-t">
-          <div className="flex gap-2">
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Ask Lionel X anything..."
-              disabled={isLoading}
-              className="flex-1"
-            />
-            <Button
-              onClick={handleSend}
-              disabled={!input.trim() || isLoading}
-              size="icon"
-            >
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4" />
-              )}
-            </Button>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            Lionel knows your progress, journal entries, and quiz scores
-          </p>
-        </div>
+            <div className="p-4 border-t">
+              <div className="flex gap-2">
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask Lionel X anything..."
+                  disabled={isLoading}
+                  className="flex-1"
+                />
+                <Button
+                  onClick={handleSend}
+                  disabled={!input.trim() || isLoading}
+                  size="icon"
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Lionel knows your progress, journal entries, and quiz scores
+              </p>
+            </div>
+          </>
+        ) : (
+          <LionelVoiceMode onTranscript={handleVoiceTranscript} />
+        )}
       </CardContent>
     </Card>
   );
