@@ -43,33 +43,43 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (session?.user) {
-        setCheckingDiscovery(true);
-        const hasCompleted = await checkDiscoveryStatus(session.user.id);
-        setCheckingDiscovery(false);
-        if (hasCompleted) {
-          navigate("/dashboard");
-        } else {
-          setShowDiscovery(true);
+    let cancelled = false;
+
+    const handleSession = (sessionUserId: string) => {
+      setCheckingDiscovery(true);
+      setTimeout(async () => {
+        try {
+          const hasCompleted = await checkDiscoveryStatus(sessionUserId);
+          if (cancelled) return;
+          if (hasCompleted) {
+            navigate("/dashboard");
+          } else {
+            setShowDiscovery(true);
+          }
+        } catch {
+          if (!cancelled) setShowDiscovery(true);
+        } finally {
+          if (!cancelled) setCheckingDiscovery(false);
         }
-      }
+      }, 0);
+    };
+
+    // Listener FIRST (avoid missing events)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      const userId = session?.user?.id;
+      if (userId) handleSession(userId);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        setCheckingDiscovery(true);
-        const hasCompleted = await checkDiscoveryStatus(session.user.id);
-        setCheckingDiscovery(false);
-        if (hasCompleted) {
-          navigate("/dashboard");
-        } else {
-          setShowDiscovery(true);
-        }
-      }
+    // THEN fetch current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const userId = session?.user?.id;
+      if (userId) handleSession(userId);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   const handleAuth = async (e: React.FormEvent) => {
