@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ModuleCard } from "@/components/ModuleCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library, Sparkles, ArrowRight } from "lucide-react";
+import { Leaf, Zap, Heart, Mountain, Flower, BookOpen, PenLine, Library, Sparkles, ArrowRight, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LionelCoach } from "@/components/LionelCoach";
 import { UserMenu } from "@/components/UserMenu";
@@ -11,6 +11,7 @@ import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "@/hooks/useTranslations";
 import { OnboardingTour } from "@/components/OnboardingTour";
+import { PersonalizedPlanView } from "@/components/PersonalizedPlanView";
 import { supabase } from "@/integrations/supabase/client";
 import lpaLogoWhite from "@/assets/lpa-logo-white.png";
 
@@ -29,14 +30,16 @@ const Dashboard = () => {
   const { getModuleProgress, isLoading: progressLoading } = useModuleProgress();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
+  const [hasPlan, setHasPlan] = useState(false);
+  const [showPlanModal, setShowPlanModal] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Check if user needs onboarding
+  // Check if user needs onboarding and has a plan
   useEffect(() => {
-    const checkOnboarding = async () => {
+    const checkOnboardingAndPlan = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
@@ -49,6 +52,17 @@ const Dashboard = () => {
           if (profile && !profile.has_completed_onboarding) {
             setShowOnboarding(true);
           }
+
+          // Check if user has a personalized plan
+          const { data: discovery } = await supabase
+            .from("user_discovery")
+            .select("ai_report")
+            .eq("user_id", user.id)
+            .maybeSingle();
+          
+          if (discovery?.ai_report) {
+            setHasPlan(true);
+          }
         }
       } catch (error) {
         console.error("Error checking onboarding status:", error);
@@ -57,7 +71,7 @@ const Dashboard = () => {
       }
     };
 
-    checkOnboarding();
+    checkOnboardingAndPlan();
   }, []);
 
 
@@ -177,6 +191,20 @@ const Dashboard = () => {
             </div>
           </div>
         </section>
+
+        {/* Personalized Plan Section - Show if user has a plan */}
+        {hasPlan && (
+          <section className="animate-fade-in-up animation-delay-50">
+            <div className="mb-8 flex items-center gap-4">
+              <div className="w-1.5 h-12 rounded-full bg-gradient-to-b from-primary to-reset-energy" />
+              <div>
+                <h3 className="text-3xl font-bold">Your Personalized Plan</h3>
+                <p className="text-muted-foreground">AI-generated diet, training, and lesson recommendations</p>
+              </div>
+            </div>
+            <PersonalizedPlanView embedded />
+          </section>
+        )}
 
         {/* Section 1: Module Grid + Next Steps */}
         <section className="animate-fade-in-up animation-delay-100">

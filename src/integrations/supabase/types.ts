@@ -293,34 +293,124 @@ export type Database = {
       }
       user_discovery: {
         Row: {
-          biggest_challenge: string
+          ai_report: Json | null
+          biggest_challenge: string | null
+          biggest_life_priority: string | null
+          biggest_nutrition_challenge: string | null
+          commitment_level: number | null
           created_at: string
-          energy_level: number
-          health_level: number
+          decision_making: string | null
+          describe_yourself: string | null
+          dietary_restrictions: string | null
+          discipline_level: number | null
+          eating_style: string | null
+          energy_level: number | null
+          family_situation: string | null
+          fitness_goal: string | null
+          health_level: number | null
+          hydration_level: number | null
           id: string
-          primary_goal: string
+          meals_per_day: number | null
+          motivation_style: string | null
+          occupation_type: string | null
+          personality_type: string | null
+          personalized_diet_plan: Json | null
+          personalized_training_plan: Json | null
+          preferred_workout: string | null
+          primary_goal: string | null
+          recommended_lessons: string[] | null
+          report_generated_at: string | null
+          secondary_goals: string[] | null
+          sleep_hours: number | null
+          sleep_quality: number | null
+          stress_level: number | null
+          time_available: string | null
           updated_at: string
           user_id: string
+          wake_up_time: string | null
+          what_holds_you_back: string | null
+          where_you_want_to_be: string | null
+          workout_frequency: string | null
         }
         Insert: {
-          biggest_challenge: string
+          ai_report?: Json | null
+          biggest_challenge?: string | null
+          biggest_life_priority?: string | null
+          biggest_nutrition_challenge?: string | null
+          commitment_level?: number | null
           created_at?: string
-          energy_level: number
-          health_level: number
+          decision_making?: string | null
+          describe_yourself?: string | null
+          dietary_restrictions?: string | null
+          discipline_level?: number | null
+          eating_style?: string | null
+          energy_level?: number | null
+          family_situation?: string | null
+          fitness_goal?: string | null
+          health_level?: number | null
+          hydration_level?: number | null
           id?: string
-          primary_goal: string
+          meals_per_day?: number | null
+          motivation_style?: string | null
+          occupation_type?: string | null
+          personality_type?: string | null
+          personalized_diet_plan?: Json | null
+          personalized_training_plan?: Json | null
+          preferred_workout?: string | null
+          primary_goal?: string | null
+          recommended_lessons?: string[] | null
+          report_generated_at?: string | null
+          secondary_goals?: string[] | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          time_available?: string | null
           updated_at?: string
           user_id: string
+          wake_up_time?: string | null
+          what_holds_you_back?: string | null
+          where_you_want_to_be?: string | null
+          workout_frequency?: string | null
         }
         Update: {
-          biggest_challenge?: string
+          ai_report?: Json | null
+          biggest_challenge?: string | null
+          biggest_life_priority?: string | null
+          biggest_nutrition_challenge?: string | null
+          commitment_level?: number | null
           created_at?: string
-          energy_level?: number
-          health_level?: number
+          decision_making?: string | null
+          describe_yourself?: string | null
+          dietary_restrictions?: string | null
+          discipline_level?: number | null
+          eating_style?: string | null
+          energy_level?: number | null
+          family_situation?: string | null
+          fitness_goal?: string | null
+          health_level?: number | null
+          hydration_level?: number | null
           id?: string
-          primary_goal?: string
+          meals_per_day?: number | null
+          motivation_style?: string | null
+          occupation_type?: string | null
+          personality_type?: string | null
+          personalized_diet_plan?: Json | null
+          personalized_training_plan?: Json | null
+          preferred_workout?: string | null
+          primary_goal?: string | null
+          recommended_lessons?: string[] | null
+          report_generated_at?: string | null
+          secondary_goals?: string[] | null
+          sleep_hours?: number | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          time_available?: string | null
           updated_at?: string
           user_id?: string
+          wake_up_time?: string | null
+          what_holds_you_back?: string | null
+          where_you_want_to_be?: string | null
+          workout_frequency?: string | null
         }
         Relationships: []
       }
