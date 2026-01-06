@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ModuleCard } from "@/components/ModuleCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +10,8 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "@/hooks/useTranslations";
+import { OnboardingTour } from "@/components/OnboardingTour";
+import { supabase } from "@/integrations/supabase/client";
 import lpaLogoWhite from "@/assets/lpa-logo-white.png";
 
 // Module name mapping to database module_name field
@@ -25,9 +27,37 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const t = useTranslations();
   const { getModuleProgress, isLoading: progressLoading } = useModuleProgress();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // Check if user needs onboarding
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("has_completed_onboarding")
+            .eq("id", user.id)
+            .single();
+          
+          if (profile && !profile.has_completed_onboarding) {
+            setShowOnboarding(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking onboarding status:", error);
+      } finally {
+        setOnboardingChecked(true);
+      }
+    };
+
+    checkOnboarding();
   }, []);
 
 
@@ -88,6 +118,11 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Onboarding Tour */}
+      {onboardingChecked && showOnboarding && (
+        <OnboardingTour onComplete={() => setShowOnboarding(false)} />
+      )}
+
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
@@ -118,7 +153,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="zen-container py-12 space-y-20 relative z-10">
         {/* Hero Welcome Section */}
-        <section className="animate-fade-in-up relative">
+        <section id="hero-section" className="animate-fade-in-up relative">
           <div className="relative p-8 md:p-12 rounded-3xl bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-hidden">
             {/* Hero Decorative Elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
@@ -157,6 +192,7 @@ const Dashboard = () => {
               modules.map((module, index) => (
                 <div
                   key={module.title}
+                  id={index === 0 ? "first-module-card" : undefined}
                   className="animate-fade-in-up"
                   style={{ animationDelay: `${(index + 2) * 100}ms` }}
                 >
@@ -178,7 +214,7 @@ const Dashboard = () => {
           </div>
 
           {/* Your Next Steps card - Enhanced */}
-          <div className="mt-10">
+          <div id="next-steps-card" className="mt-10">
             <Card className="relative overflow-hidden border-2 border-primary/20 bg-gradient-to-br from-card via-card to-primary/5 shadow-glow hover-lift">
               {/* Decorative gradient overlay */}
               <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
@@ -214,7 +250,7 @@ const Dashboard = () => {
         </section>
 
         {/* Section 2: Lionel Coach - Enhanced */}
-        <section className="animate-fade-in-up animation-delay-200 relative">
+        <section id="lionel-coach" className="animate-fade-in-up animation-delay-200 relative">
           {/* Section Header with accent line */}
           <div className="mb-8 flex items-center gap-4">
             <div className="w-1.5 h-12 rounded-full bg-gradient-to-b from-primary to-secondary" />
@@ -227,7 +263,7 @@ const Dashboard = () => {
         </section>
 
         {/* Quick Access - Enhanced */}
-        <section className="animate-fade-in-up animation-delay-300">
+        <section id="quick-access" className="animate-fade-in-up animation-delay-300">
           <div className="mb-8 flex items-center gap-4">
             <div className="w-1.5 h-12 rounded-full bg-gradient-to-b from-reset-energy to-reset-systems" />
             <div>
