@@ -229,7 +229,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
       case 0: case 1: case 2: case 3: case 16: return true; // Sliders
       case 4: return formData.personality_type !== "";
       case 5: return formData.motivation_style !== "" && formData.decision_making !== "";
-      case 6: return formData.job_title.trim().length >= 2 && formData.job_industry !== "";
+      case 6: return formData.job_industry !== "";
       case 7: return formData.wake_up_time !== "";
       case 8: return formData.eating_style !== "";
       case 9: return formData.biggest_nutrition_challenge.trim().length >= 5;
