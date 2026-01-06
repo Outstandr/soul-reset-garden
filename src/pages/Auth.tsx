@@ -5,9 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, User, Phone, Globe } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTranslations } from "@/hooks/useTranslations";
 import { DiscoveryQuestionnaire } from "@/components/DiscoveryQuestionnaire";
+
+const COUNTRIES = [
+  "United States", "United Kingdom", "Canada", "Australia", "Germany", "France", 
+  "Netherlands", "Belgium", "Spain", "Italy", "Portugal", "Ireland", "Sweden", 
+  "Norway", "Denmark", "Finland", "Switzerland", "Austria", "Poland", "Russia",
+  "Brazil", "Mexico", "Argentina", "Japan", "South Korea", "China", "India",
+  "South Africa", "Nigeria", "Egypt", "UAE", "Saudi Arabia", "Other"
+];
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -15,6 +24,10 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [country, setCountry] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showDiscovery, setShowDiscovery] = useState(false);
@@ -77,6 +90,13 @@ const Auth = () => {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              full_name: `${firstName} ${lastName}`.trim(),
+              country: country,
+              phone_number: phoneNumber,
+            },
           },
         });
         if (error) throw error;
@@ -132,6 +152,67 @@ const Auth = () => {
         </div>
 
         <form onSubmit={handleAuth} className="space-y-4">
+          {!isLogin && (
+            <>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">First Name</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="John"
+                      required
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Last Name</label>
+                  <Input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Doe"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Country</label>
+                <Select value={country} onValueChange={setCountry} required>
+                  <SelectTrigger className="w-full">
+                    <Globe className="h-4 w-4 text-muted-foreground mr-2" />
+                    <SelectValue placeholder="Select your country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNTRIES.map((c) => (
+                      <SelectItem key={c} value={c}>{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Phone Number</label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    placeholder="+1 234 567 8900"
+                    required
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
           <div>
             <label className="text-sm font-medium mb-2 block">{t.auth.email}</label>
             <Input
