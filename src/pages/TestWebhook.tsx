@@ -2,10 +2,19 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, Send, CheckCircle, XCircle } from "lucide-react";
+import { ArrowLeft, Send, CheckCircle, XCircle, Globe, Phone, User, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
+const COUNTRIES = [
+  "United States", "United Kingdom", "Canada", "Australia", "Germany", "France", 
+  "Netherlands", "Belgium", "Spain", "Italy", "Portugal", "Ireland", "Sweden", 
+  "Norway", "Denmark", "Finland", "Switzerland", "Austria", "Poland", "Russia",
+  "Brazil", "Mexico", "Argentina", "Japan", "South Korea", "China", "India",
+  "South Africa", "Nigeria", "Egypt", "UAE", "Saudi Arabia", "Other"
+];
 
 const TestWebhook = () => {
   const navigate = useNavigate();
@@ -19,6 +28,19 @@ const TestWebhook = () => {
     country: "United States",
     phone: "+1 555 123 4567",
     userId: "test-user-" + Date.now(),
+  });
+
+  const getPayloadPreview = () => ({
+    email: formData.email,
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+    phone: formData.phone,
+    country: formData.country,
+    source: 'LPA Platform',
+    signupDate: new Date().toISOString(),
+    userId: formData.userId,
+    tags: ['new_signup', 'lpa_platform'],
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -65,7 +87,7 @@ const TestWebhook = () => {
               Test GHL Webhook
             </CardTitle>
             <CardDescription>
-              Send a test payload to your GoHighLevel webhook without creating a real user.
+              Send a test payload to your GoHighLevel webhook. This mirrors the exact data sent during user signup.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -73,11 +95,15 @@ const TestWebhook = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium mb-2 block">First Name</label>
-                  <Input
-                    value={formData.firstName}
-                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                    placeholder="John"
-                  />
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                      placeholder="John"
+                      className="pl-10"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium mb-2 block">Last Name</label>
@@ -91,38 +117,56 @@ const TestWebhook = () => {
 
               <div>
                 <label className="text-sm font-medium mb-2 block">Email</label>
-                <Input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="test@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium mb-2 block">Phone</label>
-                <Input
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+1 555 123 4567"
-                />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="test@example.com"
+                    className="pl-10"
+                  />
+                </div>
               </div>
 
               <div>
                 <label className="text-sm font-medium mb-2 block">Country</label>
-                <Input
-                  value={formData.country}
-                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                  placeholder="United States"
-                />
+                <Select 
+                  value={formData.country} 
+                  onValueChange={(value) => setFormData({ ...formData, country: value })}
+                >
+                  <SelectTrigger className="w-full">
+                    <Globe className="h-4 w-4 text-muted-foreground mr-2" />
+                    <SelectValue placeholder="Select country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNTRIES.map((c) => (
+                      <SelectItem key={c} value={c}>{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div>
-                <label className="text-sm font-medium mb-2 block">User ID</label>
+                <label className="text-sm font-medium mb-2 block">Phone Number</label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+1 555 123 4567"
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">User ID (auto-generated)</label>
                 <Input
                   value={formData.userId}
                   onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
                   placeholder="test-user-123"
+                  className="font-mono text-sm"
                 />
               </div>
 
@@ -156,15 +200,9 @@ const TestWebhook = () => {
             )}
 
             <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-              <h4 className="font-medium mb-2">Payload Preview</h4>
+              <h4 className="font-medium mb-2">Payload Preview (Exact GHL Format)</h4>
               <pre className="text-xs text-muted-foreground overflow-auto">
-                {JSON.stringify({
-                  ...formData,
-                  fullName: `${formData.firstName} ${formData.lastName}`,
-                  source: 'LPA Platform',
-                  signupDate: new Date().toISOString(),
-                  tags: ['new_signup', 'lpa_platform'],
-                }, null, 2)}
+                {JSON.stringify(getPayloadPreview(), null, 2)}
               </pre>
             </div>
           </CardContent>
