@@ -51,7 +51,7 @@ const App = () => (
           <Route path="/final-certification-exam" element={<ProtectedRoute><FinalCertificationExam /></ProtectedRoute>} />
           <Route path="/certificate/:certificateNumber" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/test-webhook" element={<ProtectedRoute><TestWebhook /></ProtectedRoute>} />
+          <Route path="/test-webhook" element={<TestWebhook />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
