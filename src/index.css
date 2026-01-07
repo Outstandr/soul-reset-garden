@@ -344,6 +344,63 @@ All colors MUST be HSL.
     border: 2px solid hsl(var(--primary) / 0.5);
   }
 
+  /* Emerald Pulse - for Book card */
+  @keyframes pulse-emerald {
+    0%, 100% {
+      box-shadow: 0 0 8px hsl(145 60% 40% / 0.4),
+                  0 0 20px hsl(145 60% 40% / 0.2);
+      border-color: hsl(145 60% 40% / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(145 60% 40% / 0.6),
+                  0 0 50px hsl(145 60% 40% / 0.3);
+      border-color: hsl(145 60% 40% / 0.8);
+    }
+  }
+
+  .animate-pulse-emerald {
+    animation: pulse-emerald 2.5s ease-in-out infinite;
+    border: 2px solid hsl(145 60% 40% / 0.5);
+  }
+
+  /* Teal Pulse - for Masterclass card */
+  @keyframes pulse-teal {
+    0%, 100% {
+      box-shadow: 0 0 8px hsl(160 50% 45% / 0.4),
+                  0 0 20px hsl(160 50% 45% / 0.2);
+      border-color: hsl(160 50% 45% / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(160 50% 45% / 0.6),
+                  0 0 50px hsl(160 50% 45% / 0.3);
+      border-color: hsl(160 50% 45% / 0.8);
+    }
+  }
+
+  .animate-pulse-teal {
+    animation: pulse-teal 2.8s ease-in-out infinite;
+    border: 2px solid hsl(160 50% 45% / 0.5);
+  }
+
+  /* Lime Pulse - for Elite Self-Discipline course card */
+  @keyframes pulse-lime {
+    0%, 100% {
+      box-shadow: 0 0 8px hsl(122 31% 52% / 0.4),
+                  0 0 20px hsl(122 31% 52% / 0.2);
+      border-color: hsl(122 31% 52% / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(122 31% 52% / 0.6),
+                  0 0 50px hsl(122 31% 52% / 0.3);
+      border-color: hsl(122 31% 52% / 0.8);
+    }
+  }
+
+  .animate-pulse-lime {
+    animation: pulse-lime 3s ease-in-out infinite;
+    border: 2px solid hsl(122 31% 52% / 0.5);
+  }
+
   /* Grid Pattern Background */
   .bg-grid-pattern {
     background-image: 
