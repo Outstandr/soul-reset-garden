@@ -90,6 +90,25 @@ const Auth = () => {
     };
   }, [navigate]);
 
+  const sendToGHL = async (userId: string) => {
+    try {
+      await supabase.functions.invoke('ghl-webhook', {
+        body: {
+          email,
+          firstName,
+          lastName,
+          country,
+          phone: phoneNumber,
+          userId,
+        },
+      });
+      console.log('User data sent to GHL successfully');
+    } catch (error) {
+      console.error('Failed to send user data to GHL:', error);
+      // Don't block signup if GHL webhook fails
+    }
+  };
+
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -103,7 +122,7 @@ const Auth = () => {
         if (error) throw error;
         toast.success(t.auth.signInSuccess);
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -118,6 +137,12 @@ const Auth = () => {
           },
         });
         if (error) throw error;
+        
+        // Send new user data to GHL webhook
+        if (data.user) {
+          await sendToGHL(data.user.id);
+        }
+        
         toast.success(t.auth.signUpSuccess);
       }
     } catch (error: any) {
