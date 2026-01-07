@@ -157,7 +157,7 @@ export const LionelCoach = () => {
   };
 
   return (
-    <Card className="glass-effect h-[600px] flex flex-col">
+    <Card className="glass-effect h-[600px] flex flex-col animate-pulse-glow rounded-xl">
       <CardHeader className="border-b">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
