@@ -157,7 +157,7 @@ const Auth = () => {
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t.common.back}
         </Button>
-        <Card className="w-full p-8">
+        <Card className="w-full p-8 animate-pulse-glow rounded-xl">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">
             {isLogin ? t.auth.welcomeBack : t.auth.createAccount}
