@@ -75,7 +75,7 @@ export default function ResetByDiscipline() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-muted/20 to-background">
-      <div className="fixed inset-0 bg-grid-pattern opacity-20" />
+      <div className="fixed inset-0 bg-grid-pattern opacity-50" />
       
       <div className="relative z-10">
         <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
@@ -110,10 +110,19 @@ export default function ResetByDiscipline() {
               <p className="text-muted-foreground">Complete each stage in order to build unshakable discipline</p>
             </div>
 
-            {stages.map((stage, index) => (
+            {stages.map((stage, index) => {
+              const pulseClass = stage.id === "book" 
+                ? "animate-pulse-emerald" 
+                : stage.id === "masterclass" 
+                ? "animate-pulse-teal" 
+                : stage.id === "integration" 
+                ? "animate-pulse-lime" 
+                : "";
+              
+              return (
               <Card 
                 key={stage.id}
-                className={`animate-fade-in-up ${
+                className={`animate-fade-in-up rounded-xl ${pulseClass} ${
                   stage.status === "locked" 
                     ? "opacity-60" 
                     : "hover:shadow-medium transition-all"
@@ -278,7 +287,8 @@ export default function ResetByDiscipline() {
                   </CardContent>
                 )}
               </Card>
-            ))}
+            );
+            })}
           </section>
         </main>
       </div>
