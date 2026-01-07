@@ -17,3 +17,6 @@ verify_jwt = true
 
 [functions.generate-personalized-plan]
 verify_jwt = true
+
+[functions.ghl-webhook]
+verify_jwt = true
