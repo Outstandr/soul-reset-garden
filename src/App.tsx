@@ -22,6 +22,7 @@ import ResetByDisciplineCourse from "./pages/ResetByDisciplineCourse";
 import Certificate from "./pages/Certificate";
 import FinalCertificationExam from "./pages/FinalCertificationExam";
 import Profile from "./pages/Profile";
+import TestWebhook from "./pages/TestWebhook";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/final-certification-exam" element={<ProtectedRoute><FinalCertificationExam /></ProtectedRoute>} />
           <Route path="/certificate/:certificateNumber" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/test-webhook" element={<ProtectedRoute><TestWebhook /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
