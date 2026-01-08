@@ -15,7 +15,16 @@ const Index = () => {
   const t = useTranslations();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      {/* Grid Pattern Background */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: `linear-gradient(rgba(91, 172, 93, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(91, 172, 93, 0.08) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+          opacity: 0.5
+        }}
+      />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-700 backdrop-blur-sm border-b border-slate-600">
         <div className="zen-container py-4">
@@ -33,7 +42,7 @@ const Index = () => {
                 document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
               }}>{t.landing.testimonialsLink}</Button>
               <LanguageSwitcher />
-              <Button variant="outline" size="sm" className="border-white/30 text-white hover:bg-white/10" onClick={() => navigate('/dashboard')}>
+              <Button variant="outline" size="sm" className="border-white/50 text-white bg-white/10 hover:bg-white/20" onClick={() => navigate('/dashboard')}>
                 {t.auth.signIn}
               </Button>
               <Button size="sm" className="bg-primary text-white hover:bg-primary/90" onClick={() => navigate('/dashboard')}>
@@ -81,7 +90,7 @@ const Index = () => {
               </div>
               <Button 
                 variant="outline" 
-                className="w-full border-white/30 text-white hover:bg-white/10"
+                className="w-full border-white/50 text-white bg-white/10 hover:bg-white/20"
                 onClick={() => {
                   navigate('/dashboard');
                   setMobileMenuOpen(false);
