@@ -318,7 +318,7 @@ export type Database = {
           eating_style: string | null
           energy_level: number | null
           family_situation: string | null
-          fitness_goal: string | null
+          fitness_goals: string[] | null
           health_level: number | null
           hydration_level: number | null
           id: string
@@ -360,7 +360,7 @@ export type Database = {
           eating_style?: string | null
           energy_level?: number | null
           family_situation?: string | null
-          fitness_goal?: string | null
+          fitness_goals?: string[] | null
           health_level?: number | null
           hydration_level?: number | null
           id?: string
@@ -402,7 +402,7 @@ export type Database = {
           eating_style?: string | null
           energy_level?: number | null
           family_situation?: string | null
-          fitness_goal?: string | null
+          fitness_goals?: string[] | null
           health_level?: number | null
           hydration_level?: number | null
           id?: string

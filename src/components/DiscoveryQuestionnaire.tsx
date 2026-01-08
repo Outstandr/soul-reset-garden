@@ -126,7 +126,7 @@ const FAMILY_OPTIONS = [
   { value: "single", label: "Single", description: "Living alone" },
   { value: "relationship", label: "In a Relationship", description: "No kids" },
   { value: "married_no_kids", label: "Married, No Kids", description: "Partner, no children" },
-  { value: "married_with_kids", label: "Parent", description: "Have children" },
+  { value: "married_with_kids", label: "Married with Kids", description: "Married with children" },
   { value: "single_parent", label: "Single Parent", description: "Raising kids alone" },
 ];
 
@@ -194,7 +194,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
     biggest_nutrition_challenge: "",
     workout_frequency: "",
     preferred_workout: "",
-    fitness_goal: "",
+    fitness_goals: [] as string[],
     primary_goal: "",
     secondary_goals: [] as string[],
     biggest_challenge: "",
@@ -224,6 +224,15 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
     }));
   };
 
+  const toggleFitnessGoal = (goal: string) => {
+    setFormData(prev => ({
+      ...prev,
+      fitness_goals: prev.fitness_goals.includes(goal)
+        ? prev.fitness_goals.filter(g => g !== goal)
+        : [...prev.fitness_goals, goal]
+    }));
+  };
+
   const canProceed = () => {
     switch (currentStep) {
       case 0: case 1: case 2: case 3: case 16: return true; // Sliders
@@ -233,7 +242,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
       case 7: return formData.wake_up_time !== "";
       case 8: return formData.eating_style !== "";
       case 9: return formData.biggest_nutrition_challenge.trim().length >= 5;
-      case 10: return formData.workout_frequency !== "" && formData.preferred_workout !== "" && formData.fitness_goal !== "";
+      case 10: return formData.workout_frequency !== "" && formData.preferred_workout !== "" && formData.fitness_goals.length > 0;
       case 11: return formData.primary_goal !== "";
       case 12: return formData.family_situation !== "";
       case 13: return formData.time_available !== "";
@@ -570,17 +579,17 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
               </RadioGroup>
             </div>
             <div>
-              <h4 className="font-medium mb-3">Primary fitness goal</h4>
-              <RadioGroup value={formData.fitness_goal} onValueChange={(v) => updateField('fitness_goal', v)} className="grid grid-cols-2 gap-2">
+              <h4 className="font-medium mb-3">Fitness goals (select all that apply)</h4>
+              <div className="grid grid-cols-2 gap-2">
                 {FITNESS_GOAL_OPTIONS.map((opt) => (
-                  <div key={opt.value} className={`p-3 rounded-lg border transition-all cursor-pointer hover:border-primary/50 ${formData.fitness_goal === opt.value ? "border-primary bg-primary/5" : "border-border"}`} onClick={() => updateField('fitness_goal', opt.value)}>
-                    <RadioGroupItem value={opt.value} id={`fit-${opt.value}`} className="sr-only" />
+                  <div key={opt.value} className={`flex items-center space-x-3 p-3 rounded-lg border transition-all cursor-pointer hover:border-primary/50 ${formData.fitness_goals.includes(opt.value) ? "border-primary bg-primary/5" : "border-border"}`} onClick={() => toggleFitnessGoal(opt.value)}>
+                    <Checkbox checked={formData.fitness_goals.includes(opt.value)} id={`fit-${opt.value}`} />
                     <Label htmlFor={`fit-${opt.value}`} className="cursor-pointer">
                       <div className="font-medium text-sm">{opt.label}</div>
                     </Label>
                   </div>
                 ))}
-              </RadioGroup>
+              </div>
             </div>
           </div>
         );
