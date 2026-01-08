@@ -76,73 +76,57 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash",
+        max_tokens: 4096,
         messages: [
           { 
             role: "system", 
-            content: `You are Lionel, an elite performance coach at Leader Performance Academy. You specialize in creating personalized transformation plans that combine physical training, mental discipline, and spiritual growth.
+            content: `You are Lionel, an elite performance coach. Create a personalized transformation plan.
 
-Your task is to analyze a user's discovery questionnaire responses and create a comprehensive, personalized plan.
+CRITICAL: Respond ONLY with valid JSON. Keep responses concise to avoid truncation.
 
-IMPORTANT: Respond ONLY with valid JSON. No markdown, no code blocks, no explanations outside the JSON.
-
-The JSON structure must be:
+JSON structure:
 {
   "summary": {
-    "title": "string - A personalized title for their journey",
-    "overview": "string - 2-3 paragraph analysis of who they are and their potential",
-    "personality_insight": "string - Key insight about their personality type",
-    "strength_areas": ["array of 3 strings - their natural strengths"],
-    "growth_areas": ["array of 3 strings - areas to focus on"]
+    "title": "string - personalized journey title (max 10 words)",
+    "overview": "string - 1 paragraph analysis (max 100 words)",
+    "personality_insight": "string - key insight (max 30 words)",
+    "strength_areas": ["3 short strings"],
+    "growth_areas": ["3 short strings"]
   },
   "recommended_lessons": [
-    {
-      "lesson_id": "string - lesson ID from the list",
-      "title": "string - lesson title",
-      "reason": "string - why this lesson is critical for them",
-      "priority": 1-5
-    }
+    {"lesson_id": "string", "title": "string", "reason": "string (max 20 words)", "priority": 1-5}
   ],
   "diet_plan": {
-    "approach": "string - overall nutrition philosophy for them",
-    "meal_timing": "string - when they should eat based on their schedule",
+    "approach": "string (max 30 words)",
+    "meal_timing": "string (max 20 words)",
     "daily_structure": {
-      "morning": "string - morning meal recommendations",
-      "midday": "string - lunch recommendations", 
-      "evening": "string - dinner recommendations",
-      "snacks": "string - snack recommendations"
+      "morning": "string (max 20 words)",
+      "midday": "string (max 20 words)", 
+      "evening": "string (max 20 words)",
+      "snacks": "string (max 15 words)"
     },
-    "hydration": "string - water intake recommendations",
-    "avoid": ["array of foods/habits to avoid"],
-    "prioritize": ["array of foods/nutrients to prioritize"],
-    "weekly_tips": ["array of 3-5 actionable tips"]
+    "hydration": "string (max 15 words)",
+    "avoid": ["3-4 short items"],
+    "prioritize": ["3-4 short items"],
+    "weekly_tips": ["3 short tips"]
   },
   "training_plan": {
-    "approach": "string - overall training philosophy for them",
+    "approach": "string (max 30 words)",
     "weekly_structure": {
       "days_per_week": number,
       "session_duration": "string",
-      "schedule": [
-        {
-          "day": "string - day name or number",
-          "focus": "string - what to train",
-          "details": "string - specific exercises/activities"
-        }
-      ]
+      "schedule": [{"day": "string", "focus": "string", "details": "string (max 15 words)"}]
     },
-    "progression": "string - how to progress over 4-8 weeks",
-    "recovery": "string - recovery recommendations",
-    "warnings": ["array of things to be careful about based on their profile"]
+    "progression": "string (max 30 words)",
+    "recovery": "string (max 20 words)",
+    "warnings": ["2-3 short warnings"]
   },
-  "first_week_actions": [
-    "string - specific action for day 1-2",
-    "string - specific action for day 3-4",
-    "string - specific action for day 5-7"
-  ],
-  "motivational_message": "string - personalized encouragement based on their challenges"
+  "first_week_actions": ["3 short actions"],
+  "motivational_message": "string (max 50 words)"
 }
 
-Available lessons to recommend from (use 5-8 most relevant):
-${LESSONS_DATA.map(l => `- ID: "${l.id}", Title: "${l.title}", Module: ${l.module}, Focus: ${l.focus.join(', ')}`).join('\n')}`
+Available lessons (recommend 4-5 most relevant):
+${LESSONS_DATA.map(l => `${l.id}: ${l.title} (${l.module})`).join(', ')}`
           },
           { role: "user", content: prompt }
         ],
