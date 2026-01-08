@@ -228,7 +228,7 @@ const Index = () => {
                 {t.landing.cta.button}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+              <Button size="lg" variant="outline" className="text-lg px-8 border-white/50 text-white bg-white/10 hover:bg-white/20">
                 {t.landing.cta.downloadGuide}
               </Button>
             </div>
