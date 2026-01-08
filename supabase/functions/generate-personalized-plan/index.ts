@@ -248,7 +248,7 @@ DISCOVERY QUESTIONNAIRE RESPONSES:
 === FITNESS & ACTIVITY ===
 - Current workout frequency: ${data.workout_frequency || 'Not specified'}
 - Preferred workout type: ${data.preferred_workout || 'Not specified'}
-- Fitness goal: ${data.fitness_goal || 'Not specified'}
+- Fitness goals: ${data.fitness_goals?.join(', ') || 'Not specified'}
 
 === GOALS & CHALLENGES ===
 - Primary goal: ${data.primary_goal || 'Not specified'}
