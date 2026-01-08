@@ -70,7 +70,7 @@ export const ResetOverview = () => {
                 className="group relative animate-fade-in-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="h-full p-8 rounded-2xl bg-card border border-primary/30 shadow-soft hover:shadow-medium transition-all duration-300 relative overflow-hidden animate-pulse-border">
+                <div className="h-full p-8 rounded-2xl bg-card shadow-soft hover:shadow-medium transition-all duration-300 relative overflow-hidden animate-pulse-glow">
                   {/* Icon */}
                   <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
                     <Icon className="w-8 h-8 text-primary" />
