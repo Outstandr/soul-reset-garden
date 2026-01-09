@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +16,8 @@ import {
   Brain, Moon, Utensils, Dumbbell, Clock, Users, Briefcase, Star,
   Loader2
 } from "lucide-react";
+
+const STORAGE_KEY = "discovery_questionnaire_progress";
 
 const STEPS = [
   { id: "energy", title: "Your Energy Level", description: "How would you rate your current daily energy level?", icon: Zap },
@@ -167,45 +169,119 @@ interface DiscoveryQuestionnaireProps {
 }
 
 export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnaireProps) => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
-  const navigate = useNavigate();
 
-  // Form state
-  const [formData, setFormData] = useState({
-    energy_level: 5,
-    health_level: 5,
-    stress_level: 5,
-    discipline_level: 5,
-    commitment_level: 5,
-    personality_type: "",
-    motivation_style: "",
-    decision_making: "",
-    job_title: "",
-    job_industry: "",
-    sleep_hours: 7,
-    sleep_quality: 5,
-    wake_up_time: "",
-    meals_per_day: 3,
-    eating_style: "",
-    hydration_level: 5,
-    dietary_restrictions: "",
-    biggest_nutrition_challenge: "",
-    workout_frequency: "",
-    preferred_workout: "",
-    fitness_goals: [] as string[],
-    primary_goal: "",
-    secondary_goals: [] as string[],
-    biggest_challenge: "",
-    time_available: "",
-    occupation_type: "",
-    family_situation: "",
-    biggest_life_priority: "",
-    describe_yourself: "",
-    where_you_want_to_be: "",
-    what_holds_you_back: "",
-  });
+  // Initialize state from localStorage if available
+  const getInitialState = () => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          step: parsed.step || 0,
+          formData: {
+            energy_level: parsed.formData?.energy_level ?? 5,
+            health_level: parsed.formData?.health_level ?? 5,
+            stress_level: parsed.formData?.stress_level ?? 5,
+            discipline_level: parsed.formData?.discipline_level ?? 5,
+            commitment_level: parsed.formData?.commitment_level ?? 5,
+            personality_type: parsed.formData?.personality_type ?? "",
+            motivation_style: parsed.formData?.motivation_style ?? "",
+            decision_making: parsed.formData?.decision_making ?? "",
+            job_title: parsed.formData?.job_title ?? "",
+            job_industry: parsed.formData?.job_industry ?? "",
+            sleep_hours: parsed.formData?.sleep_hours ?? 7,
+            sleep_quality: parsed.formData?.sleep_quality ?? 5,
+            wake_up_time: parsed.formData?.wake_up_time ?? "",
+            meals_per_day: parsed.formData?.meals_per_day ?? 3,
+            eating_style: parsed.formData?.eating_style ?? "",
+            hydration_level: parsed.formData?.hydration_level ?? 5,
+            dietary_restrictions: parsed.formData?.dietary_restrictions ?? "",
+            biggest_nutrition_challenge: parsed.formData?.biggest_nutrition_challenge ?? "",
+            workout_frequency: parsed.formData?.workout_frequency ?? "",
+            preferred_workout: parsed.formData?.preferred_workout ?? "",
+            fitness_goals: parsed.formData?.fitness_goals ?? [],
+            primary_goal: parsed.formData?.primary_goal ?? "",
+            secondary_goals: parsed.formData?.secondary_goals ?? [],
+            biggest_challenge: parsed.formData?.biggest_challenge ?? "",
+            time_available: parsed.formData?.time_available ?? "",
+            occupation_type: parsed.formData?.occupation_type ?? "",
+            family_situation: parsed.formData?.family_situation ?? "",
+            biggest_life_priority: parsed.formData?.biggest_life_priority ?? "",
+            describe_yourself: parsed.formData?.describe_yourself ?? "",
+            where_you_want_to_be: parsed.formData?.where_you_want_to_be ?? "",
+            what_holds_you_back: parsed.formData?.what_holds_you_back ?? "",
+          }
+        };
+      }
+    } catch (e) {
+      console.error("Error loading saved progress:", e);
+    }
+    return {
+      step: 0,
+      formData: {
+        energy_level: 5,
+        health_level: 5,
+        stress_level: 5,
+        discipline_level: 5,
+        commitment_level: 5,
+        personality_type: "",
+        motivation_style: "",
+        decision_making: "",
+        job_title: "",
+        job_industry: "",
+        sleep_hours: 7,
+        sleep_quality: 5,
+        wake_up_time: "",
+        meals_per_day: 3,
+        eating_style: "",
+        hydration_level: 5,
+        dietary_restrictions: "",
+        biggest_nutrition_challenge: "",
+        workout_frequency: "",
+        preferred_workout: "",
+        fitness_goals: [] as string[],
+        primary_goal: "",
+        secondary_goals: [] as string[],
+        biggest_challenge: "",
+        time_available: "",
+        occupation_type: "",
+        family_situation: "",
+        biggest_life_priority: "",
+        describe_yourself: "",
+        where_you_want_to_be: "",
+        what_holds_you_back: "",
+      }
+    };
+  };
+
+  const initialState = getInitialState();
+  const [currentStep, setCurrentStep] = useState(initialState.step);
+  const [formData, setFormData] = useState(initialState.formData);
+
+  // Save progress to localStorage whenever step or formData changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        step: currentStep,
+        formData: formData,
+        savedAt: new Date().toISOString()
+      }));
+    } catch (e) {
+      console.error("Error saving progress:", e);
+    }
+  }, [currentStep, formData]);
+
+  // Clear localStorage on successful completion
+  const clearSavedProgress = useCallback(() => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.error("Error clearing saved progress:", e);
+    }
+  }, []);
 
   const progress = ((currentStep + 1) / STEPS.length) * 100;
   const currentStepData = STEPS[currentStep];
@@ -294,6 +370,9 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
       } else if (planData?.plan) {
         toast.success("Your personalized plan is ready!");
       }
+
+      // Clear saved progress on successful completion
+      clearSavedProgress();
 
       onComplete();
       navigate("/dashboard");
