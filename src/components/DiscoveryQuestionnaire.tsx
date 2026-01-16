@@ -188,7 +188,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
             discipline_level: parsed.formData?.discipline_level ?? 5,
             commitment_level: parsed.formData?.commitment_level ?? 5,
             personality_type: parsed.formData?.personality_type ?? "",
-            motivation_style: parsed.formData?.motivation_style ?? "",
+            motivation_styles: parsed.formData?.motivation_styles ?? [],
             decision_making: parsed.formData?.decision_making ?? "",
             job_title: parsed.formData?.job_title ?? "",
             job_industry: parsed.formData?.job_industry ?? "",
@@ -228,7 +228,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
         discipline_level: 5,
         commitment_level: 5,
         personality_type: "",
-        motivation_style: "",
+        motivation_styles: [] as string[],
         decision_making: "",
         job_title: "",
         job_industry: "",
@@ -309,11 +309,20 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
     }));
   };
 
+  const toggleMotivationStyle = (style: string) => {
+    setFormData(prev => ({
+      ...prev,
+      motivation_styles: prev.motivation_styles.includes(style)
+        ? prev.motivation_styles.filter(s => s !== style)
+        : [...prev.motivation_styles, style]
+    }));
+  };
+
   const canProceed = () => {
     switch (currentStep) {
       case 0: case 1: case 2: case 3: case 16: return true; // Sliders
       case 4: return formData.personality_type !== "";
-      case 5: return formData.motivation_style !== "" && formData.decision_making !== "";
+      case 5: return formData.motivation_styles.length > 0 && formData.decision_making !== "";
       case 6: return formData.job_industry !== "";
       case 7: return formData.wake_up_time !== "";
       case 8: return formData.eating_style !== "";
@@ -467,18 +476,27 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
         return (
           <div className="space-y-6">
             <div>
-              <h4 className="font-medium mb-3">What motivates you?</h4>
-              <RadioGroup value={formData.motivation_style} onValueChange={(v) => updateField('motivation_style', v)} className="space-y-2">
+              <h4 className="font-medium mb-3">What motivates you? (Select all that apply)</h4>
+              <div className="space-y-2">
                 {MOTIVATION_OPTIONS.map((opt) => (
-                  <div key={opt.value} className={`flex items-start space-x-3 p-3 rounded-lg border transition-all cursor-pointer hover:border-primary/50 ${formData.motivation_style === opt.value ? "border-primary bg-primary/5" : "border-border"}`} onClick={() => updateField('motivation_style', opt.value)}>
-                    <RadioGroupItem value={opt.value} id={`mot-${opt.value}`} className="mt-0.5" />
+                  <div 
+                    key={opt.value} 
+                    className={`flex items-start space-x-3 p-3 rounded-lg border transition-all cursor-pointer hover:border-primary/50 ${formData.motivation_styles.includes(opt.value) ? "border-primary bg-primary/5" : "border-border"}`} 
+                    onClick={() => toggleMotivationStyle(opt.value)}
+                  >
+                    <Checkbox 
+                      checked={formData.motivation_styles.includes(opt.value)} 
+                      onCheckedChange={() => toggleMotivationStyle(opt.value)}
+                      id={`mot-${opt.value}`} 
+                      className="mt-0.5" 
+                    />
                     <Label htmlFor={`mot-${opt.value}`} className="cursor-pointer flex-1">
                       <div className="font-medium text-sm">{opt.label}</div>
                       <div className="text-xs text-muted-foreground">{opt.description}</div>
                     </Label>
                   </div>
                 ))}
-              </RadioGroup>
+              </div>
             </div>
             <div>
               <h4 className="font-medium mb-3">How do you make decisions?</h4>
