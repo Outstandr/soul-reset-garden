@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Lock } from "lucide-react";
 import { ReactNode } from "react";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface ModuleCardProps {
   title: string;
@@ -24,6 +25,7 @@ export const ModuleCard = ({
   progress = 0,
   onStart,
 }: ModuleCardProps) => {
+  const t = useTranslations();
   return (
     <Card
       className={`group relative overflow-hidden transition-all duration-500 hover-lift ${
@@ -113,7 +115,7 @@ export const ModuleCard = ({
             className="w-full group/btn text-lg py-6 shadow-neon font-black hover-lift"
             onClick={onStart}
           >
-            {progress > 0 ? "Continue Journey" : "Start Journey"}
+            {progress > 0 ? (t.dashboard as any).continueJourneyBtn || "Continue Journey" : (t.dashboard as any).startJourney || "Start Journey"}
             <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" />
           </Button>
         )}
@@ -124,13 +126,13 @@ export const ModuleCard = ({
             className="w-full text-lg py-6 font-black hover-lift"
             onClick={onStart}
           >
-            Review Module
+            {(t.dashboard as any).reviewModule || "Review Module"}
           </Button>
         )}
 
         {status === "locked" && (
           <Button variant="ghost" className="w-full text-base py-6 font-bold" disabled>
-            Complete Previous Modules
+            {(t.dashboard as any).completePreviousModules || "Complete Previous Modules"}
           </Button>
         )}
       </CardContent>

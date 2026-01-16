@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Play, Clock } from "lucide-react";
@@ -5,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function MasterclassLibrary() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const masterclasses = [
     {

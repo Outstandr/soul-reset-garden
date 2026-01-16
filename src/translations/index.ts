@@ -152,6 +152,10 @@ export const translations = {
       startModule: "Start Module",
       resumeModule: "Resume Module",
       lockedModule: "Complete previous modules to unlock",
+      startJourney: "Start Journey",
+      continueJourneyBtn: "Continue Journey",
+      reviewModule: "Review Module",
+      completePreviousModules: "Complete Previous Modules",
     },
     journey: {
       rhythm: "Rhythm",
@@ -479,6 +483,10 @@ export const translations = {
       startModule: "Start Module",
       resumeModule: "Hervat Module",
       lockedModule: "Voltooi vorige modules om te ontgrendelen",
+      startJourney: "Begin Je Reis",
+      continueJourneyBtn: "Ga Verder met Reis",
+      reviewModule: "Bekijk Module",
+      completePreviousModules: "Voltooi Vorige Modules",
     },
     journey: {
       rhythm: "Ritme",
@@ -806,6 +814,10 @@ export const translations = {
       startModule: "Начать модуль",
       resumeModule: "Возобновить модуль",
       lockedModule: "Завершите предыдущие модули для разблокировки",
+      startJourney: "Начать Путешествие",
+      continueJourneyBtn: "Продолжить Путешествие",
+      reviewModule: "Повторить Модуль",
+      completePreviousModules: "Завершите Предыдущие Модули",
     },
     journey: {
       rhythm: "Ритм",

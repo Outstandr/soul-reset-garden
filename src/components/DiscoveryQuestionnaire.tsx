@@ -198,7 +198,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
             meals_per_day: parsed.formData?.meals_per_day ?? 3,
             eating_style: parsed.formData?.eating_style ?? "",
             hydration_level: parsed.formData?.hydration_level ?? 5,
-            dietary_restrictions: parsed.formData?.dietary_restrictions ?? "",
+            dietary_restrictions: parsed.formData?.dietary_restrictions ?? [],
             biggest_nutrition_challenge: parsed.formData?.biggest_nutrition_challenge ?? "",
             workout_frequency: parsed.formData?.workout_frequency ?? "",
             preferred_workout: parsed.formData?.preferred_workout ?? "",
@@ -238,7 +238,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
         meals_per_day: 3,
         eating_style: "",
         hydration_level: 5,
-        dietary_restrictions: "",
+        dietary_restrictions: [] as string[],
         biggest_nutrition_challenge: "",
         workout_frequency: "",
         preferred_workout: "",
@@ -318,6 +318,21 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
     }));
   };
 
+  const toggleDietaryRestriction = (restriction: string) => {
+    setFormData(prev => {
+      // If selecting "none", clear all other selections
+      if (restriction === "none") {
+        return { ...prev, dietary_restrictions: ["none"] };
+      }
+      // If selecting something else while "none" is selected, remove "none"
+      const currentWithoutNone = prev.dietary_restrictions.filter(r => r !== "none");
+      const updated = currentWithoutNone.includes(restriction)
+        ? currentWithoutNone.filter(r => r !== restriction)
+        : [...currentWithoutNone, restriction];
+      return { ...prev, dietary_restrictions: updated };
+    });
+  };
+
   const canProceed = () => {
     switch (currentStep) {
       case 0: case 1: case 2: case 3: case 16: return true; // Sliders
@@ -325,7 +340,7 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
       case 5: return formData.motivation_styles.length > 0 && formData.decision_making !== "";
       case 6: return formData.job_industry !== "";
       case 7: return formData.wake_up_time !== "";
-      case 8: return formData.eating_style !== "";
+      case 8: return formData.eating_style !== "" && formData.dietary_restrictions.length > 0;
       case 9: return formData.biggest_nutrition_challenge.trim().length >= 5;
       case 10: return formData.workout_frequency !== "" && formData.preferred_workout !== "" && formData.fitness_goals.length > 0;
       case 11: return formData.primary_goal !== "";
@@ -616,15 +631,23 @@ export const DiscoveryQuestionnaire = ({ onComplete }: DiscoveryQuestionnairePro
               <p className="text-center text-sm text-muted-foreground">{getSliderLabel(formData.hydration_level, 'hydration')}</p>
             </div>
             <div>
-              <h4 className="font-medium mb-3">Dietary restrictions</h4>
-              <RadioGroup value={formData.dietary_restrictions} onValueChange={(v) => updateField('dietary_restrictions', v)} className="grid grid-cols-2 gap-2">
+              <h4 className="font-medium mb-3">Dietary restrictions (select all that apply)</h4>
+              <div className="grid grid-cols-2 gap-2">
                 {DIET_OPTIONS.map((opt) => (
-                  <div key={opt.value} className={`p-2 rounded-lg border transition-all cursor-pointer hover:border-primary/50 text-center ${formData.dietary_restrictions === opt.value ? "border-primary bg-primary/5" : "border-border"}`} onClick={() => updateField('dietary_restrictions', opt.value)}>
-                    <RadioGroupItem value={opt.value} id={`diet-${opt.value}`} className="sr-only" />
+                  <div 
+                    key={opt.value} 
+                    className={`flex items-center justify-center gap-2 p-2 rounded-lg border transition-all cursor-pointer hover:border-primary/50 ${formData.dietary_restrictions.includes(opt.value) ? "border-primary bg-primary/5" : "border-border"}`} 
+                    onClick={() => toggleDietaryRestriction(opt.value)}
+                  >
+                    <Checkbox 
+                      checked={formData.dietary_restrictions.includes(opt.value)} 
+                      onCheckedChange={() => toggleDietaryRestriction(opt.value)}
+                      id={`diet-${opt.value}`} 
+                    />
                     <Label htmlFor={`diet-${opt.value}`} className="cursor-pointer text-sm">{opt.label}</Label>
                   </div>
                 ))}
-              </RadioGroup>
+              </div>
             </div>
           </div>
         );

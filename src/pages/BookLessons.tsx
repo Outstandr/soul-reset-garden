@@ -181,7 +181,7 @@ export default function BookLessons() {
             The Reset by Discipline
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Master the art of self-discipline through 20 transformative lessons. Each lesson is a building block in your journey to becoming unstoppable.
+            Master the art of self-discipline through {lessons.length} transformative lessons. Each lesson is a building block in your journey to becoming unstoppable.
           </p>
 
           {/* Progress Bar */}
