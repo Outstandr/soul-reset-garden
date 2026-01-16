@@ -144,7 +144,7 @@ export const PersonalizedPlanView = ({ onClose, embedded = false }: Personalized
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(100);
-      doc.text("Created by AI Coach Lionel | LPA Academy", margin, yPos);
+      doc.text("Created by LionelX | LPA Academy", margin, yPos);
       doc.setTextColor(0);
       yPos += 15;
 
@@ -312,7 +312,7 @@ export const PersonalizedPlanView = ({ onClose, embedded = false }: Personalized
         doc.setFont("helvetica", "italic");
         yPos = addWrappedText(`"${plan.motivational_message}"`, yPos, 11);
         doc.setFont("helvetica", "normal");
-        yPos = addWrappedText("— Coach Lionel", yPos, 10);
+        yPos = addWrappedText("— LionelX", yPos, 10);
       }
 
       // Save the PDF
@@ -376,7 +376,7 @@ export const PersonalizedPlanView = ({ onClose, embedded = false }: Personalized
             </div>
             <div>
               <CardTitle className="text-xl">{plan.summary?.title || "Your Personalized Plan"}</CardTitle>
-              <CardDescription>Created just for you by AI Coach Lionel</CardDescription>
+              <CardDescription>Created just for you by LionelX</CardDescription>
             </div>
           </div>
           {embedded && (
